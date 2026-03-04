@@ -6,8 +6,8 @@ project:
   type: book
 
 book:
-  title: "Finanzanalyseprojekt: Scout24"
-  author: ["Stefan Eich", "Jan Seidel"]
+  title: ""
+  author: []
   chapters:
     - index.qmd
     - 04_report/01_einleitung.qmd
@@ -20,6 +20,9 @@ book:
 format:
   pdf:
     title-block-style: none
+    title: ""
+    author: ""
+    date: ""
     toc: true
     toc-depth: 6
     number-sections: true

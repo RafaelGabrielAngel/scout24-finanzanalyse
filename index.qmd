@@ -1,2 +1,7 @@
-# Finanzanalyse Scout24
-Kurzüberblick und Aufbau
+---
+title: ""
+author: ""
+date: ""
+title-block-style: none
+toc: false
+---
