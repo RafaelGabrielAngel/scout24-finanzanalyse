@@ -20,7 +20,20 @@
 
 # RStudio files
 .Rproj.user/
-
+.quarto/
+**/.quarto/
+# Quarto / render output
+_book/
+**/_book/
+.quarto/
+**/.quarto/
+*.log
+*.aux
+*.out
+*.toc
+*.lof
+*.lot
+*.tex
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
