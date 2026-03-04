@@ -1,0 +1,41 @@
+% header.tex  (Quarto -> include-in-header)
+% Ziel:
+% - Seitenzahl im Kopf (mittig)
+% - auch auf TOC/Verzeichnissen sichtbar
+% - auch auf Kapitelanfangsseiten sichtbar (z.B. 1 Einleitung)
+% - keine Linien/Striche
+
+\usepackage[automark]{scrlayer-scrpage}
+\usepackage{etoolbox}
+\usepackage{caption}
+\captionsetup[table]{justification=centering, singlelinecheck=false}
+
+% Alle Kopf-/Fußdefinitionen löschen
+\clearpairofpagestyles
+
+% Seitenzahl oben mittig
+\chead{\pagemark}
+\cfoot{} % unten leer
+
+% Linien AUS (hart)
+\KOMAoptions{headsepline=false,footsepline=false}
+\setheadsepline{0pt}
+\setfootsepline{0pt}
+
+% Kapitelanfangsseiten: gleichen Stil erzwingen
+% (bei scrreprt ist das entscheidend, sonst bleibt Seite 1 der Einleitung "ohne Zahl")
+\renewcommand*\chapterpagestyle{scrheadings}
+
+% Standard-Pagestyle setzen
+\pagestyle{scrheadings}
+
+% TOC / Tabellen- / Abbildungsverzeichnis:
+% Erste Seite bekommt oft \thispagestyle{empty/plain} -> wir überschreiben das.
+\pretocmd{\tableofcontents}{\clearpage\thispagestyle{scrheadings}}{}{}
+\pretocmd{\listoftables}{\clearpage\thispagestyle{scrheadings}}{}{}
+\pretocmd{\listoffigures}{\clearpage\thispagestyle{scrheadings}}{}{}
+
+% Zusätzlich: falls irgendwo "plain" benutzt wird, mache plain = scrheadings
+\makeatletter
+\let\ps@plain\ps@scrheadings
+\makeatother
