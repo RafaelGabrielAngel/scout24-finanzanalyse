@@ -1,9 +1,13 @@
+lang: de
+date: today
+date-format: "D. MMMM YYYY"
+
 project:
   type: book
 
 book:
-  title: "Finanzanalyse Scout24"
-  author: ["Rafael Gabriel Angel", "Teammitglied"]
+  title: "Finanzanalyseprojekt: Scout24"
+  author: ["Stefan Eich", "Jan Seidel"]
   chapters:
     - index.qmd
     - 04_report/01_einleitung.qmd
@@ -15,7 +19,31 @@ book:
 
 format:
   pdf:
+    title-block-style: none
     toc: true
+    toc-depth: 6
     number-sections: true
     lof: true
     lot: true
+
+    fontsize: 12pt
+    linestretch: 1.5
+    geometry:
+      - left=4cm
+      - right=2cm
+      - top=4cm
+      - bottom=2cm
+
+    cite-method: citeproc
+
+    include-before-body:
+      - 04_report/titlepage.tex
+    include-in-header:
+      - 04_report/header.tex
+
+execute:
+  echo: false
+  warning: false
+  message: false
+
+editor: visual
