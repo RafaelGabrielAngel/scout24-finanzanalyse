@@ -1,0 +1,21 @@
+project:
+  type: book
+
+book:
+  title: "Finanzanalyse Scout24"
+  author: ["Rafael Gabriel Angel", "Teammitglied"]
+  chapters:
+    - index.qmd
+    - 01_einleitung.qmd
+    - 02_unternehmen.qmd
+    - 03_branche_peers.qmd
+    - 04_finanzanalyse.qmd
+    - 05_bewertung.qmd
+    - 06_fazit.qmd
+
+format:
+  pdf:
+    toc: true
+    number-sections: true
+    lof: true
+    lot: true
