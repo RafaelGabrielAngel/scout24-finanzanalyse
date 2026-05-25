@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scout24 SE — Equity Research</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ═══════════════════════════════ RESET & VARS ═══════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg0:#050E1A;--bg1:#0B1826;--bg2:#0F2035;--bg3:#152844;
+  --glass:rgba(15,32,53,0.85);
+  --blue:#00B4FF;--blue2:#0066CC;--blueGlow:rgba(0,180,255,0.18);
+  --gold:#FFD166;--goldDim:rgba(255,209,102,0.15);
+  --green:#00E5A0;--greenDim:rgba(0,229,160,0.12);
+  --red:#FF4D6D;--redDim:rgba(255,77,109,0.12);
+  --amber:#FFAA00;--amberDim:rgba(255,170,0,0.12);
+  --txt:#D8EAF8;--txt2:#7BAAC8;--txt3:#3D6A8A;
+  --border:rgba(0,180,255,0.12);--borderB:rgba(0,180,255,0.25);
+  --r:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Arial',sans-serif;background:var(--bg0);color:var(--txt);font-size:13px;min-height:100vh;overflow-x:hidden}
+
+/* ═══════════════════════════════ SCROLLBAR ═══════════════════════════════ */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:var(--blue2);border-radius:3px}
+
+/* ═══════════════════════════════ HEADER ═══════════════════════════════ */
+.hdr{
+  position:sticky;top:0;z-index:200;
+  background:rgba(5,14,26,0.97);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:58px;
+}
+.hdr-brand h1{font-size:17px;font-weight:700;letter-spacing:2px;color:#fff}
+.hdr-brand p{font-size:10px;color:var(--txt2);letter-spacing:1px;margin-top:1px}
+.hdr-kpis{display:flex;gap:10px}
+.hkpi{
+  padding:6px 14px;border-radius:6px;
+  background:var(--bg2);border:1px solid var(--border);
+  text-align:center;cursor:default;
+  transition:border-color .2s,background .2s;
+}
+.hkpi:hover{border-color:var(--borderB);background:var(--bg3)}
+.hkpi .lbl{font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px}
+.hkpi .val{font-size:16px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.hkpi .val.gold{color:var(--gold)}
+.hkpi .val.green{color:var(--green)}
+.hkpi .val.amber{color:var(--amber)}
+.hkpi .val.blue{color:var(--blue)}
+
+/* ═══════════════════════════════ TABS ═══════════════════════════════ */
+.tabs-bar{
+  display:flex;gap:0;
+  background:var(--bg1);
+  border-bottom:1px solid var(--border);
+  padding:0 28px;
+  overflow-x:auto;
+}
+.tabs-bar::-webkit-scrollbar{height:2px}
+.tb{
+  padding:14px 20px;border:none;background:transparent;
+  color:var(--txt2);font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+  cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;
+  transition:all .2s;position:relative;
+}
+.tb:hover{color:var(--txt)}
+.tb.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tb .dot{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  margin-right:6px;background:var(--txt3);
+}
+.tb.active .dot{background:var(--blue);box-shadow:0 0 6px var(--blue)}
+
+/* ═══════════════════════════════ LAYOUT ═══════════════════════════════ */
+.content{max-width:1280px;margin:0 auto;padding:28px 24px}
+.pane{display:none}
+.pane.active{display:block}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+/* ═══════════════════════════════ CARDS ═══════════════════════════════ */
+.card{
+  background:var(--bg1);border:1px solid var(--border);
+  border-radius:var(--r);padding:20px 22px;
+  transition:border-color .2s;
+}
+.card:hover{border-color:var(--borderB)}
+.card.glow{box-shadow:0 0 30px var(--blueGlow)}
+.card-hd{
+  font-size:10px;font-weight:700;color:var(--txt2);
+  text-transform:uppercase;letter-spacing:1.2px;
+  padding-bottom:12px;margin-bottom:14px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.card-hd .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dot-blue{background:var(--blue);box-shadow:0 0 6px var(--blue)}
+.dot-gold{background:var(--gold);box-shadow:0 0 6px var(--gold)}
+.dot-green{background:var(--green);box-shadow:0 0 6px var(--green)}
+.dot-red{background:var(--red);box-shadow:0 0 6px var(--red)}
+
+/* ═══════════════════════════════ KPI BLOCKS ═══════════════════════════════ */
+.kpi-big{margin-bottom:6px}
+.kpi-big .num{
+  font-size:32px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+  line-height:1;
+}
+.kpi-big .sub{font-size:11px;color:var(--txt2);margin-top:4px}
+.kpi-big .delta{
+  display:inline-block;margin-top:6px;
+  padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;
+}
+.delta-g{background:var(--greenDim);color:var(--green)}
+.delta-r{background:var(--redDim);color:var(--red)}
+.delta-a{background:var(--amberDim);color:var(--amber)}
+
+/* ═══════════════════════════════ STAT ROW ═══════════════════════════════ */
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px}
+.stat-row:last-child{border-bottom:none}
+.stat-row .s-lbl{color:var(--txt2)}
+.stat-row .s-val{font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums}
+.stat-row .s-val.g{color:var(--green)}
+.stat-row .s-val.r{color:var(--red)}
+.stat-row .s-val.a{color:var(--amber)}
+.stat-row .s-val.b{color:var(--blue)}
+
+/* ═══════════════════════════════ VERDICT BOX ═══════════════════════════════ */
+.verdict{
+  border-radius:var(--r);padding:20px 24px;
+  border:1px solid;margin-bottom:20px;
+  display:flex;align-items:flex-start;gap:20px;
+}
+.verdict.hold{background:var(--amberDim);border-color:var(--amber)}
+.verdict.buy{background:var(--greenDim);border-color:var(--green)}
+.verdict.sell{background:var(--redDim);border-color:var(--red)}
+.v-rating{font-size:28px;font-weight:900;letter-spacing:2px;white-space:nowrap;line-height:1;padding-top:2px}
+.verdict.hold .v-rating{color:var(--amber)}
+.verdict.buy  .v-rating{color:var(--green)}
+.verdict.sell .v-rating{color:var(--red)}
+.v-body h3{font-size:13px;color:var(--txt);font-weight:700;margin-bottom:6px}
+.v-body p{font-size:12px;color:var(--txt2);line-height:1.65}
+
+/* ═══════════════════════════════ SCENARIO BOXES ═══════════════════════════════ */
+.sc-boxes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
+.sc-box{
+  border-radius:var(--r);padding:16px;text-align:center;
+  border:1px solid;transition:transform .15s,box-shadow .15s;
+  cursor:default;
+}
+.sc-box:hover{transform:translateY(-2px)}
+.sc-box.bear{background:var(--redDim);border-color:rgba(255,77,109,.35)}
+.sc-box.base{background:var(--amberDim);border-color:rgba(255,170,0,.45)}
+.sc-box.bull{background:var(--greenDim);border-color:rgba(0,229,160,.35)}
+.sc-box .sc-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.sc-box.bear .sc-lbl{color:var(--red)}
+.sc-box.base .sc-lbl{color:var(--amber)}
+.sc-box.bull .sc-lbl{color:var(--green)}
+.sc-box .sc-val{font-size:30px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.sc-box.bear .sc-val{color:var(--red)}
+.sc-box.base .sc-val{color:var(--amber)}
+.sc-box.bull .sc-val{color:var(--green)}
+.sc-box .sc-up{font-size:11px;color:var(--txt2);margin-top:5px}
+.sc-box .sc-w{font-size:10px;margin-top:4px;opacity:.7}
+
+/* ═══════════════════════════════ SLIDERS ═══════════════════════════════ */
+.sliders-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px}
+.sl-item{padding:6px 0}
+.sl-item .sl-hd{display:flex;justify-content:space-between;margin-bottom:7px;font-size:12px}
+.sl-item .sl-name{color:var(--txt2)}
+.sl-item .sl-val{font-weight:700;color:var(--blue);font-variant-numeric:tabular-nums}
+input[type=range]{
+  width:100%;height:4px;border-radius:2px;
+  -webkit-appearance:none;background:var(--bg3);outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:14px;height:14px;
+  border-radius:50%;background:var(--blue);
+  border:2px solid var(--bg0);
+  box-shadow:0 0 8px var(--blue);
+  transition:transform .1s;
+}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.3)}
+
+/* ═══════════════════════════════ LIVE RESULT ═══════════════════════════════ */
+.live-result{
+  background:var(--bg0);border:1px solid var(--borderB);
+  border-radius:var(--r);padding:16px 20px;margin-top:16px;
+}
+.lr-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px}
+.lr-row.sep{border-top:1px solid var(--border);margin-top:6px;padding-top:10px}
+.lr-row .lr-lbl{color:var(--txt2)}
+.lr-row .lr-val{font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums}
+.lr-row.big .lr-val{font-size:22px;color:var(--gold)}
+.lr-row.big .lr-lbl{font-size:13px}
+
+/* ═══════════════════════════════ TABLES ═══════════════════════════════ */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{
+  background:var(--bg2);color:var(--txt2);
+  padding:8px 12px;text-align:right;
+  font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.8px;
+  white-space:nowrap;border-bottom:1px solid var(--border);
+}
+th:first-child{text-align:left}
+td{
+  padding:8px 12px;text-align:right;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  font-variant-numeric:tabular-nums;color:var(--txt);
+}
+td:first-child{text-align:left;color:var(--txt2);font-weight:600}
+tr:hover td{background:var(--bg2)}
+tr.row-hl td{background:rgba(255,209,102,.07)!important;color:var(--gold)!important}
+tr.row-hl td:first-child{color:var(--gold)!important}
+tr.row-sep td{background:var(--bg3)!important;color:var(--blue)!important;font-weight:700}
+tr.row-sep td:first-child{color:var(--blue)!important}
+.g-val{color:var(--green)!important}
+.r-val{color:var(--red)!important}
+.a-val{color:var(--amber)!important}
+.b-val{color:var(--blue)!important}
+
+/* ═══════════════════════════════ FOOTBALL FIELD ═══════════════════════════════ */
+.ff-outer{position:relative;padding-top:28px;padding-bottom:4px}
+.ff-vline{position:absolute;top:0;bottom:20px;width:2px;pointer-events:none;z-index:8}
+.ff-vpin{
+  position:absolute;top:0;
+  font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;
+  transform:translateX(-50%);white-space:nowrap;
+}
+.ff-rows{position:relative}
+.ff-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.ff-lbl{width:190px;text-align:right;font-size:11px;color:var(--txt2);flex-shrink:0;line-height:1.3}
+.ff-track{flex:1;height:20px;background:var(--bg3);border-radius:3px;position:relative;overflow:hidden}
+.ff-bar{
+  position:absolute;top:0;height:100%;border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:rgba(255,255,255,.9);
+  white-space:nowrap;
+}
+.ff-rng{width:100px;font-size:10px;color:var(--txt3);flex-shrink:0}
+.ff-scale{display:flex;margin-left:200px;margin-top:6px}
+.ff-scale span{flex:1;font-size:9px;color:var(--txt3);text-align:left}
+
+/* ═══════════════════════════════ RISK CARDS ═══════════════════════════════ */
+.risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.risk-card{
+  border-radius:var(--r);padding:16px;border:1px solid;
+  border-left-width:4px;
+}
+.risk-card.high{background:var(--redDim);border-color:rgba(255,77,109,.25);border-left-color:var(--red)}
+.risk-card.med {background:var(--amberDim);border-color:rgba(255,170,0,.2);border-left-color:var(--amber)}
+.risk-tag{display:inline-block;padding:2px 8px;border-radius:8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.risk-tag.high{background:var(--red);color:#fff}
+.risk-tag.med{background:var(--amber);color:#000}
+.risk-card h4{font-size:12px;font-weight:700;color:var(--txt);margin-bottom:6px}
+.risk-card p{font-size:11px;color:var(--txt2);line-height:1.6}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pill{padding:3px 9px;border-radius:8px;font-size:10px;font-weight:700}
+.pill.r{background:var(--redDim);color:var(--red)}
+.pill.g{background:var(--greenDim);color:var(--green)}
+.pill.b{background:var(--blueGlow);color:var(--blue)}
+.pill.a{background:var(--amberDim);color:var(--amber)}
+
+/* ═══════════════════════════════ CATALYST ═══════════════════════════════ */
+.catalyst-item{
+  display:flex;gap:14px;padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.catalyst-item:last-child{border-bottom:none}
+.cat-date{
+  flex-shrink:0;width:90px;
+  font-size:11px;font-weight:700;color:var(--blue);
+  padding-top:2px;
+}
+.cat-body h5{font-size:12px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.cat-body p{font-size:11px;color:var(--txt2);line-height:1.5}
+
+/* ═══════════════════════════════ PROGRESS BARS ═══════════════════════════════ */
+.prog-row{margin-bottom:10px}
+.prog-hd{display:flex;justify-content:space-between;margin-bottom:5px;font-size:11px}
+.prog-lbl{color:var(--txt2)}
+.prog-val{font-weight:700}
+.prog-track{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.prog-bar{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+
+/* ═══════════════════════════════ ACQN TABLES ═══════════════════════════════ */
+.acq-box{
+  border-radius:var(--r);padding:16px;margin-bottom:14px;
+  border:1px solid;
+}
+.acq-box.kkr{background:rgba(255,77,109,.06);border-color:rgba(255,77,109,.2)}
+.acq-box.spain{background:rgba(255,170,0,.06);border-color:rgba(255,170,0,.2)}
+.acq-box.ma{background:rgba(0,180,255,.06);border-color:rgba(0,180,255,.2)}
+.acq-box h4{font-size:13px;font-weight:700;margin-bottom:8px}
+.acq-box.kkr h4{color:var(--red)}
+.acq-box.spain h4{color:var(--amber)}
+.acq-box.ma h4{color:var(--blue)}
+.acq-box p{font-size:12px;color:var(--txt2);line-height:1.65;margin-bottom:10px}
+
+/* ═══════════════════════════════ CHART HEIGHTS ═══════════════════════════════ */
+.ch-300{position:relative;height:300px}
+.ch-220{position:relative;height:220px}
+.ch-240{position:relative;height:240px}
+
+/* ═══════════════════════════════ ANIMATIONS ═══════════════════════════════ */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow-pulse{0%,100%{box-shadow:0 0 20px var(--blueGlow)}50%{box-shadow:0 0 40px rgba(0,180,255,.3)}}
+@keyframes counter{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+.pane.active>*{animation:fadeInUp .4s ease both}
+.pane.active>*:nth-child(2){animation-delay:.06s}
+.pane.active>*:nth-child(3){animation-delay:.12s}
+.pane.active>*:nth-child(4){animation-delay:.18s}
+.pane.active>*:nth-child(5){animation-delay:.24s}
+
+/* ═══════════════════════════════ MISC ═══════════════════════════════ */
+.sep-line{height:1px;background:var(--border);margin:16px 0}
+.badge{display:inline-block;padding:3px 10px;border-radius:8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+.badge-amber{background:var(--amberDim);color:var(--amber);border:1px solid rgba(255,170,0,.3)}
+.badge-green{background:var(--greenDim);color:var(--green);border:1px solid rgba(0,229,160,.3)}
+.badge-red{background:var(--redDim);color:var(--red);border:1px solid rgba(255,77,109,.3)}
+.badge-blue{background:var(--blueGlow);color:var(--blue);border:1px solid rgba(0,180,255,.3)}
+.mb16{margin-bottom:16px}
+.mt16{margin-top:16px}
+.ta-c{text-align:center}
+.fw7{font-weight:700}
+.fz11{font-size:11px}
+.fz12{font-size:12px}
+.c-txt2{color:var(--txt2)}
+.c-gold{color:var(--gold)}
+.c-green{color:var(--green)}
+.c-red{color:var(--red)}
+.c-blue{color:var(--blue)}
+.c-amber{color:var(--amber)}
+
+/* ═══════════════════════════════ GAP CARDS ═══════════════════════════════ */
+.gap-card{border-radius:var(--r);padding:18px;border:1px solid;border-left-width:4px;background:var(--bg1)}
+.gap-card.gap-critical{border-color:rgba(255,77,109,.25);border-left-color:var(--red);background:rgba(255,77,109,.04)}
+.gap-card.gap-high{border-color:rgba(255,170,0,.22);border-left-color:var(--amber);background:rgba(255,170,0,.04)}
+.gap-num{font-size:38px;font-weight:900;opacity:.13;float:right;line-height:1;font-variant-numeric:tabular-nums;margin-top:-4px}
+.gap-card.gap-critical .gap-num{color:var(--red)}
+.gap-card.gap-high .gap-num{color:var(--amber)}
+.gap-tag2{display:inline-block;padding:2px 8px;border-radius:8px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.gap-tag2.critical{background:var(--red);color:#fff}
+.gap-tag2.high{background:var(--amber);color:#000}
+.gap-card h4{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:6px}
+.gap-card p{font-size:11px;color:var(--txt2);line-height:1.62;margin-bottom:8px}
+
+/* ═══════════════════════════════ DISRUPTION TIMELINE ═══════════════════════════════ */
+.dis-timeline{display:flex;gap:0;overflow:hidden;border-radius:8px;margin:12px 0;border:1px solid var(--border)}
+.dis-seg{flex:1;padding:14px 12px;border-right:1px solid rgba(255,255,255,.05);min-width:0}
+.dis-seg:last-child{border-right:none}
+.dis-seg.phase-past{background:rgba(255,77,109,.07)}
+.dis-seg.phase-now{background:rgba(255,170,0,.11);border-top:2px solid var(--amber)}
+.dis-seg.phase-near{background:rgba(0,180,255,.06)}
+.dis-seg.phase-future{background:rgba(0,180,255,.02)}
+.dis-year{font-size:11px;font-weight:700;margin-bottom:5px}
+.dis-seg.phase-past .dis-year{color:var(--red)}
+.dis-seg.phase-now .dis-year{color:var(--amber)}
+.dis-seg.phase-near .dis-year{color:var(--blue)}
+.dis-seg.phase-future .dis-year{color:var(--txt3)}
+.dis-label{font-size:10px;font-weight:700;color:var(--txt);margin-bottom:4px;text-transform:uppercase;letter-spacing:.7px}
+.dis-desc{font-size:9px;color:var(--txt2);line-height:1.5}
+
+/* ═══════════════════════════════ ANALOGY STRIP ═══════════════════════════════ */
+.analogy-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.anl{border-radius:8px;padding:14px;border:1px solid}
+.anl-warn{background:rgba(255,77,109,.05);border-color:rgba(255,77,109,.2)}
+.anl-ok{background:rgba(0,180,255,.05);border-color:rgba(0,180,255,.2)}
+.anl h5{font-size:11px;font-weight:700;margin-bottom:6px}
+.anl-warn h5{color:var(--red)}
+.anl-ok h5{color:var(--blue)}
+.anl p{font-size:10px;color:var(--txt2);line-height:1.55}
+.anl .anl-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:6px;display:inline-block;margin-bottom:7px}
+.anl-tag.warn{background:var(--red);color:#fff}
+.anl-tag.ok{background:var(--greenDim);color:var(--green);border:1px solid rgba(0,229,160,.3)}
+
+@media(max-width:800px){
+  .g2,.g3,.g4,.sliders-grid,.risk-grid{grid-template-columns:1fr}
+  .sc-boxes{grid-template-columns:1fr}
+  .hdr-kpis{display:none}
+  .ff-lbl{width:110px;font-size:10px}
+  .analogy-strip{grid-template-columns:1fr}
+  .dis-timeline{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ HEADER ══════════════════════ -->
+<div class="hdr">
+  <div class="hdr-brand">
+    <h1>SCOUT24 SE &nbsp;·&nbsp; <span style="color:var(--blue)">SDX.DE</span></h1>
+    <p>Equity Research &nbsp;·&nbsp; Stefan Eich &amp; Jan Seidel &nbsp;·&nbsp; FOM M.Sc. Finance &amp; Accounting &nbsp;·&nbsp; Mai 2026</p>
+  </div>
+  <div class="hdr-kpis">
+    <div class="hkpi"><div class="lbl">Kurs</div><div class="val gold">€ 72,25</div></div>
+    <div class="hkpi"><div class="lbl">Kursziel 12M</div><div class="val green">€ 92</div></div>
+    <div class="hkpi"><div class="lbl">Upside</div><div class="val green" id="hdr-up">+27 %</div></div>
+    <div class="hkpi"><div class="lbl">DCF Base</div><div class="val blue" id="hdr-dcf">€ 110</div></div>
+    <div class="hkpi"><div class="lbl">Rating</div><div class="val amber">HALTEN</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ TABS ══════════════════════ -->
+<div class="tabs-bar">
+  <button class="tb active" onclick="tab('exec',this)"><span class="dot"></span>Executive Summary</button>
+  <button class="tb" onclick="tab('dcf',this)"><span class="dot"></span>DCF Live-Modell</button>
+  <button class="tb" onclick="tab('multi',this)"><span class="dot"></span>Peer Multiples</button>
+  <button class="tb" onclick="tab('acq',this)"><span class="dot"></span>Übernahme-Szenario</button>
+  <button class="tb" onclick="tab('gap',this)"><span class="dot"></span>Geschäftsmodell-Lücken</button>
+  <button class="tb" onclick="tab('risk',this)"><span class="dot"></span>Investment-Urteil</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PANE 1 — EXECUTIVE SUMMARY
+══════════════════════════════════════════════════ -->
+<div class="content">
+<div id="p-exec" class="pane active">
+
+  <div class="verdict hold">
+    <div class="v-rating">HALTEN</div>
+    <div class="v-body">
+      <h3>Investment-These: Asymmetrisches Chance-Risiko bei struktureller Übergangsphase</h3>
+      <p>Scout24 besitzt einen der stärksten Datenmöte Europas — ~70&nbsp;% Marktanteil, 19&nbsp;Mio. Nutzer/Monat, ooEBITDA-Marge 62,5&nbsp;%. Gleichzeitig bepreist der Markt vier strukturelle Risiken (KI-Disintermediation, defensiver CMD-Pivot, €1,8&nbsp;Mrd. Goodwill-Risiko, KKR/Immowelt), die im Konsens (100&nbsp;% Buy) nicht reflektiert sind. Bei €&nbsp;72,25 ist das Bear-Szenario (€&nbsp;75) weitgehend eingepreist. <strong style="color:var(--amber)">Akkumulieren unter €&nbsp;60 — Upgrade bei Traffic-Trendwende.</strong></p>
+    </div>
+  </div>
+
+  <div class="g3 mb16">
+
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-blue"></div>Finanzkennzahlen 2025A</div>
+      <div class="stat-row"><span class="s-lbl">Umsatzerlöse</span><span class="s-val">€ 649,6 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">Umsatz-CAGR (2021–2025)</span><span class="s-val g">+13,7 %</span></div>
+      <div class="stat-row"><span class="s-lbl">ooEBITDA</span><span class="s-val">€ 405,7 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">ooEBITDA-Marge</span><span class="s-val g">62,5 %</span></div>
+      <div class="stat-row"><span class="s-lbl">Free Cashflow</span><span class="s-val">€ 261,4 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">FCF Yield</span><span class="s-val g">5,0 %</span></div>
+      <div class="stat-row"><span class="s-lbl">Nettoverschuldung</span><span class="s-val">€ 100 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">Net Debt / ooEBITDA</span><span class="s-val">0,2×</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-gold"></div>Fair Value — Szenarien</div>
+      <div class="sc-boxes" style="grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div class="sc-box bear"><div class="sc-lbl">🐻 Bär</div><div class="sc-val">€75</div><div class="sc-up">+4 % vs Kurs</div><div class="sc-w" style="color:var(--txt3)">Gew. 30 %</div></div>
+        <div class="sc-box base"><div class="sc-lbl">⚖ Base</div><div class="sc-val">€110</div><div class="sc-up">+52 % vs Kurs</div><div class="sc-w" style="color:var(--txt3)">Gew. 50 %</div></div>
+        <div class="sc-box bull"><div class="sc-lbl">🐂 Bulle</div><div class="sc-val">€137</div><div class="sc-up">+90 % vs Kurs</div><div class="sc-w" style="color:var(--txt3)">Gew. 20 %</div></div>
+      </div>
+      <div style="background:var(--bg0);border-radius:8px;padding:12px 16px;text-align:center;margin-top:4px;border:1px solid var(--border)">
+        <div style="font-size:10px;color:var(--txt2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.8px">Gewichteter Fairer Wert (40% DCF + 35% EV/EBITDA + 25% P/E)</div>
+        <div style="font-size:28px;font-weight:900;color:var(--gold)">€ 92</div>
+        <div style="font-size:11px;color:var(--green);margin-top:3px">+27 % impliziertes Upside</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-green"></div>Qualitäts-Scores</div>
+      <div class="stat-row"><span class="s-lbl">EV / ooEBITDA (akt.)</span><span class="s-val b">13,1×</span></div>
+      <div class="stat-row"><span class="s-lbl">Forward P/E 2025A</span><span class="s-val">21,7×</span></div>
+      <div class="stat-row"><span class="s-lbl">Altman Z-Score</span><span class="s-val g">10,87 ✓</span></div>
+      <div class="stat-row"><span class="s-lbl">Piotroski F-Score</span><span class="s-val g">7 / 9 ✓</span></div>
+      <div class="stat-row"><span class="s-lbl">Beneish M-Score</span><span class="s-val g">−4,01 ✓</span></div>
+      <div class="stat-row"><span class="s-lbl">ROCE (2025A)</span><span class="s-val g">16,8 %</span></div>
+      <div class="stat-row"><span class="s-lbl">ROCE − WACC Spread</span><span class="s-val g">+9,3 %</span></div>
+      <div class="stat-row"><span class="s-lbl">Goodwill / Bilanzsumme</span><span class="s-val r">87 % ⚠</span></div>
+    </div>
+  </div>
+
+  <div class="card mb16">
+    <div class="card-hd"><div class="dot dot-blue"></div>Football Field — Bewertungsbandbreite (alle Methoden)</div>
+    <div class="ff-wrap" id="ff-container"></div>
+    <div style="font-size:10px;color:var(--txt3);text-align:center;margin-top:8px">
+      <span style="color:var(--red)">●</span> Aktueller Kurs €&nbsp;72,25 &nbsp;·&nbsp;
+      <span style="color:var(--gold)">●</span> Kursziel 12M €&nbsp;92 &nbsp;·&nbsp; Skala: €&nbsp;40 – €&nbsp;160
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-blue"></div>Umsatz & FCF 2021–2025A</div>
+      <div class="ch-300"><canvas id="ch-hist"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-gold"></div>P&L Kennzahlen 2021–2025A</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Kennzahl (€ Mio.)</th><th>2021A</th><th>2022A</th><th>2023A</th><th>2024A</th><th>2025A</th></tr></thead>
+          <tbody>
+            <tr><td>Umsatz</td><td>389,0</td><td>447,5</td><td>509,1</td><td>566,3</td><td>649,6</td></tr>
+            <tr><td>YoY Wachstum</td><td class="c-txt2">—</td><td class="g-val">+15,0 %</td><td class="g-val">+13,8 %</td><td class="g-val">+11,2 %</td><td class="g-val">+14,7 %</td></tr>
+            <tr><td>ooEBITDA</td><td>226,5</td><td>263,0</td><td>302,2</td><td>348,5</td><td>405,7</td></tr>
+            <tr><td>ooEBITDA-Marge</td><td>58,2 %</td><td>58,8 %</td><td>59,4 %</td><td>61,5 %</td><td class="g-val">62,5 %</td></tr>
+            <tr><td>Free Cashflow</td><td>127,8</td><td>163,2</td><td>197,4</td><td>234,6</td><td>261,4</td></tr>
+            <tr class="row-hl"><td>FCF-Marge</td><td>32,9 %</td><td>36,5 %</td><td>38,8 %</td><td>41,4 %</td><td>40,2 %</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /exec -->
+
+<!-- ══════════════════════════════════════════════════
+     PANE 2 — DCF LIVE-MODELL
+══════════════════════════════════════════════════ -->
+<div id="p-dcf" class="pane">
+
+  <div class="g2 mb16">
+
+    <div class="card glow">
+      <div class="card-hd"><div class="dot dot-blue"></div>Annahmen — live verändern</div>
+      <div class="sliders-grid">
+
+        <div class="sl-item">
+          <div class="sl-hd"><span class="sl-name">WACC</span><span class="sl-val" id="vw">7,5 %</span></div>
+          <input type="range" id="sw" min="5.0" max="11.0" step="0.1" value="7.5" oninput="dcf()">
+        </div>
+        <div class="sl-item">
+          <div class="sl-hd"><span class="sl-name">Terminal Growth (tg)</span><span class="sl-val" id="vtg">2,5 %</span></div>
+          <input type="range" id="stg" min="0.5" max="4.0" step="0.1" value="2.5" oninput="dcf()">
+        </div>
+        <div class="sl-item">
+          <div class="sl-hd"><span class="sl-name">Wachstum Jahr 1</span><span class="sl-val" id="vrg1">11,0 %</span></div>
+          <input type="range" id="srg1" min="3" max="22" step="0.5" value="11" oninput="dcf()">
+        </div>
+        <div class="sl-item">
+          <div class="sl-hd"><span class="sl-name">Wachstum Jahr 8</span><span class="sl-val" id="vrg8">6,0 %</span></div>
+          <input type="range" id="srg8" min="1" max="14" step="0.5" value="6" oninput="dcf()">
+        </div>
+        <div class="sl-item">
+          <div class="sl-hd"><span class="sl-name">FCF-Marge (Ziel)</span><span class="sl-val" id="vfcfm">40,5 %</span></div>
+          <input type="range" id="sfcfm" min="22" max="52" step="0.5" value="40.5" oninput="dcf()">
+        </div>
+        <div class="sl-item">
+          <div class="sl-hd"><span class="sl-name">Nettoverschuldung (€M)</span><span class="sl-val" id="vnd">100</span></div>
+          <input type="range" id="snd" min="0" max="800" step="10" value="100" oninput="dcf()">
+        </div>
+        <div class="sl-item">
+          <div class="sl-hd"><span class="sl-name">Aktien diluted (Mio.)</span><span class="sl-val" id="vsh">72,07</span></div>
+          <input type="range" id="ssh" min="60" max="90" step="0.1" value="72.07" oninput="dcf()">
+        </div>
+        <div class="sl-item">
+          <div class="sl-hd"><span class="sl-name">Basisumsatz 2025A (€M)</span><span class="sl-val" id="vrev">649,6</span></div>
+          <input type="range" id="srev" min="580" max="720" step="5" value="649.6" oninput="dcf()">
+        </div>
+      </div>
+
+      <div class="live-result">
+        <div class="lr-row"><span class="lr-lbl">Σ Barwert FCFs</span><span class="lr-val" id="lr-pvfcf">—</span></div>
+        <div class="lr-row"><span class="lr-lbl">Barwert Terminal Value</span><span class="lr-val" id="lr-pvtv">—</span></div>
+        <div class="lr-row"><span class="lr-lbl">TV-Anteil am EV</span><span class="lr-val" id="lr-tvpct">—</span></div>
+        <div class="lr-row sep"><span class="lr-lbl">Enterprise Value</span><span class="lr-val" id="lr-ev">—</span></div>
+        <div class="lr-row"><span class="lr-lbl">− Nettoverschuldung</span><span class="lr-val" id="lr-nd">—</span></div>
+        <div class="lr-row"><span class="lr-lbl">= Equity Value</span><span class="lr-val" id="lr-eq">—</span></div>
+        <div class="lr-row big sep"><span class="lr-lbl fw7">Fairer Wert je Aktie</span><span class="lr-val" id="lr-fv" style="font-size:26px">—</span></div>
+      </div>
+
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button onclick="resetDCF()" style="flex:1;padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--txt2);cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">↺ Base Reset</button>
+        <button onclick="setBear()" style="flex:1;padding:8px;background:var(--redDim);border:1px solid rgba(255,77,109,.3);border-radius:6px;color:var(--red);cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px">🐻 Bär</button>
+        <button onclick="setBull()" style="flex:1;padding:8px;background:var(--greenDim);border:1px solid rgba(0,229,160,.3);border-radius:6px;color:var(--green);cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px">🐂 Bulle</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-gold"></div>DCF-Ergebnis & Szenarien</div>
+      <div class="sc-boxes">
+        <div class="sc-box bear"><div class="sc-lbl">🐻 Bär-Case</div><div class="sc-val" id="sc-bear">€ 75</div><div class="sc-up" id="sc-bear-up">+4 % vs Kurs</div></div>
+        <div class="sc-box base"><div class="sc-lbl">⚖ Base-Case</div><div class="sc-val" id="sc-base">€ 110</div><div class="sc-up" id="sc-base-up">+52 % vs Kurs</div></div>
+        <div class="sc-box bull"><div class="sc-lbl">🐂 Bulle-Case</div><div class="sc-val" id="sc-bull">€ 137</div><div class="sc-up" id="sc-bull-up">+90 % vs Kurs</div></div>
+      </div>
+      <div class="ch-240 mt16"><canvas id="ch-dcf-bar"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="dot dot-blue"></div>Cash-Flow-Projektion (Base-Case — aktualisiert live)</div>
+    <div class="tbl-wrap"><table id="dcf-tbl"><thead><tr id="dcf-thead"></tr></thead><tbody id="dcf-tbody"></tbody></table></div>
+  </div>
+
+  <div class="card mt16">
+    <div class="card-hd"><div class="dot dot-gold"></div>Sensitivitätsmatrix: Fairer Wert je Aktie (€) bei WACC × Terminal-Growth</div>
+    <div id="sens-tbl" class="tbl-wrap"></div>
+  </div>
+
+</div><!-- /dcf -->
+
+<!-- ══════════════════════════════════════════════════
+     PANE 3 — PEER MULTIPLES
+══════════════════════════════════════════════════ -->
+<div id="p-multi" class="pane">
+
+  <div class="card mb16">
+    <div class="card-hd"><div class="dot dot-blue"></div>Peer Group — Trading Multiples</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Unternehmen</th><th>Land</th><th>EV/EBITDA</th><th>EV/EBIT</th><th>Fwd P/E</th><th>FCF Yield</th><th>Umsatz-Wachstum</th><th>EBITDA-Marge</th></tr></thead>
+        <tbody>
+          <tr><td>Rightmove</td><td>🇬🇧 UK</td><td>21,4×</td><td>23,2×</td><td>21,3×</td><td>4,2 %</td><td>+8,5 %</td><td>72 %</td></tr>
+          <tr><td>Auto Trader Group</td><td>🇬🇧 UK</td><td>20,1×</td><td>22,7×</td><td>19,8×</td><td>4,7 %</td><td>+10,2 %</td><td>71 %</td></tr>
+          <tr><td>REA Group</td><td>🇦🇺 AU</td><td>34,2×</td><td>38,8×</td><td>36,1×</td><td>2,0 %</td><td>+14,8 %</td><td>54 %</td></tr>
+          <tr><td>Hemnet</td><td>🇸🇪 SE</td><td>27,3×</td><td>31,4×</td><td>29,7×</td><td>2,9 %</td><td>+18,3 %</td><td>68 %</td></tr>
+          <tr><td>Vend Marketplaces</td><td>🇫🇷 FR</td><td>8,1×</td><td>9,3×</td><td>11,2×</td><td>6,8 %</td><td>+7,1 %</td><td>62 %</td></tr>
+          <tr><td>SAP SE</td><td>🇩🇪 DE</td><td>4,3×</td><td>5,4×</td><td>16,4×</td><td>5,8 %</td><td>+11,0 %</td><td>32 %</td></tr>
+          <tr class="row-sep"><td>Peer-Median</td><td>—</td><td>11,68×</td><td>24,85×</td><td>19,09×</td><td>4,0 %</td><td>+10,6 %</td><td>65 %</td></tr>
+          <tr class="row-hl"><td>Scout24 SE (2025A)</td><td>🇩🇪 DE</td><td class="b-val">13,1×</td><td class="b-val">16,4×</td><td class="b-val">21,7×</td><td class="g-val">5,0 %</td><td class="g-val">+14,7 %</td><td class="g-val">62,5 %</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:var(--amberDim);border-radius:7px;border:1px solid rgba(255,170,0,.25);font-size:11px;color:var(--txt2);line-height:1.6">
+      ⚡ <strong style="color:var(--amber)">Methodikhinweis:</strong> EV/EBITDA-Peer-Median 11,68× basiert auf LTM 2025A — Scout24 handelt mit Aufschlag (13,1×), gerechtfertigt durch überdurchschnittliches Wachstum (+14,7 %) und Marge (62,5 %). Die Premium-13×-Reihe in der Bewertungsmatrix verwendet 2026E ooEBITDA — dies wird in der Tabelle unten explizit ausgewiesen.
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-blue"></div>EV/EBITDA — Scout24 vs. Peers</div>
+      <div class="ch-300"><canvas id="ch-peers"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-gold"></div>Bewertungsmatrix — Fair Value je Aktie (€)</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Methode</th><th>Basis</th><th>Min</th><th>Basis FV</th><th>Max</th><th>Anmerkung</th></tr></thead>
+          <tbody>
+            <tr><td>EV/ooEBITDA (11,68×)</td><td>2025A EBITDA</td><td>59</td><td class="a-val">64</td><td>84</td><td class="c-txt2 fz11">LTM €405,7M</td></tr>
+            <tr><td>EV/ooEBITDA (13× Prämie)</td><td>2026E EBITDA*</td><td>75</td><td class="a-val">84</td><td>95</td><td class="c-txt2 fz11">*€466M (CMD +15%)</td></tr>
+            <tr><td>EV/EBIT (24,85×)</td><td>2025A EBIT</td><td>54</td><td class="a-val">111</td><td>118</td><td class="c-txt2 fz11">EBIT €325,3M</td></tr>
+            <tr><td>Forward P/E (19,09×)</td><td>2026E EPS</td><td>53</td><td class="a-val">74</td><td>85</td><td class="c-txt2 fz11">EPS ~€3,90</td></tr>
+            <tr><td>FCF Yield (4,0 %)</td><td>FCF 2025A</td><td>71</td><td class="a-val">89</td><td>104</td><td class="c-txt2 fz11">FCF €261,4M</td></tr>
+            <tr><td>DCF Base-Case</td><td>WACC 7,5 %</td><td>75</td><td class="g-val">110</td><td>137</td><td class="c-txt2 fz11">tg 2,5 %</td></tr>
+            <tr class="row-hl"><td>Gewichteter FV</td><td>40/35/25</td><td>—</td><td class="a-val">€ 92</td><td>—</td><td class="c-txt2 fz11">DCF+EBITDA+P/E</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /multi -->
+
+<!-- ══════════════════════════════════════════════════
+     PANE 4 — ÜBERNAHME-SZENARIO
+══════════════════════════════════════════════════ -->
+<div id="p-acq" class="pane">
+
+  <div class="card mb16" style="background:linear-gradient(135deg,var(--bg2),var(--bg1));border-color:var(--borderB)">
+    <div class="card-hd"><div class="dot dot-red"></div>Das KKR-Immowelt + Spanien-Szenario: Doppelter strategischer Druck</div>
+    <p class="fz12 c-txt2" style="line-height:1.7">Scout24 steht vor einem zweiseitigen Druck: <strong style="color:var(--red)">(1) KKR/Immowelt</strong> reaktiviert mit institutionellem Kapital den stärksten deutschen Wettbewerber. <strong style="color:var(--amber)">(2) Spanien-Expansion</strong> (Fotocasa/Habitaclia, Closing 2026) erhöht Capex und dilutiert die ooEBITDA-Marge um ~3 Prozentpunkte. Gleichzeitig erzwingt der <strong style="color:var(--blue)">"Agentic OS"-Pivot</strong> F&amp;E-Ausgaben in einer kritischen Phase. Wir quantifizieren alle drei Szenarien und analysieren die M&amp;A-Optionalität.</p>
+  </div>
+
+  <div class="g2 mb16">
+
+    <div>
+      <div class="acq-box kkr mb16">
+        <h4>🏠 Szenario A — KKR / Immowelt: Marktanteilserosion</h4>
+        <p>KKR + CPP Investments bringen mehrjährigen Investitionshorizont und Verlusttoleranz in den DE-Kernmarkt. Q1 2026: Website-Traffic −6,8 %, Sessions −6,7 % — trotz historischer Wohnungsknappheit. Preis-/Marketingdruck in den nächsten 18–24 Monaten erwartet.</p>
+        <div class="pills">
+          <span class="pill r">Marktanteil −2–5 %</span>
+          <span class="pill r">ARPU-Druck</span>
+          <span class="pill r">Traffic −6,8 % Q1</span>
+          <span class="pill b">Wohnungsknappheit als Puffer</span>
+        </div>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Stressannahme</th><th>Basis</th><th>Stress</th><th>FV-Delta</th></tr></thead>
+          <tbody>
+            <tr><td>Marktanteilsverlust (5J.)</td><td>−2 %</td><td>−5 %</td><td class="r-val">−€4 / −€11</td></tr>
+            <tr><td>ARPU-Wachstum p.a.</td><td>+8 %</td><td>+5 %</td><td class="r-val">−€7 / −€18</td></tr>
+            <tr><td>Abwehr-Marketing/J.</td><td>€20M</td><td>€50M</td><td class="r-val">−€3 / −€8</td></tr>
+            <tr class="row-hl"><td>Kombinierter Stress</td><td>−€14</td><td>−€37</td><td class="r-val">Bär: €75 → €38</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="acq-box spain mb16">
+        <h4>🇪🇸 Szenario B — Spanien: Chancen vs. Margendilution</h4>
+        <p>Fotocasa-Akquisition (Closing 2026) verwässert ooEBITDA-Marge von 64 % auf ~61 % (−3 PP). Vorige Internationalisierung (Österreich) intern als "wenig erfolgreich" eingestuft. Spanien = €1,4 Mrd. adressierbarer Markt — fragmentiert, kein klarer Marktführer.</p>
+        <div class="pills">
+          <span class="pill r">Marge −3 PP 2026E</span>
+          <span class="pill r">Capex +€30–80M</span>
+          <span class="pill g">Markt €1,4 Mrd.</span>
+          <span class="pill g">Diversifikation</span>
+        </div>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Annahme</th><th>Optimist.</th><th>Realist.</th><th>Konservat.</th></tr></thead>
+          <tbody>
+            <tr><td>Spanien-Marktanteil 2030E</td><td>35 %</td><td>22 %</td><td>12 %</td></tr>
+            <tr><td>Spanien-Umsatz 2030E</td><td>€180M</td><td>€110M</td><td>€55M</td></tr>
+            <tr><td>Anlaufkosten 2026–28E</td><td>€30M</td><td>€55M</td><td>€85M</td></tr>
+            <tr class="row-hl"><td>NPV-Impact / Aktie</td><td class="g-val">+€11</td><td class="g-val">+€5</td><td class="r-val">−€1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2 mb16">
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-blue"></div>M&A Premium — Scout24 als Übernahmeziel</div>
+      <p class="fz12 c-txt2 mb16" style="line-height:1.65">Bei EV/EBITDA 13,1× und FCF-Rendite 5,0 % ist Scout24 attraktiv für PE-Fonds (REA Group, Axel Springer, Thoma Bravo). Typische M&amp;A-Prämie 30–50 %. Goodwill-Last und dt. Kartellrecht sind die größten Hinderungsgründe.</p>
+      <div class="ch-220"><canvas id="ch-ma"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-red"></div>Goodwill-Impairment-Risiko</div>
+      <div style="margin-bottom:14px">
+        <div class="prog-row">
+          <div class="prog-hd"><span class="prog-lbl">Goodwill</span><span class="prog-val c-red">€ 925,8 Mio. (44,8 % BS)</span></div>
+          <div class="prog-track"><div class="prog-bar" style="width:44.8%;background:var(--red)"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-hd"><span class="prog-lbl">Marke ImmoScout24</span><span class="prog-val c-red">€ 869,6 Mio. (42,1 % BS)</span></div>
+          <div class="prog-track"><div class="prog-bar" style="width:42.1%;background:rgba(255,77,109,.6)"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-hd"><span class="prog-lbl">Sonstige immaterielle</span><span class="prog-val c-txt2">€ 67,3 Mio. (3,3 %)</span></div>
+          <div class="prog-track"><div class="prog-bar" style="width:3.3%;background:var(--txt3)"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-hd"><span class="prog-lbl">Sachanlagen &amp; Finanzen</span><span class="prog-val c-txt2">€ 203,3 Mio. (9,8 %)</span></div>
+          <div class="prog-track"><div class="prog-bar" style="width:9.8%;background:var(--green)"></div></div>
+        </div>
+      </div>
+      <div style="background:var(--redDim);border-radius:7px;padding:12px;border:1px solid rgba(255,77,109,.2);font-size:11px;color:var(--txt2);line-height:1.6">
+        <strong style="color:var(--red)">⚠ Impairment-Trigger:</strong> Bei WACC-Anstieg auf 9 % oder Marktanteilsverlust von 10–15 PP würden Wertberichtigungen von €500–800 Mio. ausgelöst. Scout24 verwendet intern WACC 8,9 % im Impairment-Test — die Puffer-Differenz ist gering.
+      </div>
+    </div>
+  </div>
+
+</div><!-- /acq -->
+
+<!-- ══════════════════════════════════════════════════
+     PANE 5 — INVESTMENT-URTEIL
+══════════════════════════════════════════════════ -->
+<div id="p-risk" class="pane">
+
+  <div class="risk-grid mb16">
+    <div class="risk-card high">
+      <div class="risk-tag high">Risiko 1 — Hoch</div>
+      <h4>Traffic-Alarm Q1 2026: Erste KI-Disintermediation</h4>
+      <p>Website-Visits −6,8 %, Sessions −6,7 % bei gleichzeitig +14,5 % Angebotswachstum. Paradox in angespanntem Wohnungsmarkt. Arbeitshypothese: ChatGPT/Perplexity/Google AI Overviews aggregieren Listings direkt — kein ImmoScout24-Klick nötig. Konsens modelliert +8–12 % Traffic-Wachstum.</p>
+      <div class="pills"><span class="pill r">FV-Risiko −€20–40</span><span class="pill r">Δ Konsens +15 %P</span></div>
+    </div>
+    <div class="risk-card high">
+      <div class="risk-tag high">Risiko 2 — Hoch</div>
+      <h4>"Agentic OS" Pivot = Defensives Geständnis</h4>
+      <p>5 simultane Modelländerungen am CMD 2026: Reichweite → Intelligence, Listing → Consumption, klassische Suche → KI-native Interfaces. Historische Analogien: Pressehäuser 2014–16, stationärer Einzelhandel 2017–19 — Pivot erfolgte 12–24 Monate vor vollem Margendurchschlag.</p>
+      <div class="pills"><span class="pill r">F&amp;E +€50–80M/J.</span><span class="pill r">ROI unsicher 2–4J.</span></div>
+    </div>
+    <div class="risk-card high">
+      <div class="risk-tag high">Risiko 3 — Hoch</div>
+      <h4>€ 1,8 Mrd. Goodwill = 87 % der Bilanzsumme</h4>
+      <p>Goodwill (€925,8M) + Marke (€869,6M) = €1,795 Mrd. Werthaltigkeitstests basieren auf fortgesetzter Marktführerschaft. Impairment €500–800M wäre nicht-cashwirksam, aber eigenkapitalreduzierend. Kein Sell-Side-Modell quantifiziert dieses Tail-Risk.</p>
+      <div class="pills"><span class="pill r">Impairment €500–800M</span><span class="pill r">EPS-Verwässerung −15–25 %</span></div>
+    </div>
+    <div class="risk-card med">
+      <div class="risk-tag med">Risiko 4 — Mittel</div>
+      <h4>KKR/Immowelt + Spanien: Doppelter Margendruck</h4>
+      <p>Gleichzeitige Verteidigung (DE) + Expansion (ES) komprimiert FCF-Margen im falschen Moment. Fotocasa-Closing 2026 verwässert ooEBITDA-Marge von 64 % auf ~61 %. Österreich-Erfahrung ("rückblickend wenig erfolgreich") nährt Skepsis zur Replikation.</p>
+      <div class="pills"><span class="pill a">Marge −3 PP</span><span class="pill a">Mgmt. gebunden</span></div>
+    </div>
+  </div>
+
+  <div class="g2 mb16">
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-gold"></div>Kursziel-Übersicht &amp; Gewichtung</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Szenario</th><th>Gew.</th><th>FV (€)</th><th>Upside</th></tr></thead>
+          <tbody>
+            <tr style="background:var(--redDim)"><td>🐻 Bär — KI-Disruption</td><td>30 %</td><td class="r-val">75</td><td class="r-val">+4 %</td></tr>
+            <tr style="background:var(--amberDim)"><td>⚖ Base — CMD-Guidance</td><td>50 %</td><td class="a-val">110</td><td class="a-val">+52 %</td></tr>
+            <tr style="background:var(--greenDim)"><td>🐂 Bull — Agentic OS</td><td>20 %</td><td class="g-val">137</td><td class="g-val">+90 %</td></tr>
+            <tr class="row-hl"><td>★ Gewichteter FV (DCF)</td><td>100 %</td><td class="a-val">104</td><td class="a-val">+44 %</td></tr>
+            <tr class="row-sep"><td>★ Kursziel 12M (alle Methoden)</td><td>—</td><td>92</td><td>+27 %</td></tr>
+            <tr><td>💀 Crash — KI-Disruption voll</td><td>5 %</td><td class="r-val">35</td><td class="r-val">−52 %</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div style="background:var(--amberDim);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,170,0,.3)">
+          <div style="font-size:9px;color:var(--amber);font-weight:700;text-transform:uppercase;margin-bottom:4px;letter-spacing:.8px">Akkumulieren unter</div>
+          <div style="font-size:24px;font-weight:900;color:var(--gold)">€ 60</div>
+        </div>
+        <div style="background:var(--greenDim);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(0,229,160,.3)">
+          <div style="font-size:9px;color:var(--green);font-weight:700;text-transform:uppercase;margin-bottom:4px;letter-spacing:.8px">Kursziel 12M</div>
+          <div style="font-size:24px;font-weight:900;color:var(--green)">€ 92</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
+          <div style="font-size:9px;color:var(--txt2);font-weight:700;text-transform:uppercase;margin-bottom:4px;letter-spacing:.8px">Stop-Loss</div>
+          <div style="font-size:24px;font-weight:900;color:var(--red)">€ 52</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-blue"></div>Catalyst Calendar — Aufwärts- &amp; Abwärts-Trigger</div>
+      <div class="catalyst-item">
+        <div class="cat-date">30. Jul. 2026</div>
+        <div class="cat-body"><h5>H1 2026-Ergebnisse</h5><p>Traffic-Trend Q2 — Schlüsselindikator. Visit ≥ +3 % → Upgrade-Kandidat. Sessions &lt; −10 % → Downgrade-Risiko.</p></div>
+      </div>
+      <div class="catalyst-item">
+        <div class="cat-date">Okt. 2026</div>
+        <div class="cat-body"><h5>Q3 Trading Update</h5><p>Bestätigung CMD-Guidance. ImmoPunkte-Adoption: Erst-Reporting B2B-Anteil (~60 % Target).</p></div>
+      </div>
+      <div class="catalyst-item">
+        <div class="cat-date">Q4 2026</div>
+        <div class="cat-body"><h5>Fotocasa-Integration</h5><p>Erste EBITDA-Beiträge aus Spanien. Break-even-Timing entscheidend für Margenausblick.</p></div>
+      </div>
+      <div class="catalyst-item">
+        <div class="cat-date">12. Mär. 2027</div>
+        <div class="cat-body"><h5>FY 2026 + CMD-Update</h5><p>Validierung Mittelfristziele 2028E. Bestätigung oder Revision der ooEBITDA-Marge 64 %.</p></div>
+      </div>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--amberDim);border-radius:7px;border:1px solid rgba(255,170,0,.2);font-size:11px;color:var(--txt2);line-height:1.6">
+        <strong style="color:var(--amber)">Upgrade zu KAUFEN bei:</strong> Traffic +3 % YoY Q2/Q3 &amp; ImmoPunkte-ARPU-Anstieg sichtbar.<br>
+        <strong style="color:var(--red)">Downgrade zu VERKAUFEN bei:</strong> Sessions &lt; −10 % Q2 oder Goodwill-Impairment &gt; €200M.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="dot dot-gold"></div>SWOT</div>
+    <div class="g2">
+      <div>
+        <div style="background:var(--greenDim);border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid rgba(0,229,160,.2)">
+          <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">✅ Stärken</div>
+          <div class="stat-row"><span class="s-lbl">Marktanteil DE</span><span class="s-val g">~70 %</span></div>
+          <div class="stat-row"><span class="s-lbl">ooEBITDA-Marge</span><span class="s-val g">62,5 %</span></div>
+          <div class="stat-row"><span class="s-lbl">FCF-Konvertierung</span><span class="s-val g">~93 % EBITDA → FCF</span></div>
+          <div class="stat-row"><span class="s-lbl">Daten-Moat</span><span class="s-val g">Sprengnetter, bulwiengesa</span></div>
+          <div class="stat-row"><span class="s-lbl">DAX-40-Mitglied</span><span class="s-val g">Sep. 2025</span></div>
+        </div>
+        <div style="background:var(--redDim);border-radius:8px;padding:14px;border:1px solid rgba(255,77,109,.2)">
+          <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">❌ Schwächen</div>
+          <div class="stat-row"><span class="s-lbl">Goodwill / Bilanzsumme</span><span class="s-val r">87 % ⚠</span></div>
+          <div class="stat-row"><span class="s-lbl">DE-Abhängigkeit</span><span class="s-val r">~96 % Umsatz</span></div>
+          <div class="stat-row"><span class="s-lbl">Traffic-Erosion</span><span class="s-val r">Q1 2026 −6,8 %</span></div>
+          <div class="stat-row"><span class="s-lbl">M&A-Integrationsrisiken</span><span class="s-val r">Fotocasa, AT-Erfahrung</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="background:var(--amberDim);border-radius:8px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,170,0,.2)">
+          <div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">🔭 Chancen</div>
+          <div class="stat-row"><span class="s-lbl">Agentic OS</span><span class="s-val a">KI-ARPU Monetarisierung</span></div>
+          <div class="stat-row"><span class="s-lbl">Spanien Fotocasa</span><span class="s-val a">€1,4 Mrd. Markt</span></div>
+          <div class="stat-row"><span class="s-lbl">FinTech-Expansion</span><span class="s-val a">Hypo-Leads, BauFi</span></div>
+          <div class="stat-row"><span class="s-lbl">Strukturelle Wohnungsnot</span><span class="s-val a">50J.-Tief Fertigstellungen</span></div>
+        </div>
+        <div style="background:var(--redDim);border-radius:8px;padding:14px;border:1px solid rgba(255,77,109,.2)">
+          <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">⚡ Risiken</div>
+          <div class="stat-row"><span class="s-lbl">KI-Disintermediation</span><span class="s-val r">ChatGPT, Perplexity</span></div>
+          <div class="stat-row"><span class="s-lbl">KKR/Immowelt</span><span class="s-val r">Inst. Kapital + Verlusttoleranz</span></div>
+          <div class="stat-row"><span class="s-lbl">Goodwill-Impairment</span><span class="s-val r">WACC +150 bps → Trigger</span></div>
+          <div class="stat-row"><span class="s-lbl">DMA / Kartellrecht</span><span class="s-val r">~70 % Marktanteil</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /risk -->
+
+<!-- ══════════════════════════════════════════════════
+     PANE 6 — GESCHÄFTSMODELL-LÜCKEN
+══════════════════════════════════════════════════ -->
+<div id="p-gap" class="pane">
+
+  <div class="verdict sell">
+    <div class="v-rating" style="font-size:17px;min-width:80px;letter-spacing:1px">5 LÜCKEN</div>
+    <div class="v-body">
+      <h3>Short-Thesis: Scout24 ist ein Aggregator — der gerade selbst aggregiert wird</h3>
+      <p>ImmoScout24's Kernmoat basiert auf einem Engpass: Nutzer brauchen die Plattform, Makler brauchen die Nutzer. Generative KI bricht beide Seiten dieses Gleichgewichts gleichzeitig auf. Q1 2026 liefert den ersten empirischen Beweis: Traffic −6,8 %, Sessions −6,7 % — <em>obwohl</em> das Angebotsvolumen um +14,5 % stieg. Das ist kein Konjunktureffekt. Das ist strukturelle Disintermediation. Fünf Schichten fehlen Scout24, um diesen Wandel strukturell zu überleben: Transaktionskontrolle, API-Ökosystem, Netzwerktiefe, Datensouveränität und geografische Diversifikation. <strong style="color:var(--red)">Keines dieser Defizite ist im Konsens-DCF modelliert.</strong></p>
+    </div>
+  </div>
+
+  <!-- Gap Cards 1–3 -->
+  <div class="g3 mb16">
+
+    <div class="gap-card gap-critical">
+      <span class="gap-num">01</span>
+      <div class="gap-tag2 critical">Kritisch · 12–24 Monate</div>
+      <h4>KI-Disintermediation: Traffic wird umgeleitet</h4>
+      <p>ChatGPT, Perplexity und Google AI Overviews aggregieren Listings direkt aus öffentlichen Quellen. Der Nutzer findet seine Wohnung — ohne je auf ImmoScout24.de zu klicken. Q1 2026: −6,8 % Visits bei +14,5 % Angebotsvolumen. Der klassische Nachfragetreiber "Wohnungsknappheit" kompensiert den Rückgang nicht mehr. Konsens modelliert +8–12 % Traffic-Wachstum — das Delta zur Realität beträgt ~15 Prozentpunkte.</p>
+      <div class="pills">
+        <span class="pill r">Traffic −6,8 % Q1/26</span>
+        <span class="pill r">Revenue-Risiko €100–200M</span>
+        <span class="pill r">P(2027) = 65 %</span>
+      </div>
+    </div>
+
+    <div class="gap-card gap-critical">
+      <span class="gap-num">02</span>
+      <div class="gap-tag2 critical">Kritisch · 24–48 Monate</div>
+      <h4>Transaktionsschicht fehlt: Nur Lead-Gen, kein Deal</h4>
+      <p>Scout24 ist Europas meistbesuchtes Immobilienportal — ohne eine einzige Transaktion abzuschließen. Das Erlösmodell endet beim "Kontakt herstellen". Wenn KI-Agenten 2027/28 Besichtigungen direkt über Landlord-APIs buchen, entfällt der Klick-Engpass, auf dem das Listing-Modell basiert. Analogie: Google Flights hat Kayak nicht gekauft — es hat ihn übersprungen. REA Group (AU) und Opendoor (US) haben die Transaktionsschicht bereits aufgebaut.</p>
+      <div class="pills">
+        <span class="pill r">Kein Transaktionsanteil</span>
+        <span class="pill r">Revenue-Risiko €200–350M</span>
+        <span class="pill a">REA/Opendoor als Benchmark</span>
+      </div>
+    </div>
+
+    <div class="gap-card gap-critical">
+      <span class="gap-num">03</span>
+      <div class="gap-tag2 critical">Kritisch · 12–18 Monate</div>
+      <h4>API / Agentic Gap: Keine maschinenlesbare Datenschicht</h4>
+      <p>Wenn Wohnungssuche agentic wird — autonome KI, die Anforderungen versteht, Angebote filtert, Besichtigungen bucht — braucht sie strukturierte API-Zugänge, keine Webseite. Scout24 hat kein öffentliches Developer-API, keinen Listing-Feed-Standard. Das Risiko: KI-Agenten scrapen roh oder ignorieren die Plattform. Die "Agentic OS"-Strategie ist richtig erkannt, aber 18–24 Monate zu spät gestartet — Idealista (ES) und Zoopla (UK) sind bereits in Partnerprogrammen.</p>
+      <div class="pills">
+        <span class="pill r">Kein öff. API</span>
+        <span class="pill r">F&amp;E-Lücke €50–80M</span>
+        <span class="pill a">18M Aufholbedarf</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Gap Cards 4–5 -->
+  <div class="g2 mb16">
+
+    <div class="gap-card gap-high">
+      <span class="gap-num">04</span>
+      <div class="gap-tag2 high">Hoch · 36–60 Monate</div>
+      <h4>Daten-Moat-Erosion: Sprengnetter wird commoditisiert</h4>
+      <p>Scout24 bewirbt Sprengnetter- und bulwiengesa-Daten als Differenzierungsmerkmal. Beide basieren auf Transaktions- und Angebotshistorien, die zunehmend aus öffentlichen Quellen (Grundbuch, Notariate, Portale selbst) trainierbar sind. OpenAI, Google DeepMind und deutsche PropTech-Startups replizieren Bewertungsmodelle mit öffentlichen Daten. Wenn "Marktwert-KI" kostenlos verfügbar wird, verliert das Sprengnetter-Abo seinen Premium-Charakter. Zusätzlich: Scraping-Verbote sind in DE juristisch schwer durchsetzbar — der Datenmoat ist weniger geschützt als kommuniziert.</p>
+      <div class="pills">
+        <span class="pill a">Moat-Erosion 3–5 Jahre</span>
+        <span class="pill a">Revenue-Risiko €40–80M</span>
+        <span class="pill b">Sprengnetter-Premium gefährdet</span>
+      </div>
+    </div>
+
+    <div class="gap-card gap-high">
+      <span class="gap-num">05</span>
+      <div class="gap-tag2 high">Hoch · 24–60 Monate</div>
+      <h4>Plattform-Disaggregation: DE-Monokultur &amp; Netzwerkfragmentierung</h4>
+      <p>~96 % des Umsatzes in Deutschland — der geografisch konzentrierteste Moat in der europäischen PropTech-Branche. Facebook Marketplace, WhatsApp-Gruppen und NeighborWho-ähnliche Mikronetzwerke fragmentieren das Long-Tail-Segment (Privatvermieter). Spanien-Expansion (Fotocasa) ist der richtige Reflex — aber die historische Österreich-Erfahrung ("rückblickend wenig erfolgreich") und die gleichzeitige DE-Verteidigungsschlacht gegen KKR/Immowelt binden Management-Attention in dem Moment, wo KI-native Neugründungen ohne Legacy-Infrastruktur angreifen.</p>
+      <div class="pills">
+        <span class="pill a">DE-Abhängigkeit 96 %</span>
+        <span class="pill a">Long-Tail-Fragmentierung</span>
+        <span class="pill r">Mgmt-Kapazität gebunden</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Disruption Timeline -->
+  <div class="card mb16">
+    <div class="card-hd"><div class="dot dot-red"></div>Disruptions-Zeithorizont — Eskalationspfad 2024–2030</div>
+    <div class="dis-timeline">
+      <div class="dis-seg phase-past">
+        <div class="dis-year">2024</div>
+        <div class="dis-label">KI-Frühzeichen</div>
+        <div class="dis-desc">Google AI Overviews Beta · ChatGPT Plugins Immobilien · Erste Traffic-Anomalien (unbemerkt vom Markt)</div>
+      </div>
+      <div class="dis-seg phase-now">
+        <div class="dis-year">2025–26 ◀ JETZT</div>
+        <div class="dis-label">Sichtbare Erosion</div>
+        <div class="dis-desc">Traffic −6,8 % Q1 · CMD "Agentic OS"-Pivot · KKR/Immowelt reaktiviert · Fotocasa Closing · 100 % Buy-Konsens</div>
+      </div>
+      <div class="dis-seg phase-near">
+        <div class="dis-year">2026–27</div>
+        <div class="dis-label">ARPU-Druck</div>
+        <div class="dis-desc">Erste KI-Agenten-Buchungen · Preisdruck durch sinkende Klickraten · F&amp;E-Aufwand wird sichtbar in Margen</div>
+      </div>
+      <div class="dis-seg phase-near">
+        <div class="dis-year">2027–28</div>
+        <div class="dis-label">Margenkompression</div>
+        <div class="dis-desc">ooEBITDA-Marge unter 55 % (Bear) · Goodwill-Impairment möglich · Konsens-Revisionen · Erste Downgrades</div>
+      </div>
+      <div class="dis-seg phase-future">
+        <div class="dis-year">2028–30</div>
+        <div class="dis-label">Neues Gleichgewicht</div>
+        <div class="dis-desc">Pivot zu Daten/Transaktionen erfolgreich (€130+) — oder Nischen-Portal mit strukturell tieferer Marge (€40–60)</div>
+      </div>
+    </div>
+    <div style="margin-top:8px;font-size:10px;color:var(--txt3);display:flex;gap:20px;flex-wrap:wrap">
+      <span><span style="color:var(--red)">●</span> Bereits eingetreten</span>
+      <span><span style="color:var(--amber)">●</span> Aktuell (2025–26)</span>
+      <span><span style="color:var(--blue)">●</span> Projektion (Basis-Case)</span>
+    </div>
+  </div>
+
+  <div class="g2 mb16">
+
+    <!-- Revenue at Risk Table -->
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-red"></div>Revenue-at-Risk — Quantifizierung der 5 Lücken</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Lücke</th><th>Risiko-Range (€M)</th><th>P(2027E)</th><th>Erw. Schaden</th></tr></thead>
+          <tbody>
+            <tr><td>① KI-Disintermediation</td><td class="r-val">100–200</td><td class="r-val">65 %</td><td class="r-val">€ 130M</td></tr>
+            <tr><td>② Transaktionslücke</td><td class="r-val">200–350</td><td class="a-val">45 %</td><td class="a-val">€ 157M</td></tr>
+            <tr><td>③ API / Agentic Gap</td><td class="a-val">80–120</td><td class="a-val">55 %</td><td class="a-val">€ 55M</td></tr>
+            <tr><td>④ Daten-Moat-Erosion</td><td>40–80</td><td>50 %</td><td>€ 30M</td></tr>
+            <tr><td>⑤ Disaggregation</td><td>60–100</td><td>35 %</td><td>€ 28M</td></tr>
+            <tr class="row-sep"><td>Σ Gesamt-Exposure</td><td class="r-val">530–900</td><td>—</td><td class="r-val">€ ~400M</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--redDim);border-radius:7px;border:1px solid rgba(255,77,109,.2);font-size:11px;color:var(--txt2);line-height:1.65">
+        <strong style="color:var(--red)">⚠ Short-Signal:</strong> €400M erwarteter Schaden = 62 % des 2025A-Umsatzes. Kein Sell-Side-Modell quantifiziert mehr als Lücke ①. Die Lücken ②–⑤ sind im Konsens-DCF schlicht nicht modelliert — das ist das eigentliche Alpha.
+      </div>
+      <div style="margin-top:10px;padding:10px 14px;background:var(--blueGlow);border-radius:7px;border:1px solid rgba(0,180,255,.2);font-size:11px;color:var(--txt2);line-height:1.65">
+        <strong style="color:var(--blue)">📌 Vergleich Consensus vs. Short-These:</strong> Sell-Side-DCF-Median impliziert €3,5–4,0 Mrd. EV. Unsere 5-Lücken-Adjustierung reduziert den fairen EV auf €2,1–2,6 Mrd. im Bear-Case — das entspricht einem Kursziel von €35–45 bei vollem Durchschlag aller Lücken.
+      </div>
+    </div>
+
+    <!-- Probability-Impact Chart -->
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-gold"></div>Wahrscheinlichkeit × Impact-Matrix (Horizont 2027E)</div>
+      <div class="ch-300"><canvas id="ch-gap-scatter"></canvas></div>
+      <div style="margin-top:8px;font-size:10px;color:var(--txt3);line-height:1.5">
+        Blasengröße = Erwarteter finanzieller Schaden (€M). Oberes rechtes Quadrant = sofortiger Handlungsbedarf.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Historical Analogies -->
+  <div class="card">
+    <div class="card-hd"><div class="dot dot-blue"></div>Historische Analogien — "Das haben wir schon gesehen"</div>
+    <div class="analogy-strip">
+
+      <div class="anl anl-warn">
+        <span class="anl-tag warn">Blaupause 1 · 1995–2005</span>
+        <h5>Zeitungsklassifikatten → Online-Portale</h5>
+        <p>Classified-Anzeigen in Print-Zeitungen verloren innerhalb von 10 Jahren über 80 % des Umsatzes an Craigslist, eBay Classifieds und Immobilienportale. Die Verlage erkannten das Risiko zu spät und konnten Reichweite nicht in Transaktion umwandeln. Scout24 <em>ist</em> die Online-Plattform dieser Ära — aber AI macht Scout24 zum "neuen Print".</p>
+      </div>
+
+      <div class="anl anl-warn">
+        <span class="anl-tag warn">Blaupause 2 · 2010–2020</span>
+        <h5>Kayak / Booking.com → Google Flights</h5>
+        <p>Google baute eine native KI-Flugsuche, die Kayak als Mittler überflüssig machte. Kayaks Traffic halbierte sich in 5 Jahren. Entscheidender Unterschied: Google kontrolliert den Intent (Suche), Kayak kontrollierte nur die Aggregation — exakt wie Scout24 heute. Booking.com überlebte durch Transaktionskontrolle + Direktbuchung.</p>
+      </div>
+
+      <div class="anl anl-warn">
+        <span class="anl-tag warn">Blaupause 3 · 2014–2019</span>
+        <h5>Pressehäuser "Digital First"-Pivot</h5>
+        <p>Medienhäuser erkannten 2012–14 die Disruption und pivotierten zu "Digital First". Werbeumsätze brachen dennoch um 60–70 % ein — trotz korrekter Diagnose. Das Timing-Problem: Der Pivot dauerte 3–5 Jahre, die Disruption vollzog sich in 18–24 Monaten. Scout24's "Agentic OS"-Pivot folgt demselben Muster — mit ähnlichem Timing-Risiko.</p>
+      </div>
+
+      <div class="anl anl-ok">
+        <span class="anl-tag ok">Erfolgsfall · 2012–2024</span>
+        <h5>REA Group (AU) — Der richtige Pivot</h5>
+        <p>REA Group baute als erstes großes Immobilienportal eine echte Transaktionsschicht auf (REA Financial Services, Mortgage Broking). Heute: 34,2× EV/EBITDA vs. Scout24 13,1×. Der Markt bezahlt Transaktionskontrolle mit einem 2,6×-Multiple-Premium. Scout24's BauFi-Ansatz ist ein richtiger erster Schritt — aber kein vollständiges Transaktionsmodell. Preis für den vollständigen Pivot: 3–5 Jahre und €300–500M Investitionen.</p>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /gap -->
+
+</div><!-- /content -->
+
+<!-- ══════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+const PRICE = 72.25, ND0 = 100, SH0 = 72.07, REV0 = 649.6;
+
+// ── TAB SWITCHER ─────────────────────────────────────────────
+function tab(id, btn){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='dcf'){setTimeout(()=>{dcf();renderSens()},60)}
+  if(id==='multi'){setTimeout(renderPeers,60)}
+  if(id==='acq'){setTimeout(renderMA,60)}
+  if(id==='gap'){setTimeout(renderGapChart,60)}
+}
+
+// ── DCF ENGINE ───────────────────────────────────────────────
+function calcDCF(wacc,tg,rg1,rg8,fcfm,nd,sh,rev){
+  const n=8, w=wacc/100, t=tg/100;
+  const rows=[];
+  let r=rev;
+  let pvFCF=0;
+  let cumDF=1;
+  for(let i=0;i<n;i++){
+    const g = rg1/100 + (rg8/100-rg1/100)*i/(n-1);
+    r = r*(1+g);
+    const margin = 0.40 + (fcfm/100-0.40)*i/(n-1);
+    const fcf = r*margin;
+    cumDF = Math.pow(1+w,i+1);
+    const pv = fcf/cumDF;
+    pvFCF += pv;
+    rows.push({yr:2026+i, g:(g*100).toFixed(1), rev:r, margin:(margin*100).toFixed(1), fcf, df:cumDF.toFixed(3), pv});
+  }
+  const termFCF = rows[n-1].fcf*(1+t);
+  const tv = termFCF/(w-t);
+  const pvTV = tv/Math.pow(1+w,n);
+  const ev = pvFCF+pvTV;
+  const eq = ev-nd;
+  const fv = eq/sh;
+  return {ev,eq,fv,pvFCF,pvTV,rows,tvPct:(pvTV/ev*100).toFixed(1)};
+}
+
+const BASE={w:7.5,tg:2.5,rg1:11,rg8:6,fcfm:40.5,nd:100,sh:72.07,rev:649.6};
+const BEAR={w:7.5,tg:1.5,rg1:8,rg8:4,fcfm:37.5,nd:100,sh:72.07,rev:649.6};
+const BULL={w:7.5,tg:3.0,rg1:13,rg8:7,fcfm:42,nd:100,sh:72.07,rev:649.6};
+
+let chDCFbar;
+
+function dcf(){
+  const w =+document.getElementById('sw').value;
+  const tg=+document.getElementById('stg').value;
+  const rg1=+document.getElementById('srg1').value;
+  const rg8=+document.getElementById('srg8').value;
+  const fcfm=+document.getElementById('sfcfm').value;
+  const nd=+document.getElementById('snd').value;
+  const sh=+document.getElementById('ssh').value;
+  const rev=+document.getElementById('srev').value;
+
+  const fmtP=v=>v.toFixed(1)+' %';
+  document.getElementById('vw').textContent=fmtP(w);
+  document.getElementById('vtg').textContent=fmtP(tg);
+  document.getElementById('vrg1').textContent=fmtP(rg1);
+  document.getElementById('vrg8').textContent=fmtP(rg8);
+  document.getElementById('vfcfm').textContent=fmtP(fcfm);
+  document.getElementById('vnd').textContent=nd.toFixed(0);
+  document.getElementById('vsh').textContent=sh.toFixed(2);
+  document.getElementById('vrev').textContent=rev.toFixed(1);
+
+  const res=calcDCF(w,tg,rg1,rg8,fcfm,nd,sh,rev);
+  const fmt=v=>'€ '+(v/1000).toFixed(2)+' Mrd.';
+  document.getElementById('lr-pvfcf').textContent=fmt(res.pvFCF);
+  document.getElementById('lr-pvtv').textContent=fmt(res.pvTV);
+  document.getElementById('lr-tvpct').textContent=res.tvPct+' % des EV';
+  document.getElementById('lr-ev').textContent=fmt(res.ev);
+  document.getElementById('lr-nd').textContent='− € '+nd.toFixed(0)+' Mio.';
+  document.getElementById('lr-eq').textContent=fmt(res.eq);
+
+  const fv=res.fv;
+  const fvEl=document.getElementById('lr-fv');
+  fvEl.textContent='€ '+fv.toFixed(2);
+  fvEl.style.color=fv>=PRICE?'var(--green)':'var(--red)';
+
+  // Header update
+  document.getElementById('hdr-dcf').textContent='€ '+fv.toFixed(0);
+
+  // Scenario boxes using shifted params
+  const bear=calcDCF(BEAR.w,BEAR.tg,BEAR.rg1,BEAR.rg8,BEAR.fcfm,nd,sh,rev);
+  const bull=calcDCF(BULL.w,BULL.tg,BULL.rg1,BULL.rg8,BULL.fcfm,nd,sh,rev);
+  const setBox=(id,v)=>{
+    document.getElementById('sc-'+id).textContent='€ '+v.toFixed(0);
+    document.getElementById('sc-'+id+'-up').textContent=
+      ((v-PRICE)/PRICE*100).toFixed(1)+' % vs Kurs';
+  };
+  setBox('bear',bear.fv); setBox('base',fv); setBox('bull',bull.fv);
+
+  // Projection table
+  const thead=document.getElementById('dcf-thead');
+  const tbody=document.getElementById('dcf-tbody');
+  thead.innerHTML='<th>Kennzahl</th>'+res.rows.map(r=>'<th>'+r.yr+'E</th>').join('');
+  const fmtM=v=>'€ '+v.toFixed(0);
+  const rows2=[
+    ['Umsatz (€M)',      res.rows.map(r=>fmtM(r.rev))],
+    ['Umsatzwachstum',   res.rows.map(r=>r.g+' %')],
+    ['FCF-Marge',        res.rows.map(r=>r.margin+' %')],
+    ['Free Cashflow (€M)',res.rows.map(r=>fmtM(r.fcf))],
+    ['Diskontfaktor',    res.rows.map(r=>r.df+'×')],
+    ['PV FCF (€M)',      res.rows.map(r=>fmtM(r.pv))],
+  ];
+  tbody.innerHTML=rows2.map((row,i)=>
+    `<tr${i===5?' class="row-hl"':''}><td>${row[0]}</td>`+
+    row[1].map(v=>`<td>${v}</td>`).join('')+'</tr>'
+  ).join('');
+  const addSum=(lbl,val,cls='')=>
+    tbody.innerHTML+=`<tr${cls?' class="'+cls+'"':''}><td>${lbl}</td><td colspan="8" style="text-align:right">${val}</td></tr>`;
+  addSum('Σ Barwert FCFs','€ '+res.pvFCF.toFixed(0)+' Mio.');
+  addSum('Terminal Value (PV)','€ '+res.pvTV.toFixed(0)+' Mio. ('+res.tvPct+' % des EV)');
+  addSum('Enterprise Value','€ '+(res.ev/1000).toFixed(2)+' Mrd.','row-sep');
+  addSum('− Nettoverschuldung','− € '+nd.toFixed(0)+' Mio.');
+  addSum('Equity Value','€ '+(res.eq/1000).toFixed(2)+' Mrd.');
+  addSum('Fairer Wert je Aktie','€ '+fv.toFixed(2),'row-hl');
+
+  // Bar chart
+  if(chDCFbar) chDCFbar.destroy();
+  const ctx=document.getElementById('ch-dcf-bar').getContext('2d');
+  chDCFbar=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['🐻 Bär','⚖ Base (live)','🐂 Bulle'],
+      datasets:[
+        {label:'Fairer Wert (€)',data:[bear.fv.toFixed(0),fv.toFixed(0),bull.fv.toFixed(0)].map(Number),
+         backgroundColor:['rgba(255,77,109,.4)','rgba(255,170,0,.5)','rgba(0,229,160,.4)'],
+         borderColor:['#FF4D6D','#FFAA00','#00E5A0'],borderWidth:2,borderRadius:6},
+        {label:'Aktueller Kurs',data:[PRICE,PRICE,PRICE],
+         type:'line',borderColor:'rgba(255,255,255,.35)',borderWidth:2,
+         pointRadius:0,borderDash:[5,5]}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#7BAAC8',font:{size:11}}},
+        tooltip:{callbacks:{label:c=>c.datasetIndex===0?'€ '+c.raw:null}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#7BAAC8'}},
+        y:{beginAtZero:false,min:30,grid:{color:'rgba(255,255,255,.06)'},
+           ticks:{color:'#7BAAC8',callback:v=>'€'+v}}
+      }
+    }
+  });
+}
+
+function resetDCF(){
+  Object.entries({sw:BASE.w,stg:BASE.tg,srg1:BASE.rg1,srg8:BASE.rg8,
+    sfcfm:BASE.fcfm,snd:BASE.nd,ssh:BASE.sh,srev:BASE.rev})
+    .forEach(([id,v])=>document.getElementById(id).value=v);
+  dcf();
+}
+function setBear(){
+  Object.entries({sw:BEAR.w,stg:BEAR.tg,srg1:BEAR.rg1,srg8:BEAR.rg8,sfcfm:BEAR.fcfm})
+    .forEach(([id,v])=>document.getElementById(id).value=v);
+  dcf();
+}
+function setBull(){
+  Object.entries({sw:BULL.w,stg:BULL.tg,srg1:BULL.rg1,srg8:BULL.rg8,sfcfm:BULL.fcfm})
+    .forEach(([id,v])=>document.getElementById(id).value=v);
+  dcf();
+}
+
+// ── SENSITIVITY TABLE ────────────────────────────────────────
+function renderSens(){
+  const waccs=[6.0,6.5,7.0,7.5,8.0,8.5,9.0];
+  const tgs=[1.0,1.5,2.0,2.5,3.0,3.5,4.0];
+  let h='<table><thead><tr><th>WACC \\ tg</th>'+tgs.map(t=>'<th>'+t.toFixed(1)+' %</th>').join('')+'</tr></thead><tbody>';
+  waccs.forEach(w=>{
+    h+='<tr'+(Math.abs(w-7.5)<.01?' class="row-sep"':'')+'>';
+    h+='<td style="font-weight:700;color:var(--blue)">'+w.toFixed(1)+' %</td>';
+    tgs.forEach(t=>{
+      const r=calcDCF(w,t,BASE.rg1,BASE.rg8,BASE.fcfm,ND0,SH0,REV0);
+      const v=r.fv.toFixed(0);
+      const cl=r.fv>130?'g-val':r.fv>100?'a-val':r.fv>75?'':'r-val';
+      const bold=(Math.abs(w-7.5)<.01&&Math.abs(t-2.5)<.01)?' style="font-weight:900;font-size:14px"':'';
+      h+=`<td class="${cl}"${bold}>€${v}</td>`;
+    });
+    h+='</tr>';
+  });
+  h+='</tbody></table>';
+  document.getElementById('sens-tbl').innerHTML=h;
+}
+
+// ── FOOTBALL FIELD ───────────────────────────────────────────
+function renderFF(){
+  const MIN=40, MAX=160, R=MAX-MIN;
+  const pct=v=>(((v-MIN)/R)*100);        // returns number 0–100
+  const fmt2=v=>v.toFixed(2)+'%';
+
+  const methods=[
+    {lbl:'DCF (Bär / Base / Bulle)', lo:75,  hi:137, col:'#1A6BB5'},
+    {lbl:'EV/EBITDA (11,68×)',       lo:59,  hi:84,  col:'#0099DD'},
+    {lbl:'EV/EBITDA (13× Prämie)',   lo:75,  hi:95,  col:'#00AAEE'},
+    {lbl:'EV/EBIT (24,85×)',         lo:54,  hi:118, col:'#4488BB'},
+    {lbl:'Forward P/E (19,09×)',     lo:53,  hi:85,  col:'#3377AA'},
+    {lbl:'FCF Yield (4,0 %)',        lo:71,  hi:104, col:'#2266AA'},
+    {lbl:'Gewichteter FV',           lo:89,  hi:95,  col:'#CC9900'},
+    {lbl:'M&A Prämie (30–50 %)',     lo:94,  hi:108, col:'#009977'},
+  ];
+
+  const pp = pct(PRICE);   // e.g. 26.875
+  const tp = pct(92);      // e.g. 43.33
+
+  // ── Price / Target indicator header (a track-shaped ruler)
+  let headerTrack =
+    `<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">` +
+    `<div style="width:190px;flex-shrink:0"></div>` +
+    `<div style="flex:1;height:24px;background:var(--bg3);border-radius:3px;position:relative;">` +
+      // price line
+      `<div style="position:absolute;left:${fmt2(pp)};top:0;bottom:0;width:2px;background:var(--red);z-index:5;"></div>` +
+      `<div style="position:absolute;left:${fmt2(pp)};top:-18px;transform:translateX(-50%);background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;white-space:nowrap;z-index:6;">Kurs € ${PRICE}</div>` +
+      // target line
+      `<div style="position:absolute;left:${fmt2(tp)};top:0;bottom:0;width:2px;background:var(--gold);z-index:5;"></div>` +
+      `<div style="position:absolute;left:${fmt2(tp)};top:-18px;transform:translateX(-50%);background:var(--gold);color:#000;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;white-space:nowrap;z-index:6;">Ziel € 92</div>` +
+    `</div>` +
+    `<div style="width:100px;flex-shrink:0"></div>` +
+    `</div>`;
+
+  // ── Bar rows
+  let rows = '';
+  methods.forEach(m=>{
+    const lo = pct(m.lo);
+    const hi = pct(m.hi);
+    const w  = hi - lo;
+    const label = w > 7 ? '€'+m.lo+'–€'+m.hi : '';
+    rows+=
+      `<div class="ff-row">` +
+        `<div class="ff-lbl">${m.lbl}</div>` +
+        `<div class="ff-track">` +
+          // price indicator inside track (thin, no label)
+          `<div style="position:absolute;left:${fmt2(pp)};top:0;bottom:0;width:2px;background:rgba(255,70,90,.6);z-index:5;"></div>` +
+          `<div style="position:absolute;left:${fmt2(tp)};top:0;bottom:0;width:2px;background:rgba(255,200,0,.6);z-index:5;"></div>` +
+          `<div class="ff-bar" style="left:${fmt2(lo)};width:${fmt2(w)};background:${m.col};">${label}</div>` +
+        `</div>` +
+        `<div class="ff-rng">€${m.lo}–€${m.hi}</div>` +
+      `</div>`;
+  });
+
+  // ── Scale
+  const scale=`<div class="ff-scale">${[40,60,80,100,120,140,160].map(v=>'<span>€'+v+'</span>').join('')}</div>`;
+
+  document.getElementById('ff-container').innerHTML=
+    `<div style="padding-top:26px;">` + headerTrack + rows + scale + `</div>`;
+}
+
+// ── HISTORY CHART ────────────────────────────────────────────
+let chHist;
+function renderHist(){
+  if(chHist){chHist.destroy();chHist=null;}
+  const ctx=document.getElementById('ch-hist').getContext('2d');
+  const labels=['2021A','2022A','2023A','2024A','2025A'];
+  const rev=[389,447.5,509.1,566.3,649.6];
+  const fcf=[127.8,163.2,197.4,234.6,261.4];
+  chHist=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {type:'bar',label:'Umsatz (€M)',data:rev,
+          backgroundColor:'rgba(0,180,255,.35)',borderColor:'#00B4FF',
+          borderWidth:1.5,borderRadius:5,order:2},
+        {type:'line',label:'Free Cashflow (€M)',data:fcf,
+          borderColor:'#00E5A0',backgroundColor:'rgba(0,229,160,.08)',
+          borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#00E5A0',
+          fill:true,tension:.4,order:1}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{labels:{color:'#7BAAC8',font:{size:11},boxWidth:12}},
+        tooltip:{callbacks:{label:c=>'€ '+c.raw+' Mio.'}}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#7BAAC8'}},
+        y:{
+          beginAtZero:true,
+          grid:{color:'rgba(255,255,255,.05)'},
+          ticks:{color:'#7BAAC8',callback:v=>'€'+v}
+        }
+      }
+    }
+  });
+}
+
+// ── PEERS CHART ──────────────────────────────────────────────
+let chPeers;
+function renderPeers(){
+  if(chPeers)chPeers.destroy();
+  const ctx=document.getElementById('ch-peers').getContext('2d');
+  const peers=['Rightmove','Auto Trader','REA Group','Hemnet','Vend','SAP','Scout24'];
+  const vals=[21.4,20.1,34.2,27.3,8.1,4.3,13.1];
+  const colors=peers.map(p=>p==='Scout24'?'#FFD166':'rgba(0,180,255,.55)');
+  chPeers=new Chart(ctx,{
+    type:'bar',
+    data:{labels:peers,datasets:[{label:'EV/EBITDA',data:vals,backgroundColor:colors,borderColor:colors.map(c=>c==='#FFD166'?c:c.replace('.55','.9')),borderWidth:1.5,borderRadius:5}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#7BAAC8',callback:v=>v+'×'}},
+        y:{grid:{display:false},ticks:{color:'#7BAAC8'}}
+      }
+    }
+  });
+}
+
+// ── M&A PREMIUM CHART ────────────────────────────────────────
+let chMA;
+function renderMA(){
+  if(chMA)chMA.destroy();
+  const ctx=document.getElementById('ch-ma').getContext('2d');
+  const prems=[0,10,15,20,25,30,35,40,45,50,60];
+  const prices=prems.map(p=>(PRICE*(1+p/100)).toFixed(2));
+  const cols=prices.map(p=>p<75?'rgba(255,77,109,.5)':p<92?'rgba(255,170,0,.5)':'rgba(0,229,160,.5)');
+  chMA=new Chart(ctx,{
+    type:'bar',
+    data:{labels:prems.map(p=>'+'+p+'%'),
+      datasets:[{label:'Übernahmepreis',data:prices.map(Number),backgroundColor:cols,borderWidth:0,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'€ '+c.raw}}},
+      scales:{
+        y:{beginAtZero:false,min:60,grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#7BAAC8',callback:v=>'€'+v}},
+        x:{grid:{display:false},ticks:{color:'#7BAAC8',font:{size:10}}}
+      }
+    }
+  });
+}
+
+// ── GAP SCATTER CHART ────────────────────────────────────────
+let chGapScatter;
+function renderGapChart(){
+  if(chGapScatter)chGapScatter.destroy();
+  const ctx=document.getElementById('ch-gap-scatter').getContext('2d');
+  const gaps=[
+    {x:8.5, y:6.5, r:22, label:'① KI-Disintermediation', color:'rgba(255,77,109,.75)'},
+    {x:9.0, y:4.5, r:28, label:'② Transaktionslücke',    color:'rgba(255,77,109,.55)'},
+    {x:6.0, y:5.5, r:15, label:'③ API/Agentic Gap',      color:'rgba(255,170,0,.75)'},
+    {x:5.0, y:5.0, r:11, label:'④ Daten-Erosion',        color:'rgba(255,170,0,.55)'},
+    {x:4.5, y:3.5, r:12, label:'⑤ Disaggregation',       color:'rgba(0,180,255,.65)'},
+  ];
+  // Quadrant backgrounds via annotation plugin workaround: draw on canvas after render
+  chGapScatter=new Chart(ctx,{
+    type:'bubble',
+    data:{
+      datasets:gaps.map(g=>({
+        label:g.label,
+        data:[{x:g.x,y:g.y,r:g.r}],
+        backgroundColor:g.color,
+        borderColor:g.color.replace(/[\d.]+\)$/,'0.95)'),
+        borderWidth:1.5
+      }))
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{labels:{color:'#7BAAC8',font:{size:10},boxWidth:10,padding:8}},
+        tooltip:{callbacks:{
+          label:c=>`${c.dataset.label}  |  Impact: ${c.raw.x}/10  ·  P: ${(c.raw.y/10*100).toFixed(0)} %`
+        }}
+      },
+      scales:{
+        x:{
+          min:0,max:10,
+          title:{display:true,text:'Revenue-Impact (0 = niedrig, 10 = existenziell)',color:'#7BAAC8',font:{size:10}},
+          grid:{color:'rgba(255,255,255,.05)'},
+          ticks:{color:'#7BAAC8',font:{size:10},stepSize:2.5,
+            callback:v=>({0:'0',2.5:'Niedrig',5:'Mittel',7.5:'Hoch',10:'Sehr hoch'}[v]||'')}
+        },
+        y:{
+          min:0,max:10,
+          title:{display:true,text:'Wahrscheinlichkeit 2027E',color:'#7BAAC8',font:{size:10}},
+          grid:{color:'rgba(255,255,255,.05)'},
+          ticks:{color:'#7BAAC8',font:{size:10},stepSize:2.5,
+            callback:v=>v%2.5===0?Math.round(v*10)+'%':''}
+        }
+      }
+    }
+  });
+  // Draw quadrant labels after render
+  const c2=ctx.canvas;
+  const orig=chGapScatter.draw.bind(chGapScatter);
+  chGapScatter.draw=function(){
+    orig();
+    const area=chGapScatter.chartArea;
+    const cx=area.left+(area.right-area.left)/2;
+    const cy=area.top+(area.bottom-area.top)/2;
+    const g=ctx;
+    g.save();
+    g.font='700 9px Arial';
+    g.fillStyle='rgba(255,77,109,.35)';
+    g.fillText('SOFORT HANDELN',cx+8,area.top+16);
+    g.fillStyle='rgba(255,170,0,.3)';
+    g.fillText('BEOBACHTEN',area.left+6,area.top+16);
+    g.fillStyle='rgba(0,180,255,.25)';
+    g.fillText('ABSICHERN',cx+8,area.bottom-8);
+    g.fillStyle='rgba(255,255,255,.15)';
+    g.fillText('MONITOR',area.left+6,area.bottom-8);
+    // midpoint lines
+    g.strokeStyle='rgba(255,255,255,.07)';
+    g.lineWidth=1;
+    g.setLineDash([4,4]);
+    g.beginPath(); g.moveTo(cx,area.top); g.lineTo(cx,area.bottom); g.stroke();
+    g.beginPath(); g.moveTo(area.left,cy); g.lineTo(area.right,cy); g.stroke();
+    g.restore();
+  };
+  chGapScatter.draw();
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  renderHist();
+  renderFF();
+  dcf();
+});
+</script>
+</body>
+</html>
