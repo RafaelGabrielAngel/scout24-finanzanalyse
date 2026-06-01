@@ -43,7 +43,7 @@ FMP_KEY    = os.environ.get("FMP_API_KEY", "")
 AV_KEY     = os.environ.get("ALPHA_VANTAGE_KEY", "")   # Alpha Vantage (Primary Kurs)
 TICKER_FMP = "SDX.DE"
 TICKER_YF  = "SDX.DE"
-TICKER_AV  = "SDX.DE"          # Alpha Vantage Ticker für XETRA
+TICKER_AV  = "SDX.FRK"         # Alpha Vantage: Frankfurt Exchange Code
 OUTPUT     = Path(__file__).parent / "data.json"
 
 PEER_TICKERS = {
