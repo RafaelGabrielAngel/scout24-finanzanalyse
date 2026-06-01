@@ -509,9 +509,9 @@ def fetch_macro() -> dict:
             print(f"    [WARN] ECB Endpunkt {url[:50]}... fehlgeschlagen: {e}")
     if not result["ecb_deposit_rate"]:
         # Fallback: letzter bekannter EZB-Satz (manuell aktualisieren bei Änderung)
-        result["ecb_deposit_rate"] = 2.50   # Stand: nach Erhöhung Apr 2026 (von 2.00%)
+        result["ecb_deposit_rate"] = 2.00   # Stand: 2.00% (EZB-Sitzung 11.06.2026 steht aus)
         result["ecb_next_hike_prob"] = 0.91  # Marktimpl. Wahrscheinlichkeit +25bp am 11.06.2026
-        print(f"    [FALLBACK] EZB Einlagesatz: 2.50% (Stand Jun 2026, Hike-Risiko 91% → 2.75%)")
+        print(f"    [FALLBACK] EZB Einlagesatz: 2.00% (Stand Jun 2026, Hike-Wahrsch. 91% am 11.06.)")
 
     # ── 2. Deutscher 10J-Bund (AAA Euro-Area Yield Curve 10Y)
     try:
