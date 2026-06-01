@@ -401,7 +401,9 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 <div class="hdr">
   <div class="hdr-brand">
     <h1>SCOUT24 SE &nbsp;·&nbsp; <span style="color:var(--blue)">SDX.DE</span></h1>
-    <p>Equity Research &nbsp;·&nbsp; Stefan Eich &amp; Jan Seidel &nbsp;·&nbsp; FOM M.Sc. Finance &amp; Accounting &nbsp;·&nbsp; Mai 2026</p>
+    <p>Equity Research &nbsp;·&nbsp; Stefan Eich &amp; Jan Seidel &nbsp;·&nbsp; FOM M.Sc. Finance &amp; Accounting &nbsp;·&nbsp;
+      <span id="data-timestamp" style="display:none;color:var(--green);font-size:9px"></span>
+    </p>
   </div>
   <div class="hdr-kpis">
     <div class="hkpi"><div class="lbl">Kurs</div><div class="val gold">€ 72,25</div></div>
@@ -410,6 +412,12 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     <div class="hkpi"><div class="lbl">DCF Base</div><div class="val blue" id="hdr-dcf">€ 110</div></div>
     <div class="hkpi"><div class="lbl">Rating</div><div class="val amber">HALTEN</div></div>
   </div>
+</div>
+
+<!-- Data-Banner: wird bei fehlender data.json eingeblendet -->
+<div id="data-banner" style="background:rgba(0,180,255,.08);border-bottom:1px solid rgba(0,180,255,.2);padding:6px 28px;font-size:10px;color:var(--txt2);display:flex;align-items:center;gap:8px">
+  <span style="animation:glow-pulse 2s infinite;display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--blue)"></span>
+  Lade Live-Daten aus data.json…
 </div>
 
 <!-- ══════════════════════ TABS ══════════════════════ -->
@@ -1073,7 +1081,113 @@ tr.row-sep td:first-child{color:var(--blue)!important}
      JAVASCRIPT
 ══════════════════════════════════════════════════════ -->
 <script>
-const PRICE = 72.25, ND0 = 100, SH0 = 72.07, REV0 = 649.6;
+// ── GLOBALE DATENVARIABLEN (werden via loadData() aus data.json befüllt) ────
+let PRICE = 72.25, ND0 = 100, SH0 = 72.07, REV0 = 649.6;
+let LIVE_DATA = null;   // vollständiges data.json Objekt
+
+// ── DATA LOADER ──────────────────────────────────────────────────────────────
+async function loadData() {
+  const banner = document.getElementById('data-banner');
+  try {
+    const resp = await fetch('data.json?v=' + Date.now());
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const d = await resp.json();
+    LIVE_DATA = d;
+
+    // ── Globale Variablen setzen
+    PRICE  = d.market?.price            || PRICE;
+    ND0    = d.kpis?.net_debt_mn        || ND0;
+    SH0    = d.profile?.shares_diluted_mn || SH0;
+    REV0   = d.kpis?.revenue_mn         || REV0;
+
+    // ── Header-KPIs aktualisieren
+    const m = d.market || {}, k = d.kpis || {};
+    document.querySelectorAll('.hkpi').forEach(el => {
+      const lbl = el.querySelector('.lbl')?.textContent?.trim();
+      const val = el.querySelector('.val');
+      if (!val) return;
+      if (lbl === 'Kurs')        { val.textContent = '€ ' + m.price?.toFixed(2); }
+      if (lbl === 'ooEBITDA')    { val.textContent = '€ ' + k.ebitda_mn?.toFixed(1) + 'M'; }
+    });
+
+    // Upside im Header neu berechnen
+    const upEl = document.getElementById('hdr-up');
+    if (upEl && PRICE > 0) {
+      const up = ((92 - PRICE) / PRICE * 100).toFixed(0);
+      upEl.textContent = (up >= 0 ? '+' : '') + up + ' %';
+    }
+
+    // ── Exec Summary KPI-Karten befüllen
+    applyKpiCards(d);
+
+    // ── Peer-Tabelle befüllen (falls Daten vorhanden)
+    if (d.peers && d.peers.length > 0) applyPeerTable(d.peers);
+
+    // ── History-Chart neu zeichnen mit Live-Daten
+    if (d.history?.income?.length > 0) renderHist(d.history);
+
+    // Banner ausblenden
+    if (banner) banner.style.display = 'none';
+
+    // Update-Timestamp anzeigen
+    const ts = document.getElementById('data-timestamp');
+    if (ts && d._meta?.generated_at) {
+      const dt = new Date(d._meta.generated_at);
+      ts.textContent = 'Daten: ' + dt.toLocaleDateString('de-DE') + ' ' + dt.toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'}) + ' UTC';
+      ts.style.display = 'inline';
+    }
+
+    console.log('[Scout24] data.json geladen:', d._meta);
+
+  } catch(e) {
+    console.warn('[Scout24] data.json nicht verfügbar, nutze Fallback-Werte:', e.message);
+    if (banner) {
+      banner.textContent = '⚠ Statische Daten (Stand Mai 2026) — data.json nicht gefunden. Bitte fetcher.py ausführen.';
+      banner.style.background = 'rgba(255,170,0,.15)';
+      banner.style.borderColor = 'rgba(255,170,0,.3)';
+    }
+  }
+}
+
+function applyKpiCards(d) {
+  const k = d.kpis || {}, m = d.market || {};
+  const map = {
+    // selector → wert
+    '#exec-revenue':    k.revenue_mn   ? '€ ' + k.revenue_mn.toFixed(1)   + ' Mio.' : null,
+    '#exec-ebitda':     k.ebitda_mn    ? '€ ' + k.ebitda_mn.toFixed(1)    + ' Mio.' : null,
+    '#exec-margin':     k.ebitda_margin? k.ebitda_margin.toFixed(1)        + ' %'    : null,
+    '#exec-fcf':        k.fcf_mn       ? '€ ' + k.fcf_mn.toFixed(1)       + ' Mio.' : null,
+    '#exec-fcfyield':   k.fcf_yield    ? k.fcf_yield.toFixed(1)           + ' %'    : null,
+    '#exec-netdebt':    k.net_debt_mn  ? '€ ' + k.net_debt_mn.toFixed(0)  + ' Mio.' : null,
+    '#exec-nd-ebitda':  k.net_debt_ebitda ? k.net_debt_ebitda.toFixed(1)  + '×'     : null,
+    '#exec-ev-ebitda':  k.ev_ebitda    ? k.ev_ebitda.toFixed(1)           + '×'     : null,
+    '#exec-pe':         k.pe_ratio     ? k.pe_ratio.toFixed(1)            + '×'     : null,
+    '#exec-roce':       k.roce         ? k.roce.toFixed(1)                + ' %'    : null,
+    '#exec-goodwill-pct': k.goodwill_pct ? k.goodwill_pct.toFixed(1)     + ' %'    : null,
+  };
+  Object.entries(map).forEach(([sel, val]) => {
+    if (!val) return;
+    const el = document.querySelector(sel);
+    if (el) el.textContent = val;
+  });
+}
+
+function applyPeerTable(peers) {
+  const tbody = document.querySelector('#peer-table-body');
+  if (!tbody) return;
+  const scout = LIVE_DATA?.kpis || {};
+  // Vorhandene Peer-Zeilen aktualisieren (match by data-peer)
+  peers.forEach(p => {
+    const row = tbody.querySelector(`tr[data-peer="${p.name}"]`);
+    if (!row) return;
+    const cells = row.querySelectorAll('td');
+    if (cells[2]) cells[2].textContent = p.ev_ebitda ? p.ev_ebitda.toFixed(1) + '×' : '—';
+    if (cells[4]) cells[4].textContent = p.pe_ratio  ? p.pe_ratio.toFixed(1)  + '×' : '—';
+    if (cells[5]) cells[5].textContent = p.fcf_yield ? p.fcf_yield.toFixed(1) + ' %' : '—';
+    if (cells[6]) cells[6].textContent = p.revenue_growth ? (p.revenue_growth > 0 ? '+' : '') + p.revenue_growth.toFixed(1) + ' %' : '—';
+    if (cells[7]) cells[7].textContent = p.ebitda_margin  ? p.ebitda_margin.toFixed(1) + ' %' : '—';
+  });
+}
 
 // ── TAB SWITCHER ─────────────────────────────────────────────
 function tab(id, btn){
@@ -1322,12 +1436,20 @@ function renderFF(){
 
 // ── HISTORY CHART ────────────────────────────────────────────
 let chHist;
-function renderHist(){
+function renderHist(history){
   if(chHist){chHist.destroy();chHist=null;}
   const ctx=document.getElementById('ch-hist').getContext('2d');
-  const labels=['2021A','2022A','2023A','2024A','2025A'];
-  const rev=[389,447.5,509.1,566.3,649.6];
-  const fcf=[127.8,163.2,197.4,234.6,261.4];
+  // Fallback-Werte wenn keine Live-Daten
+  let labels=['2021A','2022A','2023A','2024A','2025A'];
+  let rev=[389,447.5,509.1,566.3,649.6];
+  let fcf=[127.8,163.2,197.4,234.6,261.4];
+  if(history?.income?.length > 0){
+    const inc = history.income.slice(-5);
+    const cf  = (history.cashflow||[]).slice(-5);
+    labels = inc.map(r=>r.year+'');
+    rev    = inc.map(r=>r.revenue||0);
+    fcf    = cf.length ? cf.map(r=>r.free_cashflow||0) : fcf;
+  }
   chHist=new Chart(ctx,{
     type:'bar',
     data:{
@@ -1485,10 +1607,11 @@ function renderGapChart(){
 }
 
 // ── INIT ─────────────────────────────────────────────────────
-window.addEventListener('load',()=>{
-  renderHist();
+window.addEventListener('load', async ()=>{
   renderFF();
   dcf();
+  renderHist();       // erst mit Fallback-Daten
+  await loadData();   // dann data.json laden → überschreibt Werte
 });
 </script>
 </body>

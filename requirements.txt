@@ -1,0 +1,4 @@
+requests>=2.31.0
+yfinance>=0.2.36
+pytrends>=4.9.2
+python-dotenv>=1.0.0
