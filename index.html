@@ -406,7 +406,7 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     </p>
   </div>
   <div class="hdr-kpis">
-    <div class="hkpi"><div class="lbl">Kurs</div><div class="val gold">€ 72,25</div></div>
+    <div class="hkpi"><div class="lbl">Kurs</div><div class="val gold" id="hdr-price">€ 72,25</div></div>
     <div class="hkpi"><div class="lbl">Kursziel 12M</div><div class="val green">€ 92</div></div>
     <div class="hkpi"><div class="lbl">Upside</div><div class="val green" id="hdr-up">+27 %</div></div>
     <div class="hkpi"><div class="lbl">DCF Base</div><div class="val blue" id="hdr-dcf">€ 110</div></div>
@@ -448,14 +448,14 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 
     <div class="card">
       <div class="card-hd"><div class="dot dot-blue"></div>Finanzkennzahlen 2025A</div>
-      <div class="stat-row"><span class="s-lbl">Umsatzerlöse</span><span class="s-val">€ 649,6 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">Umsatzerlöse</span><span class="s-val" id="kpi-revenue">€ 649,6 Mio.</span></div>
       <div class="stat-row"><span class="s-lbl">Umsatz-CAGR (2021–2025)</span><span class="s-val g">+13,7 %</span></div>
-      <div class="stat-row"><span class="s-lbl">ooEBITDA</span><span class="s-val">€ 405,7 Mio.</span></div>
-      <div class="stat-row"><span class="s-lbl">ooEBITDA-Marge</span><span class="s-val g">62,5 %</span></div>
-      <div class="stat-row"><span class="s-lbl">Free Cashflow</span><span class="s-val">€ 261,4 Mio.</span></div>
-      <div class="stat-row"><span class="s-lbl">FCF Yield</span><span class="s-val g">5,0 %</span></div>
-      <div class="stat-row"><span class="s-lbl">Nettoverschuldung</span><span class="s-val">€ 100 Mio.</span></div>
-      <div class="stat-row"><span class="s-lbl">Net Debt / ooEBITDA</span><span class="s-val">0,2×</span></div>
+      <div class="stat-row"><span class="s-lbl">ooEBITDA</span><span class="s-val" id="kpi-ebitda">€ 405,7 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">ooEBITDA-Marge</span><span class="s-val g" id="kpi-margin">62,5 %</span></div>
+      <div class="stat-row"><span class="s-lbl">Free Cashflow</span><span class="s-val" id="kpi-fcf">€ 261,4 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">FCF Yield</span><span class="s-val g" id="kpi-fcfyield">5,0 %</span></div>
+      <div class="stat-row"><span class="s-lbl">Nettoverschuldung</span><span class="s-val" id="kpi-netdebt">€ 100 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">Net Debt / ooEBITDA</span><span class="s-val" id="kpi-leverage">0,2×</span></div>
     </div>
 
     <div class="card">
@@ -474,14 +474,14 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 
     <div class="card">
       <div class="card-hd"><div class="dot dot-green"></div>Qualitäts-Scores</div>
-      <div class="stat-row"><span class="s-lbl">EV / ooEBITDA (akt.)</span><span class="s-val b">13,1×</span></div>
-      <div class="stat-row"><span class="s-lbl">Forward P/E 2025A</span><span class="s-val">21,7×</span></div>
+      <div class="stat-row"><span class="s-lbl">EV / ooEBITDA (akt.)</span><span class="s-val b" id="kpi-ev-ebitda">13,1×</span></div>
+      <div class="stat-row"><span class="s-lbl">Forward P/E 2025A</span><span class="s-val" id="kpi-pe">21,7×</span></div>
       <div class="stat-row"><span class="s-lbl">Altman Z-Score</span><span class="s-val g">10,87 ✓</span></div>
       <div class="stat-row"><span class="s-lbl">Piotroski F-Score</span><span class="s-val g">7 / 9 ✓</span></div>
       <div class="stat-row"><span class="s-lbl">Beneish M-Score</span><span class="s-val g">−4,01 ✓</span></div>
-      <div class="stat-row"><span class="s-lbl">ROCE (2025A)</span><span class="s-val g">16,8 %</span></div>
+      <div class="stat-row"><span class="s-lbl">ROCE (2025A)</span><span class="s-val g" id="kpi-roce">16,8 %</span></div>
       <div class="stat-row"><span class="s-lbl">ROCE − WACC Spread</span><span class="s-val g">+9,3 %</span></div>
-      <div class="stat-row"><span class="s-lbl">Goodwill / Bilanzsumme</span><span class="s-val r">87 % ⚠</span></div>
+      <div class="stat-row"><span class="s-lbl">Goodwill / Bilanzsumme</span><span class="s-val r" id="kpi-goodwill-pct">87 % ⚠</span></div>
     </div>
   </div>
 
@@ -1089,7 +1089,15 @@ let LIVE_DATA = null;   // vollständiges data.json Objekt
 async function loadData() {
   const banner = document.getElementById('data-banner');
   try {
-    const resp = await fetch('data.json?v=' + Date.now());
+    // Fix #4: raw.githubusercontent.com umgeht GitHub Pages CDN-Cache zuverlässig
+    const RAW = 'https://raw.githubusercontent.com/RafaelGabrielAngel/scout24-finanzanalyse/main/data.json?t=' + Date.now();
+    let resp;
+    try {
+      resp = await fetch(RAW);
+      if (!resp.ok) throw new Error('raw failed');
+    } catch {
+      resp = await fetch('data.json?v=' + Date.now()); // lokaler Fallback
+    }
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const d = await resp.json();
     LIVE_DATA = d;
@@ -1100,21 +1108,19 @@ async function loadData() {
     SH0    = d.profile?.shares_diluted_mn || SH0;
     REV0   = d.kpis?.revenue_mn         || REV0;
 
-    // ── Header-KPIs aktualisieren
+    // ── Fix #3: Header-KPIs robust aktualisieren
     const m = d.market || {}, k = d.kpis || {};
-    document.querySelectorAll('.hkpi').forEach(el => {
-      const lbl = el.querySelector('.lbl')?.textContent?.trim();
-      const val = el.querySelector('.val');
-      if (!val) return;
-      if (lbl === 'Kurs')        { val.textContent = '€ ' + m.price?.toFixed(2); }
-      if (lbl === 'ooEBITDA')    { val.textContent = '€ ' + k.ebitda_mn?.toFixed(1) + 'M'; }
-    });
 
-    // Upside im Header neu berechnen
-    const upEl = document.getElementById('hdr-up');
-    if (upEl && PRICE > 0) {
-      const up = ((92 - PRICE) / PRICE * 100).toFixed(0);
-      upEl.textContent = (up >= 0 ? '+' : '') + up + ' %';
+    // Kurs im Header
+    if (m.price > 0) {
+      const priceEl = document.getElementById('hdr-price');
+      if (priceEl) priceEl.textContent = '€ ' + m.price.toFixed(2);
+      // Upside neu berechnen
+      const upEl = document.getElementById('hdr-up');
+      if (upEl) {
+        const up = ((92 - m.price) / m.price * 100).toFixed(0);
+        upEl.textContent = (up >= 0 ? '+' : '') + up + ' %';
+      }
     }
 
     // ── Exec Summary KPI-Karten befüllen
@@ -1150,26 +1156,31 @@ async function loadData() {
 }
 
 function applyKpiCards(d) {
+  // Fix #3: direkte ID-Selektoren auf die neu gesetzten HTML-Elemente
   const k = d.kpis || {}, m = d.market || {};
-  const map = {
-    // selector → wert
-    '#exec-revenue':    k.revenue_mn   ? '€ ' + k.revenue_mn.toFixed(1)   + ' Mio.' : null,
-    '#exec-ebitda':     k.ebitda_mn    ? '€ ' + k.ebitda_mn.toFixed(1)    + ' Mio.' : null,
-    '#exec-margin':     k.ebitda_margin? k.ebitda_margin.toFixed(1)        + ' %'    : null,
-    '#exec-fcf':        k.fcf_mn       ? '€ ' + k.fcf_mn.toFixed(1)       + ' Mio.' : null,
-    '#exec-fcfyield':   k.fcf_yield    ? k.fcf_yield.toFixed(1)           + ' %'    : null,
-    '#exec-netdebt':    k.net_debt_mn  ? '€ ' + k.net_debt_mn.toFixed(0)  + ' Mio.' : null,
-    '#exec-nd-ebitda':  k.net_debt_ebitda ? k.net_debt_ebitda.toFixed(1)  + '×'     : null,
-    '#exec-ev-ebitda':  k.ev_ebitda    ? k.ev_ebitda.toFixed(1)           + '×'     : null,
-    '#exec-pe':         k.pe_ratio     ? k.pe_ratio.toFixed(1)            + '×'     : null,
-    '#exec-roce':       k.roce         ? k.roce.toFixed(1)                + ' %'    : null,
-    '#exec-goodwill-pct': k.goodwill_pct ? k.goodwill_pct.toFixed(1)     + ' %'    : null,
-  };
-  Object.entries(map).forEach(([sel, val]) => {
-    if (!val) return;
-    const el = document.querySelector(sel);
-    if (el) el.textContent = val;
-  });
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el && val !== null) el.textContent = val; };
+
+  // Finanzkennzahlen-Karte
+  if (k.revenue_mn)    set('kpi-revenue',  '€ ' + k.revenue_mn.toFixed(1) + ' Mio.');
+  if (k.ebitda_mn)     set('kpi-ebitda',   '€ ' + k.ebitda_mn.toFixed(1)  + ' Mio.');
+  if (k.ebitda_margin) set('kpi-margin',   k.ebitda_margin.toFixed(1)      + ' %');
+  if (k.fcf_mn)        set('kpi-fcf',      '€ ' + k.fcf_mn.toFixed(1)     + ' Mio.');
+  if (k.fcf_yield)     set('kpi-fcfyield', k.fcf_yield.toFixed(1)          + ' %');
+  if (k.net_debt_mn !== undefined) set('kpi-netdebt', '€ ' + k.net_debt_mn.toFixed(0) + ' Mio.');
+  if (k.net_debt_ebitda !== undefined) set('kpi-leverage', k.net_debt_ebitda.toFixed(1) + '×');
+
+  // Qualitäts-Scores-Karte
+  if (k.ev_ebitda)    set('kpi-ev-ebitda',   k.ev_ebitda.toFixed(1)    + '×');
+  if (k.pe_ratio)     set('kpi-pe',           k.pe_ratio.toFixed(1)     + '×');
+  if (k.roce)         set('kpi-roce',         k.roce.toFixed(1)         + ' %');
+  if (k.goodwill_pct) set('kpi-goodwill-pct', k.goodwill_pct.toFixed(1) + ' % ⚠');
+
+  // DCF-Slider Basiswert aktualisieren (damit Live-DCF mit echtem Umsatz rechnet)
+  if (k.revenue_mn > 0) {
+    const srev = document.getElementById('srev');
+    if (srev) { srev.value = k.revenue_mn.toFixed(1); dcf(); }
+  }
 }
 
 function applyPeerTable(peers) {
