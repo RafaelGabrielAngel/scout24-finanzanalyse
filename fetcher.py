@@ -416,6 +416,90 @@ def fetch_trends() -> dict:
     return result
 
 # ─────────────────────────────────────────────────────────────────
+# MAKRO-DATEN (Bundesbank + EZB — kostenlos, kein API-Key)
+# ─────────────────────────────────────────────────────────────────
+
+def fetch_macro() -> dict:
+    """
+    Zieht makroökonomische Daten direkt von EZB und Bundesbank APIs.
+    Kostenlos, kein API-Key nötig.
+
+    Liefert:
+      - EZB Einlagesatz (Leitzins)
+      - Deutscher 10J-Bund (risikofreier Zinssatz für WACC)
+      - Hypothekenzins DE 10J fix (Wohnbau-Nachfrage-Signal)
+      - Implizierter WACC-Bereich
+    """
+    print("[MAKRO] Bundesbank + EZB Zinsdaten...")
+    result = {
+        "ecb_deposit_rate":  None,
+        "bund_10y":          None,
+        "mortgage_rate_10y": None,
+        "wacc_floor":        None,
+        "wacc_implied":      None,
+        "as_of":             datetime.date.today().isoformat(),
+        "source":            "EZB + Bundesbank SDMX API",
+    }
+
+    # ── 1. EZB Einlagesatz (Deposit Facility Rate)
+    try:
+        url = ("https://data-api.ecb.europa.eu/service/data/"
+               "FM/B.U2.EUR.RT0.BB.N.R?format=jsondata&lastNObservations=1")
+        r = requests.get(url, timeout=15, headers={"Accept": "application/json"})
+        r.raise_for_status()
+        obs = r.json()["dataSets"][0]["series"]["0:0:0:0:0:0:0"]["observations"]
+        ecb_rate = round(float(list(obs.values())[-1][0]), 2)
+        result["ecb_deposit_rate"] = ecb_rate
+        print(f"    ✓ EZB Einlagesatz: {ecb_rate}%")
+    except Exception as e:
+        print(f"    [WARN] EZB Leitzins fehlgeschlagen: {e}")
+
+    # ── 2. Deutscher 10J-Bund (AAA Euro-Area Yield Curve 10Y)
+    try:
+        url = ("https://data-api.ecb.europa.eu/service/data/"
+               "YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y?format=jsondata&lastNObservations=1")
+        r = requests.get(url, timeout=15, headers={"Accept": "application/json"})
+        r.raise_for_status()
+        obs = r.json()["dataSets"][0]["series"]["0:0:0:0:0:0:0"]["observations"]
+        bund = round(float(list(obs.values())[-1][0]), 2)
+        result["bund_10y"] = bund
+        print(f"    ✓ Bund 10J: {bund}%")
+    except Exception as e:
+        print(f"    [WARN] Bund-Rendite fehlgeschlagen: {e}")
+
+    # ── 3. Hypothekenzins DE (Bundesbank: Wohnbaukredite HH, Zinsbindung >10J)
+    try:
+        url = ("https://api.statistik.bundesbank.de/service/data/"
+               "BBK01/M.I1.EUR.BB3L.RD?format=sdmx-json&lastNObservations=3")
+        r = requests.get(url, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+        series = data["dataSets"][0]["series"]["0:0:0:0:0"]
+        obs = series["observations"]
+        latest_val = float(list(obs.values())[-1][0])
+        result["mortgage_rate_10y"] = round(latest_val, 2)
+        print(f"    ✓ Hypothekenzins 10J: {latest_val}%")
+    except Exception as e:
+        print(f"    [WARN] Hypothekenzins fehlgeschlagen: {e}")
+
+    # ── 4. WACC-Implikation berechnen
+    # WACC = rf + β × ERP + credit spread (Damodaran-Methode)
+    # Scout24 Beta ~0.8, DE-ERP ~5.5%, Credit Spread ~1.5%
+    rf = result["bund_10y"] or 2.5
+    beta = 0.80
+    erp  = 5.5    # Equity Risk Premium DE (Damodaran 2026)
+    cs   = 1.5    # Credit Spread (Aa-Rating äquivalent)
+    wacc_calc = round(rf + beta * erp + cs, 1)
+    result["wacc_implied"]  = wacc_calc
+    result["wacc_floor"]    = round(rf + 4.5, 1)  # konservatives Minimum
+    result["erp_used"]      = erp
+    result["beta_used"]     = beta
+    if result["bund_10y"]:
+        print(f"    ✓ WACC impliziert: {wacc_calc}% (rf={rf}% + β{beta}×ERP{erp}% + CS{cs}%)")
+
+    return result
+
+# ─────────────────────────────────────────────────────────────────
 # HAUPT-ROUTINE
 # ─────────────────────────────────────────────────────────────────
 
@@ -426,15 +510,14 @@ def main():
     print("=" * 55)
 
     if not FMP_KEY:
-        print("\n[ERROR] FMP_API_KEY nicht gesetzt!")
-        print("Bitte setzen: export FMP_API_KEY='dein-key'")
-        return
+        print("\n[INFO] FMP_API_KEY nicht gesetzt — FMP-Calls werden übersprungen")
 
     market    = fetch_market_data()
     profile   = fetch_profile()
     fin       = fetch_financials()
     peers     = fetch_peers()
     trends    = fetch_trends()
+    macro     = fetch_macro()
 
     # ── Fix #2: 2025A Fallback-Daten — immer vollständige data.json
     FALLBACK_2025A = {
@@ -536,6 +619,9 @@ def main():
 
         # Traffic / KI-Signal
         "trends": trends,
+
+        # Makro: EZB Leitzins, Bund 10J, Hypothekenzins, WACC-Implikation
+        "macro": macro,
     }
 
     # ── Schreiben
