@@ -530,6 +530,31 @@ def fetch_macro() -> dict:
 # HAUPT-ROUTINE
 # ─────────────────────────────────────────────────────────────────
 
+def _load_existing_lseg() -> dict:
+    """Lädt LSEG-spezifische Felder aus vorhandenem data.json um sie zu erhalten."""
+    try:
+        with open(OUTPUT) as f:
+            old = json.load(f)
+        lseg = {}
+        # Nur LSEG-Felder übernehmen wenn sie aus Workspace stammen
+        if old.get("_meta", {}).get("source") == "LSEG Workspace":
+            # Vollständiges LSEG-data.json: alle Felder übernehmen
+            return old
+        # Gemischtes data.json: nur LSEG-spezifische Felder erhalten
+        for key in ["brokers", "multiples", "consensus", "history"]:
+            if key in old and old[key]:
+                # history.annual kommt von LSEG, history.income/cashflow von FMP/Fallback
+                if key == "history":
+                    if old[key].get("annual"):
+                        lseg["_lseg_history_annual"] = old[key]["annual"]
+                else:
+                    lseg[key] = old[key]
+        if lseg:
+            print(f"[MERGE] LSEG-Daten aus vorherigem data.json erhalten: {list(lseg.keys())}")
+        return lseg
+    except:
+        return {}
+
 def main():
     print("=" * 55)
     print("Scout24 SE — Data Fetcher")
@@ -538,6 +563,9 @@ def main():
 
     if not FMP_KEY:
         print("\n[INFO] FMP_API_KEY nicht gesetzt — FMP-Calls werden übersprungen")
+
+    # LSEG-Daten aus vorherigem data.json laden und erhalten
+    existing_lseg = _load_existing_lseg()
 
     market    = fetch_market_data()
     profile   = fetch_profile()
@@ -639,6 +667,8 @@ def main():
             "balance":  list(reversed(fin["balance"])),
             "cashflow": list(reversed(fin["cashflow"])),
             "metrics":  list(reversed(fin["metrics"])),
+            # LSEG history.annual erhalten wenn vorhanden
+            "annual":   existing_lseg.get("_lseg_history_annual", []),
         },
 
         # Peer-Gruppe
@@ -649,6 +679,11 @@ def main():
 
         # Makro: EZB Leitzins, Bund 10J, Hypothekenzins, WACC-Implikation
         "macro": macro,
+
+        # ── LSEG-Felder erhalten (werden nur durch fetcher_lseg.py gesetzt)
+        "brokers":   existing_lseg.get("brokers",   {}),
+        "multiples": existing_lseg.get("multiples", {}),
+        "consensus": existing_lseg.get("consensus", {}),
     }
 
     # ── Schreiben
