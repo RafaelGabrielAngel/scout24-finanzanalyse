@@ -1,391 +1,112 @@
 {
   "_meta": {
-    "generated_at": "2026-06-01T15:58:40.577824Z",
-    "source": "LSEG Workspace",
-    "ric": "DE000A12DM80",
-    "version": "lseg-v1"
+    "generated_at": "2026-06-01T16:04:02.570811Z",
+    "ticker": "SDX.DE",
+    "source": "FMP Free + yfinance + Google Trends"
   },
   "market": {
     "price": 72.25,
     "change_pct": 3.66,
-    "volume": 691923,
-    "market_cap_bn": 5.16,
-    "year_high": 0.0,
-    "year_low": 0.0,
-    "shares_mn": 71.37,
-    "beta": 0,
-    "div_yield": 0.0,
-    "source": "LSEG Workspace",
-    "as_of": "2026-06-01"
+    "market_cap_bn": 0,
+    "year_high": 72.7,
+    "year_low": 70.0,
+    "pe_ratio": 0
   },
   "profile": {
-    "shares_diluted_mn": 71.37,
+    "shares_diluted_mn": 72.07,
     "company_name": "Scout24 SE"
   },
   "kpis": {
-    "revenue_mn": 566.3,
-    "ebitda_mn": 320.1,
-    "ebitda_margin": 56.5,
-    "fcf_mn": 96.1,
-    "fcf_margin": 17.0,
-    "net_debt_mn": 179.7,
-    "goodwill_mn": 0.0,
-    "goodwill_pct": 0.0,
-    "total_assets_mn": 2072.5,
-    "ev_ebitda": 15.6,
-    "pe_ratio": 0.0,
-    "fcf_yield": 0.0,
-    "roce": 0.0,
-    "net_debt_ebitda": 0.0,
-    "altman_z": 10.87,
-    "short_interest": 0.0,
-    "year": "2024"
+    "revenue_mn": 649.6,
+    "ebitda_mn": 405.7,
+    "ebitda_margin": 62.5,
+    "fcf_mn": 261.4,
+    "fcf_margin": 40.2,
+    "net_debt_mn": 100.0,
+    "goodwill_mn": 925.8,
+    "goodwill_pct": 44.8,
+    "total_assets_mn": 2065.0,
+    "ev_ebitda": 13.1,
+    "pe_ratio": 21.7,
+    "fcf_yield": 5.0,
+    "roce": 16.8,
+    "net_debt_ebitda": 0.25,
+    "year": "2025A"
   },
   "history": {
-    "annual": [
+    "income": [
       {
-        "year": "2016",
-        "revenue_mn": 442.1,
-        "gross_profit_mn": 453.8,
-        "ebitda_mn": 206.6,
-        "ebit_mn": 141.2,
-        "net_income_mn": 0.0,
-        "eps": 0.0,
-        "fcf_mn": 112.8,
-        "capex_mn": 0.0,
-        "total_assets_mn": 2130.9,
-        "total_debt_mn": 673.4,
-        "cash_mn": 0.0,
-        "net_debt_mn": 673.4,
-        "goodwill_mn": 0.0,
-        "equity_mn": 990.8,
-        "dividends_mn": 0.0,
-        "ebitda_margin": 46.7,
-        "fcf_margin": 25.5
-      },
-      {
-        "year": "2017",
-        "revenue_mn": 472.6,
-        "gross_profit_mn": 464.9,
-        "ebitda_mn": 232.8,
-        "ebit_mn": 175.9,
-        "net_income_mn": 0.0,
-        "eps": 0.0,
-        "fcf_mn": 112.7,
-        "capex_mn": 0.0,
-        "total_assets_mn": 2140.5,
-        "total_debt_mn": 615.2,
-        "cash_mn": 0.0,
-        "net_debt_mn": 615.2,
-        "goodwill_mn": 0.0,
-        "equity_mn": 1065.5,
-        "dividends_mn": 0.0,
-        "ebitda_margin": 49.3,
-        "fcf_margin": 23.8
-      },
-      {
-        "year": "2018",
-        "revenue_mn": 318.2,
-        "gross_profit_mn": 316.2,
-        "ebitda_mn": 162.5,
-        "ebit_mn": 109.5,
-        "net_income_mn": 0.0,
-        "eps": 0.0,
-        "fcf_mn": 49.7,
-        "capex_mn": 0.0,
-        "total_assets_mn": 2464.3,
-        "total_debt_mn": 810.1,
-        "cash_mn": 0.0,
-        "net_debt_mn": 810.1,
-        "goodwill_mn": 0.0,
-        "equity_mn": 1172.5,
-        "dividends_mn": 0.0,
-        "ebitda_margin": 51.1,
-        "fcf_margin": 15.6
-      },
-      {
-        "year": "2019",
-        "revenue_mn": 349.7,
-        "gross_profit_mn": 349.6,
-        "ebitda_mn": 163.7,
-        "ebit_mn": 109.4,
-        "net_income_mn": 0.0,
-        "eps": 0.0,
-        "fcf_mn": 32.8,
-        "capex_mn": 0.0,
-        "total_assets_mn": 2431.2,
-        "total_debt_mn": 852.7,
-        "cash_mn": 0.0,
-        "net_debt_mn": 852.7,
-        "goodwill_mn": 0.0,
-        "equity_mn": 1053.9,
-        "dividends_mn": 0.0,
-        "ebitda_margin": 46.8,
-        "fcf_margin": 9.4
-      },
-      {
-        "year": "2020",
-        "revenue_mn": 353.8,
-        "gross_profit_mn": 360.2,
-        "ebitda_mn": 204.6,
-        "ebit_mn": 153.1,
-        "net_income_mn": 0.0,
-        "eps": 0.0,
-        "fcf_mn": 24.2,
-        "capex_mn": 0.0,
-        "total_assets_mn": 3520.4,
-        "total_debt_mn": 330.9,
-        "cash_mn": 0.0,
-        "net_debt_mn": 330.9,
-        "goodwill_mn": 0.0,
-        "equity_mn": 2813.8,
-        "dividends_mn": 0.0,
-        "ebitda_margin": 57.8,
-        "fcf_margin": 6.8
-      },
-      {
-        "year": "2021",
-        "revenue_mn": 389.0,
-        "gross_profit_mn": 394.8,
-        "ebitda_mn": 212.1,
-        "ebit_mn": 154.6,
-        "net_income_mn": 0.0,
-        "eps": 0.0,
-        "fcf_mn": 50.4,
-        "capex_mn": 0.0,
-        "total_assets_mn": 2421.4,
-        "total_debt_mn": 259.2,
-        "cash_mn": 0.0,
-        "net_debt_mn": 259.2,
-        "goodwill_mn": 0.0,
-        "equity_mn": 1773.5,
-        "dividends_mn": 0.0,
-        "ebitda_margin": 54.5,
-        "fcf_margin": 13.0
-      },
-      {
-        "year": "2022",
-        "revenue_mn": 447.5,
-        "gross_profit_mn": 456.0,
-        "ebitda_mn": 243.4,
-        "ebit_mn": 210.3,
-        "net_income_mn": 0.0,
-        "eps": 0.0,
-        "fcf_mn": 60.6,
-        "capex_mn": 0.0,
-        "total_assets_mn": 1880.6,
-        "total_debt_mn": 161.6,
-        "cash_mn": 0.0,
-        "net_debt_mn": 161.6,
-        "goodwill_mn": 0.0,
-        "equity_mn": 1348.5,
-        "dividends_mn": 0.0,
-        "ebitda_margin": 54.4,
-        "fcf_margin": 13.5
-      },
-      {
-        "year": "2023",
-        "revenue_mn": 509.1,
-        "gross_profit_mn": 518.5,
-        "ebitda_mn": 293.5,
-        "ebit_mn": 257.2,
-        "net_income_mn": 0.0,
-        "eps": 0.0,
-        "fcf_mn": 117.3,
-        "capex_mn": 0.0,
-        "total_assets_mn": 2019.4,
-        "total_debt_mn": 177.4,
-        "cash_mn": 0.0,
-        "net_debt_mn": 177.4,
-        "goodwill_mn": 0.0,
-        "equity_mn": 1447.2,
-        "dividends_mn": 0.0,
-        "ebitda_margin": 57.7,
-        "fcf_margin": 23.0
+        "year": "2025",
+        "revenue": 649.6,
+        "ebitda": 405.7,
+        "ebitda_margin": 62.5,
+        "fcf_margin": 40.2
       },
       {
         "year": "2024",
-        "revenue_mn": 566.3,
-        "gross_profit_mn": 573.1,
-        "ebitda_mn": 320.1,
-        "ebit_mn": 273.1,
-        "net_income_mn": 0.0,
-        "eps": 0.0,
-        "fcf_mn": 96.1,
-        "capex_mn": 0.0,
-        "total_assets_mn": 2072.5,
-        "total_debt_mn": 179.7,
-        "cash_mn": 0.0,
-        "net_debt_mn": 179.7,
-        "goodwill_mn": 0.0,
-        "equity_mn": 1432.3,
-        "dividends_mn": 0.0,
-        "ebitda_margin": 56.5,
-        "fcf_margin": 17.0
+        "revenue": 566.3,
+        "ebitda": 348.5,
+        "ebitda_margin": 61.5,
+        "fcf_margin": 41.4
+      },
+      {
+        "year": "2023",
+        "revenue": 509.1,
+        "ebitda": 302.2,
+        "ebitda_margin": 59.4,
+        "fcf_margin": 38.8
+      },
+      {
+        "year": "2022",
+        "revenue": 447.5,
+        "ebitda": 263.0,
+        "ebitda_margin": 58.8,
+        "fcf_margin": 36.5
+      },
+      {
+        "year": "2021",
+        "revenue": 389.0,
+        "ebitda": 226.5,
+        "ebitda_margin": 58.2,
+        "fcf_margin": 32.9
       }
-    ]
+    ],
+    "balance": [],
+    "cashflow": [
+      {
+        "year": "2025",
+        "free_cashflow": 261.4,
+        "operating_cf": 318.9,
+        "capex": -57.5
+      },
+      {
+        "year": "2024",
+        "free_cashflow": 234.6,
+        "operating_cf": 286.2,
+        "capex": -51.6
+      },
+      {
+        "year": "2023",
+        "free_cashflow": 197.4,
+        "operating_cf": 240.8,
+        "capex": -43.4
+      },
+      {
+        "year": "2022",
+        "free_cashflow": 163.2,
+        "operating_cf": 199.1,
+        "capex": -35.9
+      },
+      {
+        "year": "2021",
+        "free_cashflow": 127.8,
+        "operating_cf": 155.9,
+        "capex": -28.1
+      }
+    ],
+    "metrics": []
   },
-  "consensus": {
-    "2026E": {
-      "revenue_mn": 0.0,
-      "revenue_high_mn": 0.0,
-      "revenue_low_mn": 0.0,
-      "ebitda_mn": 0.0,
-      "ebitda_high_mn": 0.0,
-      "ebitda_low_mn": 0.0,
-      "eps_mean": 0.0,
-      "eps_high": 0.0,
-      "eps_low": 0.0,
-      "fcf_mn": 0.0,
-      "num_analysts": 0,
-      "ebitda_margin_e": 0
-    },
-    "2027E": {
-      "revenue_mn": 0.0,
-      "revenue_high_mn": 0.0,
-      "revenue_low_mn": 0.0,
-      "ebitda_mn": 0.0,
-      "ebitda_high_mn": 0.0,
-      "ebitda_low_mn": 0.0,
-      "eps_mean": 0.0,
-      "eps_high": 0.0,
-      "eps_low": 0.0,
-      "fcf_mn": 0.0,
-      "num_analysts": 0,
-      "ebitda_margin_e": 0
-    },
-    "2028E": {
-      "revenue_mn": 0.0,
-      "revenue_high_mn": 0.0,
-      "revenue_low_mn": 0.0,
-      "ebitda_mn": 0.0,
-      "ebitda_high_mn": 0.0,
-      "ebitda_low_mn": 0.0,
-      "eps_mean": 0.0,
-      "eps_high": 0.0,
-      "eps_low": 0.0,
-      "fcf_mn": 0.0,
-      "num_analysts": 0,
-      "ebitda_margin_e": 0
-    }
-  },
-  "brokers": {
-    "tp_mean": 103.72,
-    "tp_high": 129.0,
-    "tp_low": 86.0,
-    "rec_mean": 0.0,
-    "buy_count": 0,
-    "hold_count": 0,
-    "sell_count": 0,
-    "buy_pct": 0,
-    "hold_pct": 0,
-    "sell_pct": 0,
-    "implied_upside_pct": 43.6
-  },
-  "multiples": {
-    "ev_ebitda": 15.6,
-    "pe_ratio": 0.0,
-    "pb_ratio": 0.0,
-    "roic": 0.0,
-    "roce": 0.0,
-    "fcf_yield": 0.0,
-    "net_debt_ebitda": 0.0,
-    "short_interest_pct": 0.0,
-    "short_days_to_cover": 0.0
-  },
-  "peers": [
-    {
-      "name": "Rightmove",
-      "ric": "RMV.L",
-      "price": 419.7,
-      "market_cap_bn": 0,
-      "ev_ebitda": 10.5,
-      "pe_ratio": 0.0,
-      "div_yield": 0.0,
-      "revenue_mn": 425.1,
-      "ebitda_mn": 296.2,
-      "ebitda_margin": 69.7,
-      "revenue_growth": 0.0
-    },
-    {
-      "name": "REA Group",
-      "ric": "REA.AX",
-      "price": 151.24,
-      "market_cap_bn": 0,
-      "ev_ebitda": 19.4,
-      "pe_ratio": 0.0,
-      "div_yield": 0.0,
-      "revenue_mn": 1928.5,
-      "ebitda_mn": 960.1,
-      "ebitda_margin": 49.8,
-      "revenue_growth": 0.0
-    },
-    {
-      "name": "Hemnet",
-      "ric": "HEM.ST",
-      "price": 98.45,
-      "market_cap_bn": 0,
-      "ev_ebitda": 13.2,
-      "pe_ratio": 0.0,
-      "div_yield": 0.0,
-      "revenue_mn": 1526.8,
-      "ebitda_mn": 767.5,
-      "ebitda_margin": 50.3,
-      "revenue_growth": 0.0
-    }
-  ],
-  "news": [
-    {
-      "date": "",
-      "title": "",
-      "source": "NS:GLORDP"
-    },
-    {
-      "date": "",
-      "title": "",
-      "source": "NS:CNBSTR"
-    },
-    {
-      "date": "",
-      "title": "",
-      "source": "NS:CNBSTR"
-    },
-    {
-      "date": "",
-      "title": "",
-      "source": "NS:CNBSTR"
-    },
-    {
-      "date": "",
-      "title": "",
-      "source": "NS:CNBSTR"
-    },
-    {
-      "date": "",
-      "title": "",
-      "source": "NS:ADHOCN"
-    },
-    {
-      "date": "",
-      "title": "",
-      "source": "NS:GLORDP"
-    },
-    {
-      "date": "",
-      "title": "",
-      "source": "NS:ADHOCN"
-    },
-    {
-      "date": "",
-      "title": "",
-      "source": "NS:GLORDP"
-    },
-    {
-      "date": "",
-      "title": "",
-      "source": "NS:FINSWI"
-    }
-  ],
+  "peers": [],
   "trends": {
     "status": "ok",
     "series": [
@@ -443,15 +164,15 @@
       },
       {
         "date": "2026-05-17",
-        "value": 76
+        "value": 75
       },
       {
         "date": "2026-05-24",
-        "value": 70
+        "value": 67
       },
       {
         "date": "2026-05-31",
-        "value": 73
+        "value": 64
       }
     ],
     "competitor": [
@@ -522,18 +243,18 @@
       },
       {
         "date": "2026-05-17",
-        "immoscout": 76,
-        "immowelt": 75
+        "immoscout": 75,
+        "immowelt": 76
       },
       {
         "date": "2026-05-24",
-        "immoscout": 70,
-        "immowelt": 74
+        "immoscout": 67,
+        "immowelt": 76
       },
       {
         "date": "2026-05-31",
-        "immoscout": 73,
-        "immowelt": 87
+        "immoscout": 64,
+        "immowelt": 81
       }
     ],
     "ai_signal": [
@@ -585,25 +306,25 @@
       {
         "date": "2026-05-17",
         "Wohnung KI": 35,
-        "Wohnung ChatGPT": 51
+        "Wohnung ChatGPT": 50
       },
       {
         "date": "2026-05-24",
-        "Wohnung KI": 44,
-        "Wohnung ChatGPT": 57
+        "Wohnung KI": 42,
+        "Wohnung ChatGPT": 58
       },
       {
         "date": "2026-05-31",
-        "Wohnung KI": 60,
-        "Wohnung ChatGPT": 58
+        "Wohnung KI": 53,
+        "Wohnung ChatGPT": 55
       }
     ],
-    "trend_delta": -16.7,
+    "trend_delta": -20.3,
     "competitor_delta": {
-      "immoscout_delta": -16.7,
-      "immowelt_delta": -5.5
+      "immoscout_delta": -20.3,
+      "immowelt_delta": -6.4
     },
-    "ai_delta_Wohnung_KI": 50.0,
-    "ai_delta_Wohnung_ChatGPT": -13.1
+    "ai_delta_Wohnung_KI": 43.5,
+    "ai_delta_Wohnung_ChatGPT": -14.3
   }
 }
