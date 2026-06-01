@@ -406,7 +406,7 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     </p>
   </div>
   <div class="hdr-kpis">
-    <div class="hkpi"><div class="lbl">Kurs</div><div class="val gold" id="hdr-price">€ 72,25</div></div>
+    <div class="hkpi"><div class="lbl">Kurs <span id="hdr-change" style="font-size:9px;font-weight:700;margin-left:4px"></span></div><div class="val gold" id="hdr-price">—</div></div>
     <div class="hkpi"><div class="lbl">Kursziel 12M</div><div class="val green">€ 92</div></div>
     <div class="hkpi"><div class="lbl">Upside</div><div class="val green" id="hdr-up">+27 %</div></div>
     <div class="hkpi"><div class="lbl">DCF Base</div><div class="val blue" id="hdr-dcf">€ 110</div></div>
@@ -1111,16 +1111,29 @@ async function loadData() {
     // ── Fix #3: Header-KPIs robust aktualisieren
     const m = d.market || {}, k = d.kpis || {};
 
-    // Kurs im Header
+    // Kurs im Header — mit Tagesveränderung
     if (m.price > 0) {
       const priceEl = document.getElementById('hdr-price');
       if (priceEl) priceEl.textContent = '€ ' + m.price.toFixed(2);
+
+      // Δ Tagesveränderung
+      const chEl = document.getElementById('hdr-change');
+      if (chEl && m.change_pct !== undefined) {
+        const sign = m.change_pct >= 0 ? '+' : '';
+        chEl.textContent = sign + m.change_pct.toFixed(2) + '%';
+        chEl.style.color = m.change_pct >= 0 ? 'var(--green)' : 'var(--red)';
+      }
+
       // Upside neu berechnen
       const upEl = document.getElementById('hdr-up');
       if (upEl) {
         const up = ((92 - m.price) / m.price * 100).toFixed(0);
         upEl.textContent = (up >= 0 ? '+' : '') + up + ' %';
       }
+
+      // DCF Globals updaten
+      PRICE = m.price;
+      renderFF();
     }
 
     // ── Exec Summary KPI-Karten befüllen
