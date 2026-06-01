@@ -1,0 +1,97 @@
+{
+  "_meta": {
+    "generated_at": "2026-06-01T12:20:36.403665Z",
+    "ticker": "SDX.DE",
+    "source": "FMP Free + yfinance + Google Trends"
+  },
+  "market": {
+    "price": 0,
+    "change_pct": 0,
+    "market_cap_bn": 0.0,
+    "year_high": 0,
+    "year_low": 0,
+    "pe_ratio": 0
+  },
+  "profile": {
+    "shares_diluted_mn": 72.07,
+    "company_name": "Scout24 SE"
+  },
+  "kpis": {
+    "revenue_mn": 649.6,
+    "ebitda_mn": 405.7,
+    "ebitda_margin": 62.5,
+    "fcf_mn": 261.4,
+    "fcf_margin": 40.2,
+    "net_debt_mn": 100,
+    "goodwill_mn": 925.8,
+    "goodwill_pct": 44.8,
+    "total_assets_mn": 2065.0,
+    "ev_ebitda": 13.1,
+    "pe_ratio": 21.7,
+    "fcf_yield": 5.0,
+    "roce": 16.8,
+    "net_debt_ebitda": 0.25,
+    "year": "2025A"
+  },
+  "history": {
+    "income": [],
+    "balance": [],
+    "cashflow": [],
+    "metrics": []
+  },
+  "peers": [],
+  "trends": {
+    "status": "ok",
+    "trend_delta": -15.3,
+    "series": [
+      {
+        "date": "2026-03-15",
+        "immoscout": 98
+      },
+      {
+        "date": "2026-03-22",
+        "immoscout": 95
+      },
+      {
+        "date": "2026-03-29",
+        "immoscout": 100
+      },
+      {
+        "date": "2026-04-05",
+        "immoscout": 96
+      },
+      {
+        "date": "2026-04-12",
+        "immoscout": 93
+      },
+      {
+        "date": "2026-04-19",
+        "immoscout": 85
+      },
+      {
+        "date": "2026-04-26",
+        "immoscout": 84
+      },
+      {
+        "date": "2026-05-03",
+        "immoscout": 81
+      },
+      {
+        "date": "2026-05-10",
+        "immoscout": 87
+      },
+      {
+        "date": "2026-05-17",
+        "immoscout": 75
+      },
+      {
+        "date": "2026-05-24",
+        "immoscout": 72
+      },
+      {
+        "date": "2026-05-31",
+        "immoscout": 75
+      }
+    ]
+  }
+}
