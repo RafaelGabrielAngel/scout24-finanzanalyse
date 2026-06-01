@@ -358,7 +358,7 @@ def fetch_trends() -> dict:
                 for idx, row in df.tail(16).iterrows()
             ]
             print(f"    ✓ ImmoScout24 Trend Delta: {result['trend_delta']:+.1f}%")
-        time.sleep(2)
+        time.sleep(4)   # längere Pause wegen Rate-Limiting
     except Exception as e:
         print(f"    [WARN] ImmoScout24 Trend fehlgeschlagen: {e}")
 
@@ -390,7 +390,8 @@ def fetch_trends() -> dict:
     except Exception as e:
         print(f"    [WARN] Wettbewerber-Vergleich fehlgeschlagen: {e}")
 
-    # ── 3. KI-Disintermediation-Signal
+    # ── 3. KI-Disintermediation-Signal (mit Retry wegen Rate-Limit)
+    time.sleep(5)   # längere Pause vor KI-Abfrage
     try:
         df3 = safe_trends(["Wohnung KI", "Wohnung ChatGPT"])
         if df3 is not None and not df3.empty:

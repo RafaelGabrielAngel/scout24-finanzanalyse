@@ -1817,12 +1817,31 @@ function renderTrafficSignal(d) {
     const fasterEl = document.getElementById('t-scout-faster');
     if (fasterEl && gap < -2) fasterEl.textContent = Math.abs(gap).toFixed(1) + ' PP schneller';
   }
-  const aiKey = 'ai_delta_Wohnung_KI';
-  if (t[aiKey] !== undefined) {
-    const aiEl = document.getElementById('t-ai-delta');
-    if (aiEl) { aiEl.textContent = fmt(t[aiKey]); aiEl.style.color = t[aiKey] > 0 ? 'var(--green)' : 'var(--txt2)'; }
-    const riseEl = document.getElementById('t-ai-rise');
-    if (riseEl) riseEl.textContent = t[aiKey] > 0 ? '+' + t[aiKey].toFixed(1) + '% steigendem' : 'rückläufigem';
+  // KI-Signal: ai_delta_Wohnung_KI oder Fallback aus ai_signal-Reihe
+  const aiKey   = 'ai_delta_Wohnung_KI';
+  const aiDelta = t[aiKey] !== undefined ? t[aiKey]
+    : (t.ai_signal && t.ai_signal.length >= 2
+        ? (() => {
+            const vals = t.ai_signal.map(p => p['Wohnung KI'] || 0).filter(v => v > 0);
+            if (vals.length < 4) return null;
+            const recent = vals.slice(-4).reduce((a,b)=>a+b,0)/4;
+            const old    = vals.slice(0,4).reduce((a,b)=>a+b,0)/4;
+            return old ? Math.round((recent-old)/old*1000)/10 : null;
+          })()
+        : null);
+  const aiEl = document.getElementById('t-ai-delta');
+  if (aiEl) {
+    if (aiDelta !== null) {
+      aiEl.textContent = fmt(aiDelta);
+      aiEl.style.color = aiDelta > 0 ? 'var(--green)' : 'var(--txt2)';
+    } else {
+      aiEl.textContent = 'N/A';
+      aiEl.style.color = 'var(--txt3)';
+    }
+  }
+  const riseEl = document.getElementById('t-ai-rise');
+  if (riseEl && aiDelta !== null) {
+    riseEl.textContent = aiDelta > 0 ? '+' + aiDelta.toFixed(1) + '% steigendem' : 'rückläufigem';
   }
 
   // Datum
