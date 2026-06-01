@@ -40,8 +40,10 @@ except ImportError:
 
 # ── Konfiguration ───────────────────────────────────────────────
 FMP_KEY    = os.environ.get("FMP_API_KEY", "")
-TICKER_FMP = "SDX.DE"          # FMP-Ticker für Scout24 SE
-TICKER_YF  = "SDX.DE"          # yfinance-Ticker
+AV_KEY     = os.environ.get("ALPHA_VANTAGE_KEY", "")   # Alpha Vantage (Primary Kurs)
+TICKER_FMP = "SDX.DE"
+TICKER_YF  = "SDX.DE"
+TICKER_AV  = "SDX.DE"          # Alpha Vantage Ticker für XETRA
 OUTPUT     = Path(__file__).parent / "data.json"
 
 PEER_TICKERS = {
@@ -75,51 +77,54 @@ def fetch_market_data() -> dict:
     print("[1/5] Marktdaten (Kurs, MarketCap) via yfinance...")
     result = {}
 
-    # PRIMARY: Stooq — kostenlos, kein API-Key, funktioniert zuverlässig in GitHub Actions
-    try:
-        # Stooq CSV-Feed: Symbol,Date,Time,Open,High,Low,Close,Volume
-        url  = "https://stooq.com/q/l/?s=sdx.de&f=sd2t2ohlcv&h&e=csv"
-        resp = requests.get(url, timeout=15)
-        resp.raise_for_status()
-        lines = [l for l in resp.text.strip().split("\n") if l and not l.startswith("Symbol")]
-        if lines:
-            parts      = lines[0].split(",")
-            price      = round(float(parts[6]), 2)   # Close
-            prev_open  = round(float(parts[3]), 2)   # Open als Annäherung
-            change_pct = round(((price - prev_open) / max(prev_open, 0.01)) * 100, 2)
-            high_52w   = round(float(parts[4]), 2)
-            low_52w    = round(float(parts[5]), 2)
-            result = {
-                "price":          price,
-                "change_pct":     change_pct,
-                "market_cap_bn":  0,
-                "year_high":      high_52w,
-                "year_low":       low_52w,
-                "avg_volume":     int(float(parts[7])) if len(parts) > 7 else 0,
-                "beta":           0,
-                "dividend_yield": 0,
-                "currency":       "EUR",
-            }
-            print(f"    ✓ Kurs (Stooq): €{price}  Δ{change_pct:+.2f}%")
-    except Exception as e:
-        print(f"    [WARN] Stooq fehlgeschlagen: {e}")
+    # PRIMARY: Alpha Vantage — explizit für API-Zugriff gebaut, keine CI-Blocks
+    if AV_KEY:
+        try:
+            url  = "https://www.alphavantage.co/query"
+            r    = requests.get(url, params={
+                "function": "GLOBAL_QUOTE",
+                "symbol":   TICKER_AV,
+                "apikey":   AV_KEY,
+            }, timeout=15)
+            r.raise_for_status()
+            q = r.json().get("Global Quote", {})
+            price = float(q.get("05. price", 0) or 0)
+            if price:
+                prev  = float(q.get("08. previous close", price) or price)
+                result = {
+                    "price":          round(price, 2),
+                    "change_pct":     round(float(q.get("10. change percent", "0%").replace("%","").strip()) or 0, 2),
+                    "market_cap_bn":  0,
+                    "year_high":      round(float(q.get("03. high", 0) or 0), 2),
+                    "year_low":       round(float(q.get("04. low",  0) or 0), 2),
+                    "avg_volume":     int(float(q.get("06. volume", 0) or 0)),
+                    "beta":           0,
+                    "dividend_yield": 0,
+                    "currency":       "EUR",
+                    "latest_day":     q.get("07. latest trading day", ""),
+                }
+                print(f"    ✓ Kurs (Alpha Vantage): €{price}  Δ{result['change_pct']:+.2f}%  Stand: {result['latest_day']}")
+            else:
+                print(f"    [WARN] Alpha Vantage: Kein Preis — Response: {str(r.json())[:200]}")
+        except Exception as e:
+            print(f"    [WARN] Alpha Vantage fehlgeschlagen: {e}")
+    else:
+        print("    [WARN] ALPHA_VANTAGE_KEY nicht gesetzt")
 
-    # FALLBACK: Yahoo Finance direkt (manchmal blockiert in CI)
+    # FALLBACK: Stooq (kein Key nötig)
     if not result.get("price"):
         try:
-            headers = {"User-Agent": "Mozilla/5.0 (compatible; DataFetcher/1.0)"}
-            url2    = f"https://query2.finance.yahoo.com/v8/finance/chart/{TICKER_YF}"
-            r2      = requests.get(url2, headers=headers, params={"interval":"1d","range":"5d"}, timeout=15)
-            meta    = r2.json()["chart"]["result"][0]["meta"]
-            price2  = float(meta.get("regularMarketPrice") or 0)
-            if price2:
-                result["price"]         = round(price2, 2)
-                result["market_cap_bn"] = round(float(meta.get("marketCap", 0) or 0) / 1e9, 2)
-                result["year_high"]     = round(float(meta.get("fiftyTwoWeekHigh", 0) or 0), 2)
-                result["year_low"]      = round(float(meta.get("fiftyTwoWeekLow",  0) or 0), 2)
-                print(f"    ✓ Kurs (Yahoo Fallback): €{result['price']}")
+            url2  = "https://stooq.com/q/l/?s=sdx.de&f=sd2t2ohlcv&h&e=csv"
+            r2    = requests.get(url2, timeout=15)
+            lines = [l for l in r2.text.strip().split("\n") if l and "N/D" not in l and not l.startswith("Symbol")]
+            if lines:
+                p = lines[0].split(",")
+                price2 = round(float(p[6]), 2)
+                result["price"]      = price2
+                result["change_pct"] = round(((price2 - float(p[3])) / max(float(p[3]), 0.01)) * 100, 2)
+                print(f"    ✓ Kurs (Stooq Fallback): €{price2}")
         except Exception as e:
-            print(f"    [WARN] Yahoo Fallback fehlgeschlagen: {e}")
+            print(f"    [WARN] Stooq Fallback fehlgeschlagen: {e}")
 
     # FALLBACK: FMP Quote (falls yfinance nicht verfügbar)
     if not result.get("price") and FMP_KEY:
