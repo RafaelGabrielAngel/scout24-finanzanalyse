@@ -420,6 +420,49 @@ def fetch_trends() -> dict:
 # MAKRO-DATEN (Bundesbank + EZB — kostenlos, kein API-Key)
 # ─────────────────────────────────────────────────────────────────
 
+def fetch_bafin_shorts() -> dict:
+    """
+    Holt BaFin-Netto-Leerverkaufspositionen für Scout24 SE (ISIN: DE000A12DM80).
+    Quelle: BaFin API — kostenlos, kein Key nötig, täglich aktualisiert.
+    Alle Short-Positionen >0.5% des Floats sind meldepflichtig und öffentlich.
+    """
+    print("[BAFIN] Netto-Leerverkaufspositionen Scout24...")
+    SCOUT24_ISIN = "DE000A12DM80"
+    result = {
+        "positions":      [],
+        "total_short_pct": 0,
+        "num_holders":    0,
+        "as_of":          datetime.date.today().isoformat(),
+        "source":         "BaFin — Netto-Leerverkaufspositionen (öffentlich)",
+    }
+    try:
+        # BaFin API v2 — ISIN-basierte Abfrage
+        url = f"https://api.bafin.de/srs/shortselling/v2/positions?isin={SCOUT24_ISIN}"
+        r = requests.get(url, timeout=15, headers={"Accept": "application/json"})
+        r.raise_for_status()
+        data = r.json()
+        positions = data if isinstance(data, list) else data.get("positions", data.get("data", []))
+        if positions:
+            result["positions"] = [
+                {
+                    "holder":    p.get("positionHolderName") or p.get("holder") or p.get("name", "Unbekannt"),
+                    "pct":       round(float(p.get("netShortPosition") or p.get("position") or p.get("pct", 0)), 2),
+                    "date":      str(p.get("positionDate") or p.get("date", ""))[:10],
+                }
+                for p in positions[:10]
+            ]
+            result["total_short_pct"] = round(sum(p["pct"] for p in result["positions"]), 2)
+            result["num_holders"]     = len(result["positions"])
+            print(f"  ✓ {result['num_holders']} Short-Positionen | Gesamt: {result['total_short_pct']}% des Floats")
+            for p in result["positions"]:
+                print(f"    {p['holder']}: {p['pct']}% (Stand: {p['date']})")
+        else:
+            print(f"  [INFO] Keine Short-Positionen >0.5% gemeldet (oder API leer)")
+    except Exception as e:
+        print(f"  [WARN] BaFin API fehlgeschlagen: {e}")
+        # Fallback: öffentliche BaFin-Datei (XLSX) — wird bei Bedarf aktiviert
+    return result
+
 def fetch_macro() -> dict:
     """
     Zieht makroökonomische Daten direkt von EZB und Bundesbank APIs.
@@ -573,6 +616,7 @@ def main():
     peers     = fetch_peers()
     trends    = fetch_trends()
     macro     = fetch_macro()
+    shorts    = fetch_bafin_shorts()
 
     # ── Fix #2: 2025A Fallback-Daten — immer vollständige data.json
     FALLBACK_2025A = {
@@ -679,6 +723,9 @@ def main():
 
         # Makro: EZB Leitzins, Bund 10J, Hypothekenzins, WACC-Implikation
         "macro": macro,
+
+        # BaFin Short-Positionen (täglich via GitHub Actions)
+        "shorts":  shorts,
 
         # ── LSEG-Felder erhalten (werden nur durch fetcher_lseg.py gesetzt)
         "brokers":   existing_lseg.get("brokers",   {}),

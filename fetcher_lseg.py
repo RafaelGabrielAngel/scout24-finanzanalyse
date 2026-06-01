@@ -145,6 +145,70 @@ def fetch_market():
     return result
 
 # ─────────────────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# 2b. QUARTALSZAHLEN (letzte 8 Quartale — Margentrendanalyse)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def fetch_quarterly():
+    print("\n[2b] Quartalszahlen (letzte 8Q — Margintrend)...")
+    fields = [
+        'TR.Revenue',
+        'TR.EBITDA',
+        'TR.EBIT',
+        'TR.NetIncome',
+        'TR.FreeCashFlow',
+        'TR.Revenue.periodenddate',
+    ]
+    params = {'SDate': '2023-01-01', 'EDate': '2026-12-31', 'Frq': 'Q'}
+    df, err = get_data(RIC_MAIN, fields, params)
+    if err or df is None or df.empty:
+        print(f"  [WARN] Quartalszahlen fehlgeschlagen: {err}")
+        return []
+
+    rows = []
+    for _, row in df.iterrows():
+        rev    = safe_float(row.get('Revenue'))
+        ebitda = safe_float(row.get('EBITDA'))
+        fcf    = safe_float(row.get('Free Cash Flow'))
+        date   = str(row.get('Period End Date', ''))[:10]
+        if not date or rev == 0:
+            continue
+        # Quartal-Label: Q1 2024 etc.
+        try:
+            q_dt = datetime.datetime.strptime(date, '%Y-%m-%d')
+            q_num = (q_dt.month - 1) // 3 + 1
+            label = f"Q{q_num} {q_dt.year}"
+        except:
+            label = date
+        rows.append({
+            "quarter":       label,
+            "date":          date,
+            "revenue_mn":    round(rev / 1e6, 1),
+            "ebitda_mn":     round(ebitda / 1e6, 1),
+            "ebit_mn":       round(safe_float(row.get('EBIT')) / 1e6, 1),
+            "net_income_mn": round(safe_float(row.get('Net Income')) / 1e6, 1),
+            "fcf_mn":        round(fcf / 1e6, 1),
+            "ebitda_margin": round(ebitda / max(rev, 1) * 100, 1) if rev else 0,
+            "fcf_margin":    round(fcf / max(rev, 1) * 100, 1) if rev else 0,
+        })
+
+    rows = [r for r in rows if r["revenue_mn"] > 0]
+    rows.sort(key=lambda x: x["date"])
+    print(f"  ✓ {len(rows)} Quartale geladen ({rows[0]['quarter'] if rows else '—'} – {rows[-1]['quarter'] if rows else '—'})")
+
+    # Margentrendanalyse: letzte 4Q vs. vorherige 4Q
+    if len(rows) >= 8:
+        recent4 = rows[-4:]
+        older4  = rows[-8:-4]
+        margin_recent = sum(r["ebitda_margin"] for r in recent4) / 4
+        margin_older  = sum(r["ebitda_margin"] for r in older4)  / 4
+        delta = round(margin_recent - margin_older, 1)
+        trend = "↗ Expanding" if delta > 0.5 else "↘ Compressing" if delta < -0.5 else "→ Stable"
+        print(f"  ✓ EBITDA-Marge Trend: {trend} ({delta:+.1f} PP letzte 4Q vs. vorherige 4Q)")
+
+    return rows
+
+# ─────────────────────────────────────────────────────────────────────────────
 # 2. HISTORISCHE FINANCIALS (2018–2025)
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -432,6 +496,7 @@ def main():
     diagnose()
 
     market    = fetch_market()
+    quarterly = fetch_quarterly()
     fin       = fetch_financials()
     consensus = fetch_consensus()
     brokers   = fetch_broker_targets()
@@ -484,7 +549,8 @@ def main():
             "year":             last_annual.get("year", "2025A"),
         },
         "history": {
-            "annual": fin.get("annual", []),
+            "annual":    fin.get("annual", []),
+            "quarterly": quarterly,
         },
         "consensus":  consensus,
         "brokers":    brokers,
