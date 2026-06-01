@@ -27,11 +27,11 @@ RIC_ALT   = "SDXG.DE"         # Fallback RIC
 OUTPUT    = Path(__file__).parent / "data.json"
 
 PEER_RICS = {
-    "Rightmove":   "RMV.L",
-    "Auto Trader": "AUTO.L",
-    "REA Group":   "REA.AX",
-    "Hemnet":      "HEM.ST",
-    "Immowelt":    "HMWG.DE",   # Immowelt / HausHeld (Monitoring)
+    "Rightmove":       "RMV.L",    # UK, reines Portal — direktester Vergleich
+    "Auto Trader":     "AUTO.L",   # UK, digitaler Marktplatz
+    "REA Group":       "REA.AX",   # AU, Transaktionsrente aufgebaut — Best-in-Class
+    "Hemnet":          "HEM.ST",   # SE, nordeuropäisches Äquivalent
+    # Bewusst ausgeschlossen: SAP SE (kein PropTech), Vend Marketplaces (Liquidität)
 }
 
 # ── LSEG / Eikon Library laden ──────────────────────────────────────────────
