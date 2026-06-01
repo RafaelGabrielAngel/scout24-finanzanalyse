@@ -444,6 +444,57 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     </div>
   </div>
 
+  <!-- ═══ EARNINGS COUNTDOWN ═══ -->
+  <div id="earnings-countdown" class="card mb16" style="border-color:rgba(255,170,0,.35);background:rgba(255,170,0,.04)">
+    <div class="card-hd" style="border-bottom-color:rgba(255,170,0,.2)">
+      <div class="dot dot-gold"></div>
+      <span>⏱ Catalyst Countdown — Nächste Earnings</span>
+      <span id="earnings-live-signal" style="margin-left:auto;font-size:9px;font-weight:700;padding:2px 8px;border-radius:6px"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start">
+      <!-- Countdown-Timer -->
+      <div style="text-align:center;min-width:130px;background:var(--bg2);border-radius:8px;padding:14px;border:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">H1 2026 Ergebnisse</div>
+        <div style="font-size:11px;color:var(--amber);font-weight:700;margin-bottom:8px">30. Juli 2026</div>
+        <div id="count-days" style="font-size:44px;font-weight:900;color:var(--gold);line-height:1">—</div>
+        <div style="font-size:10px;color:var(--txt2);margin-top:4px">Tage verbleibend</div>
+        <div id="count-bar" style="height:4px;border-radius:2px;background:var(--bg3);margin-top:10px;overflow:hidden">
+          <div id="count-fill" style="height:100%;border-radius:2px;background:var(--gold);transition:width .5s"></div>
+        </div>
+      </div>
+      <!-- Szenarien -->
+      <div>
+        <div style="font-size:10px;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">
+          Was passiert am 30. Juli — 3 Szenarien:
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+          <div style="background:var(--greenDim);border-radius:7px;padding:10px;border:1px solid rgba(0,229,160,.25)">
+            <div style="font-size:9px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.7px">🐂 Upgrade-Trigger</div>
+            <div style="font-size:11px;color:var(--txt);font-weight:700;margin:5px 0">Traffic ≥ +3% Q2/Q3</div>
+            <div style="font-size:10px;color:var(--txt2);line-height:1.5">ARPU sichtbar steigend · ImmoPunkte-Adoption >40% · HALTEN → KAUFEN</div>
+            <div style="font-size:12px;color:var(--green);font-weight:700;margin-top:6px">Kursreaktion: +12–18%</div>
+          </div>
+          <div style="background:var(--amberDim);border-radius:7px;padding:10px;border:1px solid rgba(255,170,0,.25)">
+            <div style="font-size:9px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:.7px">⚖ Base-Case</div>
+            <div style="font-size:11px;color:var(--txt);font-weight:700;margin:5px 0">Traffic −3 bis +3%</div>
+            <div style="font-size:10px;color:var(--txt2);line-height:1.5">Guidance bestätigt · Spanien-Update · HALTEN bleibt</div>
+            <div style="font-size:12px;color:var(--amber);font-weight:700;margin-top:6px">Kursreaktion: ±5%</div>
+          </div>
+          <div style="background:var(--redDim);border-radius:7px;padding:10px;border:1px solid rgba(255,77,109,.25)">
+            <div style="font-size:9px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.7px">🐻 Downgrade-Trigger</div>
+            <div style="font-size:11px;color:var(--txt);font-weight:700;margin:5px 0">Sessions &lt; −10% Q2</div>
+            <div style="font-size:10px;color:var(--txt2);line-height:1.5">Konsens-Revision · Goodwill-Risiko steigt · HALTEN → VERKAUFEN</div>
+            <div style="font-size:12px;color:var(--red);font-weight:700;margin-top:6px">Kursreaktion: −15–25%</div>
+          </div>
+        </div>
+        <!-- Aktuelle Lage -->
+        <div id="earnings-current-signal" style="padding:8px 12px;border-radius:6px;font-size:10px;line-height:1.6">
+          Lade aktuellen Traffic-Trend…
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ LSEG BROKER-KONSENS ═══ -->
   <div id="broker-block" style="display:none;background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.25);border-radius:var(--r);padding:14px 18px;margin-bottom:16px"></div>
 
@@ -1204,6 +1255,9 @@ async function loadData() {
     // ── Traffic-Signal Charts rendern
     renderTrafficSignal(d);
 
+    // ── Earnings Countdown mit Live-Daten
+    initEarningsCountdown(d);
+
     // ── Makro-Panel im DCF-Tab
     if (d.macro) {
       applyMacroPanel(d);
@@ -1740,6 +1794,69 @@ function renderMA(){
   });
 }
 
+// ── EARNINGS COUNTDOWN ───────────────────────────────────────
+const EARNINGS_DATES = [
+  { label: "H1 2026 Ergebnisse",   date: "2026-07-30", critical: true  },
+  { label: "Q3 Trading Update",    date: "2026-10-01", critical: false },
+  { label: "FY 2026 + CMD-Update", date: "2027-03-12", critical: false },
+];
+
+function initEarningsCountdown(liveData) {
+  const now       = new Date();
+  const next      = EARNINGS_DATES.find(e => new Date(e.date) > now) || EARNINGS_DATES[0];
+  const target    = new Date(next.date);
+  const msLeft    = target - now;
+  const daysLeft  = Math.max(0, Math.floor(msLeft / 86400000));
+  const totalDays = 59; // Abstand von heutigem Stand zum H1-Termin ca. 59 Tage
+
+  // Countdown-Anzeige
+  const daysEl = document.getElementById('count-days');
+  const fillEl = document.getElementById('count-fill');
+  if (daysEl) daysEl.textContent = daysLeft;
+  if (fillEl) {
+    const pct = Math.max(0, Math.min(100, 100 - (daysLeft / totalDays * 100)));
+    fillEl.style.width = pct + '%';
+    fillEl.style.background = daysLeft < 14 ? 'var(--red)' : daysLeft < 30 ? 'var(--amber)' : 'var(--gold)';
+  }
+
+  // Traffic-Signal aus Live-Daten
+  const t = liveData?.trends || {};
+  const trendDelta   = t.trend_delta || 0;
+  const compDelta    = t.competitor_delta?.immoscout_delta || trendDelta;
+  const aiDelta      = t['ai_delta_Wohnung_KI'] || 0;
+
+  // Ampel-Bewertung
+  let signalColor, signalText, signalBg, currentText;
+  if (compDelta >= 3) {
+    signalColor = 'var(--green)'; signalBg = 'var(--greenDim)';
+    signalText  = '🟢 UPGRADE-KANDIDAT';
+    currentText = `<strong style="color:var(--green)">Bullisches Signal:</strong> ImmoScout24 Suchinteresse +${compDelta.toFixed(1)}% YoY. Wenn dieser Trend in Q2/Q3-Zahlen bestätigt wird → Upgrade zu KAUFEN möglich.`;
+  } else if (compDelta >= -5) {
+    signalColor = 'var(--amber)'; signalBg = 'var(--amberDim)';
+    signalText  = '🟡 NEUTRAL — BEOBACHTEN';
+    currentText = `<strong style="color:var(--amber)">Neutrale Lage:</strong> Suchinteresse ${compDelta.toFixed(1)}% YoY — im Beobachtungsbereich. KI-Suche wächst +${aiDelta.toFixed(1)}% und ist das Hauptrisiko für die Earnings.`;
+  } else {
+    signalColor = 'var(--red)'; signalBg = 'var(--redDim)';
+    signalText  = '🔴 DOWNGRADE-RISIKO';
+    currentText = `<strong style="color:var(--red)">Bearisches Signal:</strong> ImmoScout24 Suchinteresse ${compDelta.toFixed(1)}% YoY während KI-Suche +${aiDelta.toFixed(1)}% wächst. Wenn Sessions am 30. Juli <−10% — Downgrade-Trigger. <strong>In ${daysLeft} Tagen wissen wir es.</strong>`;
+  }
+
+  const liveSignalEl = document.getElementById('earnings-live-signal');
+  if (liveSignalEl) {
+    liveSignalEl.textContent = signalText;
+    liveSignalEl.style.background = signalBg;
+    liveSignalEl.style.color = signalColor;
+    liveSignalEl.style.border = `1px solid ${signalColor}`;
+  }
+
+  const currentEl = document.getElementById('earnings-current-signal');
+  if (currentEl) {
+    currentEl.innerHTML = currentText;
+    currentEl.style.background = signalBg;
+    currentEl.style.border = `1px solid rgba(${signalColor === 'var(--red)' ? '255,77,109' : signalColor === 'var(--green)' ? '0,229,160' : '255,170,0'},.2)`;
+  }
+}
+
 // ── MAKRO-KONTEXT PANEL ──────────────────────────────────────
 function applyMacroPanel(d) {
   const m = d.macro || {};
@@ -1994,8 +2111,9 @@ function renderGapChart(){
 window.addEventListener('load', async ()=>{
   renderFF();
   dcf();
-  renderHist();       // erst mit Fallback-Daten
-  await loadData();   // dann data.json laden → überschreibt Werte
+  renderHist();
+  initEarningsCountdown({});  // Countdown sofort mit Fallback-Signal zeigen
+  await loadData();           // dann data.json laden → Signal wird aktualisiert
 });
 </script>
 </body>
