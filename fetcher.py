@@ -75,30 +75,39 @@ def fetch_market_data() -> dict:
     print("[1/5] Marktdaten (Kurs, MarketCap) via yfinance...")
     result = {}
 
-    # PRIMARY: yfinance — zuverlässig für deutsche Aktien
+    # PRIMARY: yfinance — history() ist stabiler als .info() für DE-Aktien in CI
     if YFINANCE_OK:
         try:
             ticker = yf.Ticker(TICKER_YF)
-            info   = ticker.info
-            fast   = ticker.fast_info
 
-            price = (
-                info.get("currentPrice") or
-                info.get("regularMarketPrice") or
-                getattr(fast, "last_price", None) or 0
-            )
+            # Kurs via history (zuverlässigste Methode in GitHub Actions)
+            hist = ticker.history(period="5d")
+            price = float(hist["Close"].iloc[-1]) if not hist.empty else 0
+            prev  = float(hist["Close"].iloc[-2]) if len(hist) >= 2 else price
+            change_pct = round(((price - prev) / max(prev, 0.01)) * 100, 2) if prev else 0
+
+            # Zusatzinfos via fast_info (leichtgewichtig, kein rate-limit)
+            fi = ticker.fast_info
+            market_cap = getattr(fi, "market_cap", 0) or 0
+            year_high  = getattr(fi, "year_high",  0) or 0
+            year_low   = getattr(fi, "year_low",   0) or 0
+            shares     = getattr(fi, "shares",     0) or 0
+
             result = {
-                "price":          round(float(price), 2),
-                "change_pct":     round(float(info.get("regularMarketChangePercent", 0) or 0), 2),
-                "market_cap_bn":  round((info.get("marketCap", 0) or 0) / 1e9, 2),
-                "pe_ratio":       round(float(info.get("trailingPE", 0) or 0), 1),
-                "year_high":      round(float(info.get("fiftyTwoWeekHigh", 0) or 0), 2),
-                "year_low":       round(float(info.get("fiftyTwoWeekLow",  0) or 0), 2),
-                "avg_volume":     int(info.get("averageVolume", 0) or 0),
-                "beta":           round(float(info.get("beta", 0) or 0), 2),
-                "dividend_yield": round(float(info.get("dividendYield", 0) or 0) * 100, 2),
+                "price":          round(price, 2),
+                "change_pct":     change_pct,
+                "market_cap_bn":  round(market_cap / 1e9, 2),
+                "year_high":      round(year_high, 2),
+                "year_low":       round(year_low,  2),
+                "avg_volume":     0,
+                "beta":           0,
+                "dividend_yield": 0,
             }
-            print(f"    ✓ Kurs (yfinance): €{result['price']}  MarketCap: €{result['market_cap_bn']}Mrd")
+            # Shares aus fast_info wenn verfügbar
+            if shares > 0:
+                result["_shares_from_yf"] = round(shares / 1e6, 2)
+
+            print(f"    ✓ Kurs (yfinance history): €{result['price']}  Δ{change_pct:+.2f}%  MCap: €{result['market_cap_bn']}Mrd")
         except Exception as e:
             print(f"    [WARN] yfinance fehlgeschlagen: {e}")
 
