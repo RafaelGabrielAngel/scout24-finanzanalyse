@@ -407,10 +407,10 @@ tr.row-sep td:first-child{color:var(--blue)!important}
   </div>
   <div class="hdr-kpis">
     <div class="hkpi"><div class="lbl">Kurs <span id="hdr-change" style="font-size:9px;font-weight:700;margin-left:4px"></span></div><div class="val gold" id="hdr-price">—</div></div>
-    <div class="hkpi"><div class="lbl">Kursziel 12M</div><div class="val green">€ 92</div></div>
-    <div class="hkpi"><div class="lbl">Upside</div><div class="val green" id="hdr-up">+27 %</div></div>
+    <div class="hkpi"><div class="lbl">Broker-Konsens <span style="font-size:8px;color:var(--txt3)">LSEG</span></div><div class="val green" id="hdr-tp">€ —</div></div>
+    <div class="hkpi"><div class="lbl">Upside (Broker)</div><div class="val green" id="hdr-up">— %</div></div>
     <div class="hkpi"><div class="lbl">DCF Base</div><div class="val blue" id="hdr-dcf">€ 110</div></div>
-    <div class="hkpi"><div class="lbl">Rating</div><div class="val amber">HALTEN</div></div>
+    <div class="hkpi"><div class="lbl">EV/EBITDA live</div><div class="val amber" id="hdr-ev">—×</div></div>
   </div>
 </div>
 
@@ -443,6 +443,9 @@ tr.row-sep td:first-child{color:var(--blue)!important}
       <p>Scout24 besitzt einen der stärksten Datenmöte Europas — ~70&nbsp;% Marktanteil, 19&nbsp;Mio. Nutzer/Monat, ooEBITDA-Marge 62,5&nbsp;%. Gleichzeitig bepreist der Markt vier strukturelle Risiken (KI-Disintermediation, defensiver CMD-Pivot, €1,8&nbsp;Mrd. Goodwill-Risiko, KKR/Immowelt), die im Konsens (100&nbsp;% Buy) nicht reflektiert sind. Bei €&nbsp;72,25 ist das Bear-Szenario (€&nbsp;75) weitgehend eingepreist. <strong style="color:var(--amber)">Akkumulieren unter €&nbsp;60 — Upgrade bei Traffic-Trendwende.</strong></p>
     </div>
   </div>
+
+  <!-- ═══ LSEG BROKER-KONSENS ═══ -->
+  <div id="broker-block" style="display:none;background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.25);border-radius:var(--r);padding:14px 18px;margin-bottom:16px"></div>
 
   <!-- ═══ LIVE TRAFFIC-SIGNAL ═══ -->
   <div id="traffic-signal" class="card mb16" style="border-color:rgba(255,77,109,.35);background:rgba(255,77,109,.05)">
@@ -1237,11 +1240,67 @@ function applyKpiCards(d) {
   if (k.roce)         set('kpi-roce',         k.roce.toFixed(1)         + ' %');
   if (k.goodwill_pct) set('kpi-goodwill-pct', k.goodwill_pct.toFixed(1) + ' % ⚠');
 
-  // DCF-Slider Basiswert aktualisieren (damit Live-DCF mit echtem Umsatz rechnet)
+  // DCF-Slider Basiswert aktualisieren
   if (k.revenue_mn > 0) {
     const srev = document.getElementById('srev');
     if (srev) { srev.value = k.revenue_mn.toFixed(1); dcf(); }
   }
+
+  // ── LSEG Broker-Ziele im Header
+  const b = d.brokers || {};
+  if (b.tp_mean > 0) {
+    const tpEl = document.getElementById('hdr-tp');
+    if (tpEl) tpEl.textContent = '€ ' + b.tp_mean.toFixed(2);
+
+    // Upside vs. aktuellem Kurs
+    const upEl = document.getElementById('hdr-up');
+    if (upEl && m.price > 0) {
+      const up = ((b.tp_mean - m.price) / m.price * 100).toFixed(1);
+      upEl.textContent = (up >= 0 ? '+' : '') + up + ' %';
+      upEl.style.color = up >= 0 ? 'var(--green)' : 'var(--red)';
+    }
+
+    // Broker-Range als Tooltip-Info unter dem Ziel
+    if (tpEl) tpEl.title = `Range: €${b.tp_low}–€${b.tp_high}`;
+  }
+
+  // ── Live EV/EBITDA im Header
+  const mult = d.multiples || {};
+  if (mult.ev_ebitda > 0) {
+    const evEl = document.getElementById('hdr-ev');
+    if (evEl) evEl.textContent = mult.ev_ebitda.toFixed(1) + '×';
+    // auch in Qualitäts-Scores aktualisieren
+    set('kpi-ev-ebitda', mult.ev_ebitda.toFixed(1) + '×');
+  }
+
+  // ── Broker-Block in Exec Summary einblenden wenn Daten vorhanden
+  if (b.tp_mean > 0) applyBrokerBlock(d);
+}
+
+function applyBrokerBlock(d) {
+  const b = d.brokers || {}, m = d.market || {};
+  let el = document.getElementById('broker-block');
+  if (!el) return;
+  const upside = m.price > 0 ? ((b.tp_mean - m.price) / m.price * 100).toFixed(1) : '—';
+  el.innerHTML = `
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <div style="text-align:center;min-width:80px">
+        <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px">Broker-Konsens</div>
+        <div style="font-size:22px;font-weight:900;color:var(--green)">€${b.tp_mean.toFixed(2)}</div>
+        <div style="font-size:9px;color:var(--green)">${upside >= 0 ? '+' : ''}${upside}% Upside</div>
+      </div>
+      <div style="text-align:center;min-width:70px">
+        <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px">Range</div>
+        <div style="font-size:13px;font-weight:700;color:var(--txt)">€${b.tp_low}–€${b.tp_high}</div>
+        <div style="font-size:9px;color:var(--txt3)">Low–High</div>
+      </div>
+      <div style="flex:1;min-width:120px;font-size:10px;color:var(--txt2);line-height:1.6">
+        <span style="color:var(--blue);font-weight:700">LSEG Workspace</span> — Institutioneller Sell-Side-Konsens.
+        Scout24 handelt mit <span style="color:var(--red);font-weight:700">${((m.price - b.tp_mean)/b.tp_mean*100).toFixed(1)}%</span> Abschlag
+        auf das Broker-Kursziel — ungewöhnlich für 100% Buy-Konsens.
+      </div>
+    </div>`;
+  el.style.display = 'block';
 }
 
 function applyPeerTable(peers) {
