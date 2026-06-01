@@ -444,6 +444,51 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     </div>
   </div>
 
+  <!-- ═══ LIVE TRAFFIC-SIGNAL ═══ -->
+  <div id="traffic-signal" class="card mb16" style="border-color:rgba(255,77,109,.35);background:rgba(255,77,109,.05)">
+    <div class="card-hd" style="border-bottom-color:rgba(255,77,109,.2)">
+      <div class="dot dot-red"></div>
+      <span>⚡ Live Traffic-Signal — Google Trends DE (wöchentlich aktualisiert)</span>
+      <span id="trends-date" style="margin-left:auto;font-size:9px;color:var(--txt3);font-weight:400"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px" id="trends-kpis">
+      <!-- wird via JS befüllt -->
+      <div style="background:var(--redDim);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,77,109,.2)">
+        <div style="font-size:9px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">ImmoScout24 YoY</div>
+        <div id="t-scout-delta" style="font-size:26px;font-weight:900;color:var(--red)">–</div>
+        <div style="font-size:9px;color:var(--txt3);margin-top:3px">Suchinteresse DE</div>
+      </div>
+      <div style="background:var(--amberDim);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,170,0,.2)">
+        <div style="font-size:9px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Immowelt YoY</div>
+        <div id="t-welt-delta" style="font-size:26px;font-weight:900;color:var(--amber)">–</div>
+        <div style="font-size:9px;color:var(--txt3);margin-top:3px">Suchinteresse DE</div>
+      </div>
+      <div style="background:rgba(0,229,160,.08);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(0,229,160,.2)">
+        <div style="font-size:9px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">KI-Suche „Wohnung KI"</div>
+        <div id="t-ai-delta" style="font-size:26px;font-weight:900;color:var(--green)">–</div>
+        <div style="font-size:9px;color:var(--txt3);margin-top:3px">Substitut wächst</div>
+      </div>
+      <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Marktanteil-Delta</div>
+        <div id="t-gap-delta" style="font-size:26px;font-weight:900;color:var(--red)">–</div>
+        <div style="font-size:9px;color:var(--txt3);margin-top:3px">Scout vs. Immowelt</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div>
+        <div style="font-size:10px;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">ImmoScout24 Suchinteresse — 16 Wochen</div>
+        <div style="position:relative;height:120px"><canvas id="ch-trend-main"></canvas></div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">ImmoScout24 vs. Immowelt — Wettbewerb</div>
+        <div style="position:relative;height:120px"><canvas id="ch-trend-comp"></canvas></div>
+      </div>
+    </div>
+    <div style="margin-top:10px;padding:8px 12px;background:var(--redDim);border-radius:6px;border:1px solid rgba(255,77,109,.2);font-size:10px;color:var(--txt2);line-height:1.6">
+      <strong style="color:var(--red)">⚠ Short-Signal:</strong> ImmoScout24 verliert Suchinteresse <span id="t-scout-faster">schneller</span> als Wettbewerber — bei gleichzeitig <span id="t-ai-rise">steigendem</span> KI-Suchvolumen. Dies ist der erste messbare Beleg für KI-Disintermediation. Konsens modelliert +8–12 % Traffic-Wachstum.
+    </div>
+  </div>
+
   <div class="g3 mb16">
 
     <div class="card">
@@ -1142,6 +1187,9 @@ async function loadData() {
     // ── Peer-Tabelle befüllen (falls Daten vorhanden)
     if (d.peers && d.peers.length > 0) applyPeerTable(d.peers);
 
+    // ── Traffic-Signal Charts rendern
+    renderTrafficSignal(d);
+
     // ── History-Chart neu zeichnen mit Live-Daten
     if (d.history?.income?.length > 0) renderHist(d.history);
 
@@ -1548,6 +1596,95 @@ function renderMA(){
       }
     }
   });
+}
+
+// ── TRAFFIC SIGNAL CHARTS ────────────────────────────────────
+let chTrendMain, chTrendComp;
+function renderTrafficSignal(d) {
+  const t = d.trends || {};
+  if (!t.series || t.series.length === 0) return;
+
+  // ── KPI-Boxen befüllen
+  const fmt = v => (v >= 0 ? '+' : '') + v.toFixed(1) + ' %';
+
+  if (t.trend_delta !== undefined) {
+    const el = document.getElementById('t-scout-delta');
+    if (el) { el.textContent = fmt(t.trend_delta); el.style.color = t.trend_delta < 0 ? 'var(--red)' : 'var(--green)'; }
+  }
+  if (t.competitor_delta) {
+    const weltEl = document.getElementById('t-welt-delta');
+    if (weltEl) {
+      const wd = t.competitor_delta.immowelt_delta;
+      weltEl.textContent = fmt(wd);
+      weltEl.style.color = wd < 0 ? 'var(--red)' : 'var(--amber)';
+    }
+    // Gap-Delta: Scout verliert X mehr als Immowelt
+    const gap = (t.competitor_delta.immoscout_delta || 0) - (t.competitor_delta.immowelt_delta || 0);
+    const gapEl = document.getElementById('t-gap-delta');
+    if (gapEl) { gapEl.textContent = fmt(gap); gapEl.style.color = gap < 0 ? 'var(--red)' : 'var(--green)'; }
+
+    // Textbaustein
+    const fasterEl = document.getElementById('t-scout-faster');
+    if (fasterEl && gap < -2) fasterEl.textContent = Math.abs(gap).toFixed(1) + ' PP schneller';
+  }
+  const aiKey = 'ai_delta_Wohnung_KI';
+  if (t[aiKey] !== undefined) {
+    const aiEl = document.getElementById('t-ai-delta');
+    if (aiEl) { aiEl.textContent = fmt(t[aiKey]); aiEl.style.color = t[aiKey] > 0 ? 'var(--green)' : 'var(--txt2)'; }
+    const riseEl = document.getElementById('t-ai-rise');
+    if (riseEl) riseEl.textContent = t[aiKey] > 0 ? '+' + t[aiKey].toFixed(1) + '% steigendem' : 'rückläufigem';
+  }
+
+  // Datum
+  if (t.series.length > 0) {
+    const dateEl = document.getElementById('trends-date');
+    if (dateEl) dateEl.textContent = 'Stand: ' + t.series[t.series.length-1].date;
+  }
+
+  // ── Chart 1: ImmoScout24 Haupttrend
+  if (chTrendMain) chTrendMain.destroy();
+  const ctx1 = document.getElementById('ch-trend-main');
+  if (ctx1) {
+    const labels = t.series.map(p => p.date.slice(5)); // MM-DD
+    const vals   = t.series.map(p => p.value);
+    chTrendMain = new Chart(ctx1.getContext('2d'), {
+      type: 'line',
+      data: { labels, datasets: [{
+        data: vals, borderColor: '#FF4D6D', backgroundColor: 'rgba(255,77,109,.1)',
+        borderWidth: 2, fill: true, tension: .4, pointRadius: 0
+      }]},
+      options: { responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>'Index: '+c.raw}} },
+        scales:{
+          x:{grid:{display:false},ticks:{color:'#3D6A8A',font:{size:9},maxTicksLimit:6}},
+          y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#3D6A8A',font:{size:9}},min:60,max:105}
+        }
+      }
+    });
+  }
+
+  // ── Chart 2: Wettbewerber-Vergleich
+  if (chTrendComp) chTrendComp.destroy();
+  const ctx2 = document.getElementById('ch-trend-comp');
+  if (ctx2 && t.competitor && t.competitor.length > 0) {
+    const cLabels = t.competitor.map(p => p.date.slice(5));
+    chTrendComp = new Chart(ctx2.getContext('2d'), {
+      type: 'line',
+      data: { labels: cLabels, datasets: [
+        { label:'ImmoScout24', data: t.competitor.map(p=>p.immoscout),
+          borderColor:'#FF4D6D', borderWidth:2, fill:false, tension:.4, pointRadius:0 },
+        { label:'Immowelt', data: t.competitor.map(p=>p.immowelt),
+          borderColor:'#FFAA00', borderWidth:2, fill:false, tension:.4, pointRadius:0, borderDash:[4,3] },
+      ]},
+      options: { responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{labels:{color:'#7BAAC8',font:{size:9},boxWidth:8,padding:6}} },
+        scales:{
+          x:{grid:{display:false},ticks:{color:'#3D6A8A',font:{size:9},maxTicksLimit:6}},
+          y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#3D6A8A',font:{size:9}},min:0}
+        }
+      }
+    });
+  }
 }
 
 // ── GAP SCATTER CHART ────────────────────────────────────────
