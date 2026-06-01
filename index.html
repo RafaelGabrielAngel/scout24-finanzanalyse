@@ -1266,31 +1266,39 @@ function applyKpiCards(d) {
     if (srev) { srev.value = k.revenue_mn.toFixed(1); dcf(); }
   }
 
-  // ── LSEG Broker-Ziele im Header
+  // ── LSEG Broker-Ziele im Header (mit Fallback)
   const b = d.brokers || {};
-  if (b.tp_mean > 0) {
-    const tpEl = document.getElementById('hdr-tp');
-    if (tpEl) tpEl.textContent = '€ ' + b.tp_mean.toFixed(2);
+  const tpEl = document.getElementById('hdr-tp');
+  const upEl = document.getElementById('hdr-up');
 
-    // Upside vs. aktuellem Kurs
-    const upEl = document.getElementById('hdr-up');
+  if (b.tp_mean > 0) {
+    // LSEG-Daten vorhanden
+    if (tpEl) { tpEl.textContent = '€ ' + b.tp_mean.toFixed(2); tpEl.title = `Range: €${b.tp_low}–€${b.tp_high}`; }
     if (upEl && m.price > 0) {
       const up = ((b.tp_mean - m.price) / m.price * 100).toFixed(1);
       upEl.textContent = (up >= 0 ? '+' : '') + up + ' %';
       upEl.style.color = up >= 0 ? 'var(--green)' : 'var(--red)';
     }
-
-    // Broker-Range als Tooltip-Info unter dem Ziel
-    if (tpEl) tpEl.title = `Range: €${b.tp_low}–€${b.tp_high}`;
+  } else {
+    // Fallback: statischer Analysewert
+    if (tpEl) { tpEl.textContent = '€ 92'; tpEl.title = 'Eigene Analyse (kein LSEG-Update)'; tpEl.style.opacity = '.6'; }
+    if (upEl && m.price > 0) {
+      const up = ((92 - m.price) / m.price * 100).toFixed(0);
+      upEl.textContent = (up >= 0 ? '+' : '') + up + ' %';
+    }
   }
 
-  // ── Live EV/EBITDA im Header
+  // ── EV/EBITDA im Header — LSEG live, sonst KPI-Fallback
   const mult = d.multiples || {};
-  if (mult.ev_ebitda > 0) {
+  const evVal = mult.ev_ebitda || k.ev_ebitda || 0;
+  if (evVal > 0) {
     const evEl = document.getElementById('hdr-ev');
-    if (evEl) evEl.textContent = mult.ev_ebitda.toFixed(1) + '×';
-    // auch in Qualitäts-Scores aktualisieren
-    set('kpi-ev-ebitda', mult.ev_ebitda.toFixed(1) + '×');
+    if (evEl) {
+      evEl.textContent = evVal.toFixed(1) + '×';
+      // LSEG-Wert ist live (grün), Fallback ist gedimmt
+      if (!mult.ev_ebitda) evEl.style.opacity = '.6';
+    }
+    set('kpi-ev-ebitda', evVal.toFixed(1) + '×');
   }
 
   // ── Broker-Block in Exec Summary einblenden wenn Daten vorhanden

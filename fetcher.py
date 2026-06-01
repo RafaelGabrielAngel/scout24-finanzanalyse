@@ -441,18 +441,32 @@ def fetch_macro() -> dict:
         "source":            "EZB + Bundesbank SDMX API",
     }
 
-    # ── 1. EZB Einlagesatz (Deposit Facility Rate)
-    try:
-        url = ("https://data-api.ecb.europa.eu/service/data/"
-               "FM/B.U2.EUR.RT0.BB.N.R?format=jsondata&lastNObservations=1")
-        r = requests.get(url, timeout=15, headers={"Accept": "application/json"})
-        r.raise_for_status()
-        obs = r.json()["dataSets"][0]["series"]["0:0:0:0:0:0:0"]["observations"]
-        ecb_rate = round(float(list(obs.values())[-1][0]), 2)
-        result["ecb_deposit_rate"] = ecb_rate
-        print(f"    ✓ EZB Einlagesatz: {ecb_rate}%")
-    except Exception as e:
-        print(f"    [WARN] EZB Leitzins fehlgeschlagen: {e}")
+    # ── 1. EZB Einlagesatz — mehrere Endpunkte versuchen
+    ecb_urls = [
+        "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.RT0.BB.N.R?format=jsondata&lastNObservations=1",
+        "https://sdw-wsrest.ecb.europa.eu/service/data/FM/B.U2.EUR.RT0.BB.N.R?format=jsondata&lastNObservations=1",
+    ]
+    for url in ecb_urls:
+        try:
+            r = requests.get(url, timeout=15, headers={"Accept": "application/json"})
+            r.raise_for_status()
+            data = r.json()
+            # Flexibles Parsing — verschiedene ECB Response-Strukturen
+            datasets = data.get("dataSets", [{}])
+            series = datasets[0].get("series", {}) if datasets else {}
+            first_series = list(series.values())[0] if series else {}
+            obs = first_series.get("observations", {})
+            if obs:
+                ecb_rate = round(float(list(obs.values())[-1][0]), 2)
+                result["ecb_deposit_rate"] = ecb_rate
+                print(f"    ✓ EZB Einlagesatz: {ecb_rate}%")
+                break
+        except Exception as e:
+            print(f"    [WARN] ECB Endpunkt {url[:50]}... fehlgeschlagen: {e}")
+    if not result["ecb_deposit_rate"]:
+        # Fallback: letzter bekannter EZB-Satz (manuell aktualisieren bei Änderung)
+        result["ecb_deposit_rate"] = 2.50
+        print(f"    [FALLBACK] EZB Einlagesatz: 2.50% (statisch)")
 
     # ── 2. Deutscher 10J-Bund (AAA Euro-Area Yield Curve 10Y)
     try:
@@ -467,20 +481,31 @@ def fetch_macro() -> dict:
     except Exception as e:
         print(f"    [WARN] Bund-Rendite fehlgeschlagen: {e}")
 
-    # ── 3. Hypothekenzins DE (Bundesbank: Wohnbaukredite HH, Zinsbindung >10J)
-    try:
-        url = ("https://api.statistik.bundesbank.de/service/data/"
-               "BBK01/M.I1.EUR.BB3L.RD?format=sdmx-json&lastNObservations=3")
-        r = requests.get(url, timeout=15)
-        r.raise_for_status()
-        data = r.json()
-        series = data["dataSets"][0]["series"]["0:0:0:0:0"]
-        obs = series["observations"]
-        latest_val = float(list(obs.values())[-1][0])
-        result["mortgage_rate_10y"] = round(latest_val, 2)
-        print(f"    ✓ Hypothekenzins 10J: {latest_val}%")
-    except Exception as e:
-        print(f"    [WARN] Hypothekenzins fehlgeschlagen: {e}")
+    # ── 3. Hypothekenzins DE — mehrere Bundesbank-Endpunkte versuchen
+    bbk_urls = [
+        "https://api.statistik.bundesbank.de/service/data/BBK01/M.I1.EUR.BB3L.RD?format=sdmx-json&lastNObservations=3",
+        "https://api.statistik.bundesbank.de/service/data/BBK01/M.I1.EUR.BB3L.RD?format=sdmx-json&lastNObservations=1&detail=dataonly",
+    ]
+    for url in bbk_urls:
+        try:
+            r = requests.get(url, timeout=15)
+            r.raise_for_status()
+            data = r.json()
+            # Flexibles Parsing
+            datasets = data.get("dataSets", [{}])
+            series_dict = datasets[0].get("series", {}) if datasets else {}
+            first_series = list(series_dict.values())[0] if series_dict else {}
+            obs = first_series.get("observations", {})
+            if obs:
+                latest_val = float(list(obs.values())[-1][0])
+                result["mortgage_rate_10y"] = round(latest_val, 2)
+                print(f"    ✓ Hypothekenzins 10J: {latest_val}%")
+                break
+        except Exception as e:
+            print(f"    [WARN] BBK Endpunkt fehlgeschlagen: {e}")
+    if not result["mortgage_rate_10y"]:
+        result["mortgage_rate_10y"] = 3.82  # Fallback: letzter bekannter Wert
+        print(f"    [FALLBACK] Hypothekenzins: 3.82% (statisch)")
 
     # ── 4. WACC-Implikation berechnen
     # WACC = rf + β × ERP + credit spread (Damodaran-Methode)
