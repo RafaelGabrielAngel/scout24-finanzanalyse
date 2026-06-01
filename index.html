@@ -618,6 +618,20 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     </div>
   </div>
 
+  <!-- ═══ SIMILARWEB VALIDIERUNG ═══ -->
+  <div id="sw-block" class="card mb16" style="display:none;border-color:rgba(0,180,255,.25)">
+    <div class="card-hd">
+      <div class="dot dot-blue"></div>
+      Similarweb — Echter Traffic-Nachweis <span style="font-size:9px;color:var(--txt3);margin-left:6px;font-weight:400">(manuelle Erfassung, monatlich · immobilienscout24.de)</span>
+      <span id="sw-month" style="margin-left:auto;font-size:9px;color:var(--txt3);font-weight:400"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px" id="sw-kpis"></div>
+    <div id="sw-channels" style="display:none;margin-top:8px;padding:8px 12px;background:var(--bg2);border-radius:6px;font-size:10px;color:var(--txt2);line-height:1.7"></div>
+    <div style="margin-top:8px;font-size:9px;color:var(--txt3);line-height:1.5">
+      Quelle: Similarweb kostenloses Konto · Methodik: Panel + ISP-Schätzung · Abweichung ±10–20% möglich · Validiert Google-Trends-Proxy
+    </div>
+  </div>
+
   <!-- ═══ QUARTALSZAHLEN + BaFin SHORTS ═══ -->
   <div class="g2 mt16">
     <div class="card">
@@ -1817,6 +1831,64 @@ function renderMA(){
   });
 }
 
+// ── SIMILARWEB INTEGRATION ───────────────────────────────────
+async function loadSimilarweb() {
+  try {
+    const r = await fetch('similarweb_data.json?v=' + Date.now());
+    if (!r.ok) return;
+    const sw = await r.json();
+    const block = document.getElementById('sw-block');
+    if (!block) return;
+
+    const cmp = sw.comparison || {};
+    const scout = cmp.scout24_visits_mn || 0;
+    const welt  = cmp.immowelt_visits_mn || 0;
+    const ratio = cmp.scout_immowelt_ratio || 0;
+
+    // Monat
+    const mEl = document.getElementById('sw-month');
+    if (mEl) mEl.textContent = 'Stand: ' + (cmp.month || sw._meta?.month || '—');
+
+    // KPI-Boxen
+    const kEl = document.getElementById('sw-kpis');
+    if (kEl && scout > 0) {
+      kEl.innerHTML = `
+        <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
+          <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px">ImmoScout24 Visits</div>
+          <div style="font-size:22px;font-weight:900;color:var(--blue)">${scout.toFixed(2)} Mio.</div>
+          <div style="font-size:9px;color:var(--txt3);margin-top:2px">immobilienscout24.de</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
+          <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px">Immowelt Visits</div>
+          <div style="font-size:22px;font-weight:900;color:var(--amber)">${welt.toFixed(2)} Mio.</div>
+          <div style="font-size:9px;color:var(--txt3);margin-top:2px">immowelt.de</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
+          <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px">Traffic-Ratio</div>
+          <div style="font-size:22px;font-weight:900;color:var(--txt)">${ratio.toFixed(1)}×</div>
+          <div style="font-size:9px;color:var(--txt3);margin-top:2px">Scout vs. Immowelt</div>
+        </div>`;
+    }
+
+    // Channels (wenn Hauptdomain-Daten verfügbar)
+    const ch = sw.immoscout24?.channels;
+    const cEl = document.getElementById('sw-channels');
+    if (cEl && ch) {
+      cEl.style.display = 'block';
+      const org = ch.organic_search_pct || 0;
+      cEl.innerHTML = `<strong style="color:var(--blue)">Traffic-Mix:</strong>
+        Direct ${ch.direct_pct?.toFixed(1)}% ·
+        Organic Search <strong style="color:${org < 20 ? 'var(--red)' : 'var(--green)'}">${org.toFixed(1)}%</strong> ·
+        Paid ${ch.paid_search_pct?.toFixed(1) || '0'}%
+        ${org < 20 ? '<br><span style="color:var(--red)">⚠ Niedriger Organic-Anteil = hohe KI-Override-Verwundbarkeit (SEO-Traffic als erstes betroffen)</span>' : ''}`;
+    }
+
+    block.style.display = 'block';
+  } catch(e) {
+    console.log('[Similarweb] Keine Daten:', e.message);
+  }
+}
+
 // ── QUARTALSZAHLEN CHART ─────────────────────────────────────
 let chQuarterly;
 function renderQuarterlyChart(d) {
@@ -2253,8 +2325,9 @@ window.addEventListener('load', async ()=>{
   renderFF();
   dcf();
   renderHist();
-  initEarningsCountdown({});  // Countdown sofort mit Fallback-Signal zeigen
-  await loadData();           // dann data.json laden → Signal wird aktualisiert
+  initEarningsCountdown({});
+  await loadData();
+  await loadSimilarweb();   // Similarweb-Daten separat laden
 });
 </script>
 </body>

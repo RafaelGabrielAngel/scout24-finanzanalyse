@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "source": "Similarweb Free Account",
+    "collected": "2026-06-01",
+    "month": "2026-04",
+    "note": "Manuelle Erfassung — Similarweb kostenloses Konto (1 Monat sichtbar). Bitte monatlich aktualisieren.",
+    "methodology": "Similarweb schätzt Web-Traffic anhand von Panels, ISP-Daten und öffentlichen Quellen. Abweichungen von internen Scout24-Daten möglich (±10-20%). Dient als unabhängige Validierung des Google-Trends-Proxys."
+  },
+  "immoscout24": {
+    "domain": "immobilienscout24.de",
+    "note": "Hauptdomain ImmoScout24 SE",
+    "visits_mn": 36.41,
+    "month": "2026-04",
+    "rank_global": null,
+    "rank_de": null,
+    "pages_per_visit": null,
+    "bounce_rate_pct": null,
+    "visit_duration_sec": null,
+    "channels": null
+  },
+  "immowelt": {
+    "domain": "immowelt.de",
+    "note": "Hauptwettbewerber (KKR/CPP Investments)",
+    "visits_mn": 13.49,
+    "month": "2026-04"
+  },
+  "immonet": {
+    "domain": "immonet.de",
+    "visits_mn": 0.059,
+    "month": "2026-04"
+  },
+  "redirect_domain": {
+    "domain": "immoscout24.de",
+    "note": "ACHTUNG: Redirect-Domain — nicht repräsentativ für Gesamttraffic. Weiterleitung auf immobilienscout24.de.",
+    "visits": 20195,
+    "change_mom_pct": -33.05,
+    "bounce_rate_pct": 89.04,
+    "pages_per_visit": 1.25,
+    "visit_duration_sec": 7,
+    "rank_global": 1524688,
+    "rank_de": 88860,
+    "rank_industry": 12369,
+    "channels": {
+      "direct_pct": 82.95,
+      "organic_search_pct": 17.05,
+      "paid_search_pct": 0
+    },
+    "top_countries": {
+      "DE": { "share_pct": 95.01, "change_pct": -29.35 },
+      "CH": { "share_pct": 3.89, "change_pct": null },
+      "US": { "share_pct": 1.10, "change_pct": -79.99 }
+    }
+  },
+  "comparison": {
+    "month": "2026-04",
+    "scout24_visits_mn": 36.41,
+    "immowelt_visits_mn": 13.49,
+    "immonet_visits_mn": 0.059,
+    "scout_immowelt_ratio": 2.7,
+    "note": "Quelle: Similarweb Vergleichschart — immobilienscout24.de vs. immowelt.de, Apr 2026"
+  },
+  "todo_next_month": [
+    "immobilienscout24.de Hauptdomain aufrufen (nicht immoscout24.de)",
+    "Total Visits, Pages/Visit, Bounce Rate, Verweildauer eintragen",
+    "Channels-Mix (Direct vs. Organic Search) für Hauptdomain erfassen",
+    "Vergleichschart: immobilienscout24.de + immowelt.de + immonet.de"
+  ]
+}
