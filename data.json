@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-06-01T19:06:30.924052Z",
+    "generated_at": "2026-06-01T19:35:44.709059Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -165,7 +165,7 @@
       },
       {
         "date": "2026-05-17",
-        "value": 74
+        "value": 73
       },
       {
         "date": "2026-05-24",
@@ -173,7 +173,7 @@
       },
       {
         "date": "2026-05-31",
-        "value": 68
+        "value": 69
       }
     ],
     "competitor": [
@@ -244,8 +244,8 @@
       },
       {
         "date": "2026-05-17",
-        "immoscout": 74,
-        "immowelt": 78
+        "immoscout": 73,
+        "immowelt": 77
       },
       {
         "date": "2026-05-24",
@@ -254,8 +254,8 @@
       },
       {
         "date": "2026-05-31",
-        "immoscout": 68,
-        "immowelt": 87
+        "immoscout": 69,
+        "immowelt": 88
       }
     ],
     "ai_signal": [
@@ -316,7 +316,7 @@
       },
       {
         "date": "2026-05-31",
-        "Wohnung KI": 53,
+        "Wohnung KI": 57,
         "Wohnung ChatGPT": 60
       }
     ],
@@ -325,11 +325,11 @@
       "immoscout_delta": -18.9,
       "immowelt_delta": -2.4
     },
-    "ai_delta_Wohnung_KI": 44.9,
+    "ai_delta_Wohnung_KI": 47.8,
     "ai_delta_Wohnung_ChatGPT": -11.9
   },
   "macro": {
-    "ecb_deposit_rate": 2.5,
+    "ecb_deposit_rate": 2.0,
     "bund_10y": 3.02,
     "mortgage_rate_10y": 3.82,
     "wacc_floor": 7.5,
