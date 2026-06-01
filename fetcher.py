@@ -1,20 +1,16 @@
 """
-Scout24 SE — Live Data Fetcher
-================================
-Holt Markt- und Finanzdaten aus mehreren Quellen und schreibt data.json.
-
-Quellen:
-  - FMP (Financial Modeling Prep) — Financials, Multiples, Kurs
-  - yfinance                      — Backup-Kurs, Shares
-  - Google Trends (pytrends)      — Traffic-Proxy / KI-Disintermediation-Signal
+Scout24 SE — Live Data Fetcher v2
+===================================
+Quellen (Priorität):
+  1. yfinance (PRIMARY)  — Kurs, Shares, MarketCap, Peer-Grunddaten (kostenlos, DE-Stocks)
+  2. FMP                 — Financials, Key Metrics (Starter Plan für volle Abdeckung)
+  3. Google Trends       — Traffic-Proxy: ImmoScout24 vs Immowelt vs KI-Suchen
 
 Ausführung:
   python fetcher.py
 
-Umgebungsvariablen (lokal in .env oder via GitHub Actions Secrets):
-  FMP_API_KEY=dein-key-hier
-
-GitHub Actions führt dieses Skript täglich aus und commitet data.json.
+Umgebungsvariablen:
+  FMP_API_KEY=dein-key-hier  (optional für Financials)
 """
 
 import os
@@ -72,63 +68,108 @@ def fmp(endpoint: str, **params) -> list | dict:
     return data
 
 # ─────────────────────────────────────────────────────────────────
-# 1. AKTIENKURS & MARKTDATEN
+# 1. AKTIENKURS & MARKTDATEN  (PRIMARY: yfinance)
 # ─────────────────────────────────────────────────────────────────
 
 def fetch_market_data() -> dict:
-    print("[1/5] Marktdaten (Kurs, MarketCap)...")
+    print("[1/5] Marktdaten (Kurs, MarketCap) via yfinance...")
     result = {}
 
-    # Primär: FMP Quote
-    try:
-        quotes = fmp(f"quote/{TICKER_FMP}")
-        if quotes:
-            q = quotes[0]
-            result = {
-                "price":          round(q.get("price", 0), 2),
-                "change_pct":     round(q.get("changesPercentage", 0), 2),
-                "market_cap_bn":  round((q.get("marketCap", 0) or 0) / 1e9, 2),
-                "pe_ratio":       round(q.get("pe", 0) or 0, 1),
-                "avg_volume":     q.get("avgVolume", 0),
-                "year_high":      round(q.get("yearHigh", 0) or 0, 2),
-                "year_low":       round(q.get("yearLow", 0) or 0, 2),
-            }
-            print(f"    Kurs: €{result['price']}")
-    except Exception as e:
-        print(f"    [WARN] FMP Quote fehlgeschlagen: {e}")
-
-    # Fallback: yfinance
-    if not result.get("price") and YFINANCE_OK:
+    # PRIMARY: yfinance — zuverlässig für deutsche Aktien
+    if YFINANCE_OK:
         try:
             ticker = yf.Ticker(TICKER_YF)
-            info = ticker.info
-            result["price"]         = round(info.get("currentPrice") or info.get("regularMarketPrice", 0), 2)
-            result["market_cap_bn"] = round((info.get("marketCap", 0) or 0) / 1e9, 2)
-            print(f"    Kurs (yfinance Fallback): €{result['price']}")
+            info   = ticker.info
+            fast   = ticker.fast_info
+
+            price = (
+                info.get("currentPrice") or
+                info.get("regularMarketPrice") or
+                getattr(fast, "last_price", None) or 0
+            )
+            result = {
+                "price":          round(float(price), 2),
+                "change_pct":     round(float(info.get("regularMarketChangePercent", 0) or 0), 2),
+                "market_cap_bn":  round((info.get("marketCap", 0) or 0) / 1e9, 2),
+                "pe_ratio":       round(float(info.get("trailingPE", 0) or 0), 1),
+                "year_high":      round(float(info.get("fiftyTwoWeekHigh", 0) or 0), 2),
+                "year_low":       round(float(info.get("fiftyTwoWeekLow",  0) or 0), 2),
+                "avg_volume":     int(info.get("averageVolume", 0) or 0),
+                "beta":           round(float(info.get("beta", 0) or 0), 2),
+                "dividend_yield": round(float(info.get("dividendYield", 0) or 0) * 100, 2),
+            }
+            print(f"    ✓ Kurs (yfinance): €{result['price']}  MarketCap: €{result['market_cap_bn']}Mrd")
         except Exception as e:
-            print(f"    [WARN] yfinance Fallback fehlgeschlagen: {e}")
+            print(f"    [WARN] yfinance fehlgeschlagen: {e}")
+
+    # FALLBACK: FMP Quote (falls yfinance nicht verfügbar)
+    if not result.get("price") and FMP_KEY:
+        try:
+            quotes = fmp(f"quote/{TICKER_FMP}")
+            if quotes:
+                q = quotes[0]
+                result = {
+                    "price":         round(q.get("price", 0), 2),
+                    "change_pct":    round(q.get("changesPercentage", 0), 2),
+                    "market_cap_bn": round((q.get("marketCap", 0) or 0) / 1e9, 2),
+                    "pe_ratio":      round(q.get("pe", 0) or 0, 1),
+                    "year_high":     round(q.get("yearHigh", 0) or 0, 2),
+                    "year_low":      round(q.get("yearLow",  0) or 0, 2),
+                    "avg_volume":    q.get("avgVolume", 0),
+                }
+                print(f"    ✓ Kurs (FMP Fallback): €{result['price']}")
+        except Exception as e:
+            print(f"    [WARN] FMP Quote fehlgeschlagen: {e}")
+
+    if not result.get("price"):
+        print("    [WARN] Kein Kurs verfügbar — verwende Fallback 0")
 
     return result
 
 # ─────────────────────────────────────────────────────────────────
-# 2. UNTERNEHMENSPROFIL (Shares, Net Debt)
+# 2. UNTERNEHMENSPROFIL  (PRIMARY: yfinance)
 # ─────────────────────────────────────────────────────────────────
 
 def fetch_profile() -> dict:
-    print("[2/5] Unternehmensprofil...")
-    try:
-        profiles = fmp(f"profile/{TICKER_FMP}")
-        if profiles:
-            p = profiles[0]
-            return {
-                "shares_diluted_mn": round((p.get("sharesOutstanding", 0) or 0) / 1e6, 2),
-                "company_name":      p.get("companyName", "Scout24 SE"),
-                "description":       p.get("description", ""),
-                "sector":            p.get("sector", "Technology"),
-                "exchange":          p.get("exchangeShortName", "XETRA"),
+    print("[2/5] Unternehmensprofil via yfinance...")
+    if YFINANCE_OK:
+        try:
+            info = yf.Ticker(TICKER_YF).info
+            shares = (
+                info.get("sharesOutstanding") or
+                info.get("impliedSharesOutstanding") or
+                72_070_000
+            )
+            result = {
+                "shares_diluted_mn": round(float(shares) / 1e6, 2),
+                "company_name":      info.get("longName", "Scout24 SE"),
+                "sector":            info.get("sector", "Technology"),
+                "industry":          info.get("industry", "Internet Content & Information"),
+                "employees":         info.get("fullTimeEmployees", 0),
+                "website":           info.get("website", "https://www.scout24.com"),
             }
-    except Exception as e:
-        print(f"    [WARN] Profil fehlgeschlagen: {e}")
+            print(f"    ✓ Shares: {result['shares_diluted_mn']}M  Mitarbeiter: {result['employees']}")
+            return result
+        except Exception as e:
+            print(f"    [WARN] yfinance Profil fehlgeschlagen: {e}")
+
+    # Fallback FMP
+    if FMP_KEY:
+        try:
+            profiles = fmp(f"profile/{TICKER_FMP}")
+            if profiles:
+                p = profiles[0]
+                return {
+                    "shares_diluted_mn": round((p.get("sharesOutstanding", 0) or 0) / 1e6, 2),
+                    "company_name":      p.get("companyName", "Scout24 SE"),
+                    "sector":            p.get("sector", "Technology"),
+                    "industry":          p.get("industry", ""),
+                    "employees":         p.get("fullTimeEmployees", 0),
+                    "website":           p.get("website", ""),
+                }
+        except Exception as e:
+            print(f"    [WARN] FMP Profil fehlgeschlagen: {e}")
+
     return {"shares_diluted_mn": 72.07, "company_name": "Scout24 SE"}
 
 # ─────────────────────────────────────────────────────────────────
@@ -254,41 +295,99 @@ def fetch_peers() -> list:
     return peers
 
 # ─────────────────────────────────────────────────────────────────
-# 5. GOOGLE TRENDS (Traffic-Proxy)
+# 5. GOOGLE TRENDS (Traffic-Proxy + Wettbewerber + KI-Signal)
 # ─────────────────────────────────────────────────────────────────
 
 def fetch_trends() -> dict:
-    print("[5/5] Google Trends (Traffic-Proxy)...")
+    print("[5/5] Google Trends (ImmoScout24 vs Immowelt + KI-Signale)...")
     if not TRENDS_OK:
-        return {"status": "pytrends nicht installiert", "data": []}
-    try:
+        return {"status": "pytrends nicht installiert", "series": [], "competitor": [], "ai_signal": []}
+    import time
+
+    def safe_trends(kw_list, timeframe="today 12-m", geo="DE", retries=2):
         pytrends = TrendReq(hl="de-DE", tz=60)
-        kw_list = ["ImmoScout24", "Wohnung mieten KI", "Wohnung ChatGPT"]
-        pytrends.build_payload(kw_list, cat=0, timeframe="today 12-m", geo="DE")
-        df = pytrends.interest_over_time()
-        if df.empty:
-            return {"status": "Keine Daten", "data": []}
+        for attempt in range(retries):
+            try:
+                pytrends.build_payload(kw_list, cat=0, timeframe=timeframe, geo=geo)
+                df = pytrends.interest_over_time()
+                return df
+            except Exception as e:
+                if attempt < retries - 1:
+                    time.sleep(3)
+                else:
+                    raise e
+        return None
 
-        # Letzte 4 Wochen vs. Vorjahr
-        recent = df.tail(4)["ImmoScout24"].mean()
-        year_ago = df.head(4)["ImmoScout24"].mean()
-        trend_delta = round(((recent - year_ago) / max(year_ago, 1)) * 100, 1)
+    result = {"status": "ok", "series": [], "competitor": [], "ai_signal": [], "trend_delta": 0}
 
-        # Letzte 12 Datenpunkte als Zeitreihe
-        trend_series = [
-            {"date": str(idx.date()), "immoscout": int(row["ImmoScout24"])}
-            for idx, row in df.tail(12).iterrows()
-        ]
-
-        print(f"    Trends Delta (12M): {trend_delta:+.1f}%")
-        return {
-            "status":       "ok",
-            "trend_delta":  trend_delta,
-            "series":       trend_series,
-        }
+    # ── 1. ImmoScout24 12-Monats-Trend (Hauptsignal)
+    try:
+        df = safe_trends(["ImmoScout24"])
+        if df is not None and not df.empty and "ImmoScout24" in df.columns:
+            recent   = df.tail(4)["ImmoScout24"].mean()
+            year_ago = df.head(4)["ImmoScout24"].mean()
+            result["trend_delta"] = round(((recent - year_ago) / max(year_ago, 1)) * 100, 1)
+            result["series"] = [
+                {"date": str(idx.date()), "value": int(row["ImmoScout24"])}
+                for idx, row in df.tail(16).iterrows()
+            ]
+            print(f"    ✓ ImmoScout24 Trend Delta: {result['trend_delta']:+.1f}%")
+        time.sleep(2)
     except Exception as e:
-        print(f"    [WARN] Google Trends fehlgeschlagen: {e}")
-        return {"status": f"Fehler: {str(e)}", "data": []}
+        print(f"    [WARN] ImmoScout24 Trend fehlgeschlagen: {e}")
+
+    # ── 2. ImmoScout24 vs Immowelt (Wettbewerber-Vergleich)
+    try:
+        df2 = safe_trends(["ImmoScout24", "Immowelt"])
+        if df2 is not None and not df2.empty:
+            cols = [c for c in ["ImmoScout24", "Immowelt"] if c in df2.columns]
+            result["competitor"] = [
+                {
+                    "date":       str(idx.date()),
+                    "immoscout":  int(row.get("ImmoScout24", 0)),
+                    "immowelt":   int(row.get("Immowelt", 0)),
+                }
+                for idx, row in df2.tail(16).iterrows()
+            ]
+            # Marktanteil-Signal: wer gewinnt / verliert
+            if "ImmoScout24" in df2.columns and "Immowelt" in df2.columns:
+                scout_recent  = df2.tail(4)["ImmoScout24"].mean()
+                welt_recent   = df2.tail(4)["Immowelt"].mean()
+                scout_old     = df2.head(4)["ImmoScout24"].mean()
+                welt_old      = df2.head(4)["Immowelt"].mean()
+                result["competitor_delta"] = {
+                    "immoscout_delta": round(((scout_recent - scout_old) / max(scout_old, 1)) * 100, 1),
+                    "immowelt_delta":  round(((welt_recent  - welt_old)  / max(welt_old,  1)) * 100, 1),
+                }
+                print(f"    ✓ ImmoScout24 {result['competitor_delta']['immoscout_delta']:+.1f}% vs Immowelt {result['competitor_delta']['immowelt_delta']:+.1f}%")
+        time.sleep(2)
+    except Exception as e:
+        print(f"    [WARN] Wettbewerber-Vergleich fehlgeschlagen: {e}")
+
+    # ── 3. KI-Disintermediation-Signal
+    try:
+        df3 = safe_trends(["Wohnung KI", "Wohnung ChatGPT"])
+        if df3 is not None and not df3.empty:
+            cols = [c for c in df3.columns if c != "isPartial"]
+            result["ai_signal"] = [
+                {
+                    "date": str(idx.date()),
+                    **{c: int(row.get(c, 0)) for c in cols}
+                }
+                for idx, row in df3.tail(12).iterrows()
+            ]
+            # Wachstum KI-Suchen
+            for kw in ["Wohnung KI", "Wohnung ChatGPT"]:
+                if kw in df3.columns:
+                    ai_recent = df3.tail(4)[kw].mean()
+                    ai_old    = df3.head(4)[kw].mean()
+                    delta = round(((ai_recent - ai_old) / max(ai_old, 0.1)) * 100, 1)
+                    result[f"ai_delta_{kw.replace(' ', '_')}"] = delta
+                    print(f"    ✓ KI-Signal '{kw}': {delta:+.1f}%")
+    except Exception as e:
+        print(f"    [WARN] KI-Signal fehlgeschlagen: {e}")
+
+    return result
 
 # ─────────────────────────────────────────────────────────────────
 # HAUPT-ROUTINE
