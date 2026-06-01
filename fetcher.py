@@ -75,53 +75,51 @@ def fetch_market_data() -> dict:
     print("[1/5] Marktdaten (Kurs, MarketCap) via yfinance...")
     result = {}
 
-    # PRIMARY: Yahoo Finance JSON API (direkt, mit Browser-Header — funktioniert in CI)
+    # PRIMARY: Stooq — kostenlos, kein API-Key, funktioniert zuverlässig in GitHub Actions
     try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Accept": "application/json,text/html,*/*",
-            "Accept-Language": "de-DE,de;q=0.9,en;q=0.8",
-            "Referer": "https://finance.yahoo.com/",
-        }
-        url = f"https://query2.finance.yahoo.com/v8/finance/chart/{TICKER_YF}"
-        resp = requests.get(url, headers=headers, params={"interval": "1d", "range": "5d"}, timeout=15)
+        # Stooq CSV-Feed: Symbol,Date,Time,Open,High,Low,Close,Volume
+        url  = "https://stooq.com/q/l/?s=sdx.de&f=sd2t2ohlcv&h&e=csv"
+        resp = requests.get(url, timeout=15)
         resp.raise_for_status()
-        chart = resp.json()["chart"]["result"][0]
-        meta  = chart["meta"]
-        closes = chart.get("indicators", {}).get("quote", [{}])[0].get("close", [])
-        closes = [c for c in closes if c is not None]
-
-        price      = float(meta.get("regularMarketPrice") or (closes[-1] if closes else 0))
-        prev_close = float(meta.get("chartPreviousClose") or (closes[-2] if len(closes) >= 2 else price))
-        change_pct = round(((price - prev_close) / max(prev_close, 0.01)) * 100, 2)
-
-        result = {
-            "price":          round(price, 2),
-            "change_pct":     change_pct,
-            "market_cap_bn":  round(float(meta.get("marketCap", 0) or 0) / 1e9, 2),
-            "year_high":      round(float(meta.get("fiftyTwoWeekHigh", 0) or 0), 2),
-            "year_low":       round(float(meta.get("fiftyTwoWeekLow",  0) or 0), 2),
-            "avg_volume":     int(meta.get("regularMarketVolume", 0) or 0),
-            "beta":           0,
-            "dividend_yield": 0,
-            "currency":       meta.get("currency", "EUR"),
-        }
-        print(f"    ✓ Kurs (Yahoo API direkt): €{result['price']}  Δ{change_pct:+.2f}%  MCap: €{result['market_cap_bn']}Mrd")
+        lines = [l for l in resp.text.strip().split("\n") if l and not l.startswith("Symbol")]
+        if lines:
+            parts      = lines[0].split(",")
+            price      = round(float(parts[6]), 2)   # Close
+            prev_open  = round(float(parts[3]), 2)   # Open als Annäherung
+            change_pct = round(((price - prev_open) / max(prev_open, 0.01)) * 100, 2)
+            high_52w   = round(float(parts[4]), 2)
+            low_52w    = round(float(parts[5]), 2)
+            result = {
+                "price":          price,
+                "change_pct":     change_pct,
+                "market_cap_bn":  0,
+                "year_high":      high_52w,
+                "year_low":       low_52w,
+                "avg_volume":     int(float(parts[7])) if len(parts) > 7 else 0,
+                "beta":           0,
+                "dividend_yield": 0,
+                "currency":       "EUR",
+            }
+            print(f"    ✓ Kurs (Stooq): €{price}  Δ{change_pct:+.2f}%")
     except Exception as e:
-        print(f"    [WARN] Yahoo API direkt fehlgeschlagen: {e}")
+        print(f"    [WARN] Stooq fehlgeschlagen: {e}")
 
-    # FALLBACK 1: yfinance download()
-    if not result.get("price") and YFINANCE_OK:
+    # FALLBACK: Yahoo Finance direkt (manchmal blockiert in CI)
+    if not result.get("price"):
         try:
-            data = yf.download(TICKER_YF, period="5d", progress=False, auto_adjust=True)
-            if not data.empty:
-                price = float(data["Close"].iloc[-1])
-                prev  = float(data["Close"].iloc[-2]) if len(data) >= 2 else price
-                result["price"]      = round(price, 2)
-                result["change_pct"] = round(((price - prev) / max(prev, 0.01)) * 100, 2)
-                print(f"    ✓ Kurs (yfinance Fallback): €{result['price']}")
+            headers = {"User-Agent": "Mozilla/5.0 (compatible; DataFetcher/1.0)"}
+            url2    = f"https://query2.finance.yahoo.com/v8/finance/chart/{TICKER_YF}"
+            r2      = requests.get(url2, headers=headers, params={"interval":"1d","range":"5d"}, timeout=15)
+            meta    = r2.json()["chart"]["result"][0]["meta"]
+            price2  = float(meta.get("regularMarketPrice") or 0)
+            if price2:
+                result["price"]         = round(price2, 2)
+                result["market_cap_bn"] = round(float(meta.get("marketCap", 0) or 0) / 1e9, 2)
+                result["year_high"]     = round(float(meta.get("fiftyTwoWeekHigh", 0) or 0), 2)
+                result["year_low"]      = round(float(meta.get("fiftyTwoWeekLow",  0) or 0), 2)
+                print(f"    ✓ Kurs (Yahoo Fallback): €{result['price']}")
         except Exception as e:
-            print(f"    [WARN] yfinance Fallback fehlgeschlagen: {e}")
+            print(f"    [WARN] Yahoo Fallback fehlgeschlagen: {e}")
 
     # FALLBACK: FMP Quote (falls yfinance nicht verfügbar)
     if not result.get("price") and FMP_KEY:
