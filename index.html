@@ -544,15 +544,17 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 
   <div class="g2">
     <div class="card">
-      <div class="card-hd"><div class="dot dot-blue"></div>Umsatz & FCF 2021–2025A</div>
+      <div class="card-hd"><div class="dot dot-blue"></div><span id="hist-chart-title">Umsatz &amp; FCF — Historisch</span></div>
       <div class="ch-300"><canvas id="ch-hist"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-hd"><div class="dot dot-gold"></div>P&L Kennzahlen 2021–2025A</div>
+      <div class="card-hd"><div class="dot dot-gold"></div><span id="pl-title">P&amp;L Kennzahlen — Historisch</span>
+        <span id="pl-source" style="margin-left:auto;font-size:9px;color:var(--txt3);font-weight:400"></span>
+      </div>
       <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Kennzahl (€ Mio.)</th><th>2021A</th><th>2022A</th><th>2023A</th><th>2024A</th><th>2025A</th></tr></thead>
-          <tbody>
+        <table id="pl-table">
+          <thead id="pl-thead"><tr><th>Kennzahl (€ Mio.)</th><th>2021A</th><th>2022A</th><th>2023A</th><th>2024A</th><th>2025A</th></tr></thead>
+          <tbody id="pl-tbody">
             <tr><td>Umsatz</td><td>389,0</td><td>447,5</td><td>509,1</td><td>566,3</td><td>649,6</td></tr>
             <tr><td>YoY Wachstum</td><td class="c-txt2">—</td><td class="g-val">+15,0 %</td><td class="g-val">+13,8 %</td><td class="g-val">+11,2 %</td><td class="g-val">+14,7 %</td></tr>
             <tr><td>ooEBITDA</td><td>226,5</td><td>263,0</td><td>302,2</td><td>348,5</td><td>405,7</td></tr>
@@ -1193,8 +1195,11 @@ async function loadData() {
     // ── Traffic-Signal Charts rendern
     renderTrafficSignal(d);
 
-    // ── History-Chart neu zeichnen mit Live-Daten
-    if (d.history?.income?.length > 0) renderHist(d.history);
+    // ── History-Chart + P&L-Tabelle mit Live-Daten (LSEG oder FMP)
+    if (d.history?.annual?.length > 0 || d.history?.income?.length > 0) {
+      renderHist(d.history);
+      applyHistoryTable(d);
+    }
 
     // Banner ausblenden
     if (banner) banner.style.display = 'none';
@@ -1565,16 +1570,71 @@ function renderFF(){
     `<div style="padding-top:26px;">` + headerTrack + rows + scale + `</div>`;
 }
 
+// ── P&L TABELLE AUS LSEG-DATEN ───────────────────────────────
+function applyHistoryTable(d) {
+  const annual = d?.history?.annual;
+  if (!annual || annual.length === 0) return;
+
+  // Letzte 5 Jahre nehmen
+  const rows = annual.slice(-5);
+  const thead = document.getElementById('pl-thead');
+  const tbody = document.getElementById('pl-tbody');
+  if (!thead || !tbody) return;
+
+  // Header
+  thead.innerHTML = '<tr><th>Kennzahl (€ Mio.)</th>' +
+    rows.map(r => `<th>${r.year}</th>`).join('') + '</tr>';
+
+  // Wachstum berechnen
+  const growths = rows.map((r, i) => {
+    if (i === 0) return '—';
+    const prev = rows[i-1].revenue_mn;
+    const curr = r.revenue_mn;
+    if (!prev) return '—';
+    const g = ((curr - prev) / prev * 100).toFixed(1);
+    return (g > 0 ? '+' : '') + g + ' %';
+  });
+
+  const fmt = v => v ? v.toFixed(1) : '—';
+  const fmtPct = v => v ? v.toFixed(1) + ' %' : '—';
+  const isLast = i => i === rows.length - 1;
+
+  tbody.innerHTML = `
+    <tr><td>Umsatz</td>${rows.map((r,i) => `<td${isLast(i)?' class="g-val"':''}>${fmt(r.revenue_mn)}</td>`).join('')}</tr>
+    <tr><td>YoY Wachstum</td>${growths.map((g,i) => `<td class="${g!=='—'&&g.startsWith('+')? 'g-val':'c-txt2'}">${g}</td>`).join('')}</tr>
+    <tr><td>EBITDA</td>${rows.map(r => `<td>${fmt(r.ebitda_mn)}</td>`).join('')}</tr>
+    <tr><td>EBITDA-Marge</td>${rows.map((r,i) => `<td${isLast(i)?' class="g-val"':''}>${fmtPct(r.ebitda_margin)}</td>`).join('')}</tr>
+    <tr><td>Free Cashflow</td>${rows.map(r => `<td>${fmt(r.fcf_mn)}</td>`).join('')}</tr>
+    <tr class="row-hl"><td>FCF-Marge</td>${rows.map(r => `<td>${fmtPct(r.fcf_margin)}</td>`).join('')}</tr>
+  `;
+
+  // Quellenhinweis
+  const src = document.getElementById('pl-source');
+  const titleEl = document.getElementById('pl-title');
+  if (src) src.textContent = d._meta?.source === 'LSEG Workspace' ? 'Quelle: LSEG Workspace' : '';
+  if (titleEl) titleEl.textContent = `P&L Kennzahlen ${rows[0].year}–${rows[rows.length-1].year}`;
+  const chartTitle = document.getElementById('hist-chart-title');
+  if (chartTitle) chartTitle.textContent = `Umsatz & FCF ${rows[0].year}–${rows[rows.length-1].year}`;
+}
+
 // ── HISTORY CHART ────────────────────────────────────────────
 let chHist;
 function renderHist(history){
   if(chHist){chHist.destroy();chHist=null;}
   const ctx=document.getElementById('ch-hist').getContext('2d');
-  // Fallback-Werte wenn keine Live-Daten
+  // Fallback-Werte
   let labels=['2021A','2022A','2023A','2024A','2025A'];
   let rev=[389,447.5,509.1,566.3,649.6];
   let fcf=[127.8,163.2,197.4,234.6,261.4];
-  if(history?.income?.length > 0){
+
+  // LSEG Format: history.annual
+  if(history?.annual?.length > 0){
+    const rows = history.annual.slice(-6);
+    labels = rows.map(r => r.year + '');
+    rev    = rows.map(r => r.revenue_mn || 0);
+    fcf    = rows.map(r => r.fcf_mn || 0);
+  // FMP Format: history.income + history.cashflow
+  } else if(history?.income?.length > 0){
     const inc = history.income.slice(-5);
     const cf  = (history.cashflow||[]).slice(-5);
     labels = inc.map(r=>r.year+'');
