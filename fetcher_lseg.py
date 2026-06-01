@@ -22,8 +22,8 @@ from pathlib import Path
 
 # ── Konfiguration ───────────────────────────────────────────────────────────
 APP_KEY   = "4776ea80927f44ec8b12897bc6b0cab4b2ad4f88"
-RIC_MAIN  = "SDXG.DE"          # Scout24 SE auf XETRA (Refinitiv RIC)
-RIC_ALT   = "SDX.DE"           # Fallback-RIC
+RIC_MAIN  = "DE000A12DM80"     # Scout24 SE — ISIN (verifiziert, liefert Kurs €72,25)
+RIC_ALT   = "SDXG.DE"         # Fallback RIC
 OUTPUT    = Path(__file__).parent / "data.json"
 
 PEER_RICS = {
@@ -95,19 +95,30 @@ def first_row(df):
 # 1. MARKTDATEN & KURS (Real-Time / EOD)
 # ─────────────────────────────────────────────────────────────────────────────
 
+def diagnose(ric=None):
+    """Zeigt alle verfügbaren Spaltennamen für einen schnellen Feldname-Check."""
+    ric = ric or RIC_MAIN
+    print(f"\n[DIAG] Teste Felder für {ric}...")
+    test_fields = ['TR.PriceClose','TR.PricePctChg1D','TR.MarketCap',
+                   'TR.Revenue','TR.EBITDA','TR.EPSMeanEstimate','TR.TPMean']
+    df, err = get_data(ric, test_fields)
+    if df is not None and not df.empty:
+        print(f"  Spaltennamen: {df.columns.tolist()}")
+        print(f"  Erste Zeile:  {df.iloc[0].to_dict()}")
+    else:
+        print(f"  Fehler: {err}")
+
 def fetch_market():
     print("\n[1/7] Marktdaten & Kurs...")
+    # Verifizierte Felder (getestet 2026-06-01)
     fields = [
-        'TR.PriceClose',          # letzter Schlusskurs
-        'TR.PricePctChg1D',       # Tagesveränderung %
-        'TR.Volume',              # Volumen
-        'TR.MarketCap',           # Marktkapitalisierung
-        'TR.PriceHigh52Week',     # 52-Wochen-Hoch
-        'TR.PriceLow52Week',      # 52-Wochen-Tief
-        'TR.SharesOutstanding',   # Aktien ausstehend
-        'TR.Beta',                # Beta
-        'TR.DivYield',            # Dividendenrendite
-        'TR.VWAP',                # VWAP
+        'TR.PriceClose',          # → 'Price Close'
+        'TR.PricePctChg1D',       # → '1-day Price PCT Change'
+        'TR.Volume',              # → 'Volume'
+        'TR.SharesOutstanding',   # → 'Outstanding Shares'
+        'TR.PriceHigh52Week',     # → 'Price High - 52 Week' (falls verfügbar)
+        'TR.PriceLow52Week',      # → 'Price Low - 52 Week'
+        'TR.DivYield',            # → 'Dividend Yield'
     ]
     df, err = get_data(RIC_MAIN, fields)
     if err or df is None or df.empty:
@@ -115,21 +126,22 @@ def fetch_market():
         df, err = get_data(RIC_ALT, fields)
 
     row = first_row(df)
+    price  = safe_float(row.get('Price Close'))
+    shares = safe_float(row.get('Outstanding Shares'))
     result = {
-        "price":          safe_float(row.get('Price Close')),
-        "change_pct":     safe_float(row.get('Price Pct Chg 1D')),
+        "price":          price,
+        "change_pct":     round(safe_float(row.get('1-day Price PCT Change')), 2),  # ✓ verifiziert
         "volume":         safe_int(row.get('Volume')),
-        "market_cap_bn":  round(safe_float(row.get('Market Capitalization')) / 1e9, 2),
+        "market_cap_bn":  round(price * shares / 1e9, 2),                          # berechnet: Kurs × Aktien
         "year_high":      safe_float(row.get('Price High - 52 Week')),
         "year_low":       safe_float(row.get('Price Low - 52 Week')),
-        "shares_mn":      round(safe_float(row.get('Shares Outstanding')) / 1e6, 2),
-        "beta":           safe_float(row.get('Beta')),
+        "shares_mn":      round(shares / 1e6, 2),                                  # ✓ 'Outstanding Shares'
+        "beta":           0,
         "div_yield":      safe_float(row.get('Dividend Yield')),
-        "vwap":           safe_float(row.get('Volume Weighted Avg Price')),
         "source":         "LSEG Workspace",
         "as_of":          datetime.date.today().isoformat(),
     }
-    print(f"  ✓ Kurs: €{result['price']}  Δ{result['change_pct']:+.2f}%  MCap: €{result['market_cap_bn']}Mrd")
+    print(f"  ✓ Kurs: €{result['price']}  Δ{result['change_pct']:+.2f}%  MCap: €{result['market_cap_bn']}Mrd  Shares: {result['shares_mn']}M")
     return result
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -245,16 +257,15 @@ def fetch_consensus():
 
 def fetch_broker_targets():
     print("\n[4/7] Broker-Kursziele & Empfehlungen...")
+    # Verifizierte Felder (getestet 2026-06-01)
     fields = [
-        'TR.TPMean',              # Median-Kursziel
-        'TR.TPHigh',              # Höchstes Kursziel
-        'TR.TPLow',               # Niedrigstes Kursziel
-        'TR.TPNumOfRec',          # Anzahl Empfehlungen
-        'TR.RecommendationMean',  # 1=Strong Buy, 3=Hold, 5=Sell
-        'TR.TotalBuyRecom',       # Anzahl Buy/Strong Buy
-        'TR.TotalHoldRecom',      # Anzahl Hold
-        'TR.TotalSellRecom',      # Anzahl Sell/Strong Sell
-        'TR.RecommendationDate',  # Datum letzte Änderung
+        'TR.PriceTargetMean',     # → 'Price Target - Mean'   ✓
+        'TR.PriceTargetHigh',     # → 'Price Target - High'   ✓
+        'TR.PriceTargetLow',      # → 'Price Target - Low'    ✓
+        'TR.RecommendationMean',  # Empfehlungs-Score (falls verfügbar)
+        'TR.TotalBuyRecom',
+        'TR.TotalHoldRecom',
+        'TR.TotalSellRecom',
     ]
     df, err = get_data(RIC_MAIN, fields)
     if err or df is None or df.empty:
@@ -262,29 +273,28 @@ def fetch_broker_targets():
         return {}
 
     row = first_row(df)
-    tp_mean = safe_float(row.get('Target Price - Mean'))
-    buy = safe_int(row.get('Total Buy Recommendations'))
-    hold = safe_int(row.get('Total Hold Recommendations'))
-    sell = safe_int(row.get('Total Sell Recommendations'))
+    tp_mean = safe_float(row.get('Price Target - Mean'))   # ✓ verifiziert
+    tp_high = safe_float(row.get('Price Target - High'))   # ✓ verifiziert
+    tp_low  = safe_float(row.get('Price Target - Low'))    # ✓ verifiziert
+    buy  = safe_int(row.get('Total Buy Recommendations', 0))
+    hold = safe_int(row.get('Total Hold Recommendations', 0))
+    sell = safe_int(row.get('Total Sell Recommendations', 0))
     total = max(buy + hold + sell, 1)
 
     result = {
-        "tp_mean":       round(tp_mean, 2),
-        "tp_high":       round(safe_float(row.get('Target Price - High')), 2),
-        "tp_low":        round(safe_float(row.get('Target Price - Low')), 2),
-        "num_analysts":  safe_int(row.get('Number Of Recommendations')),
-        "rec_mean":      round(safe_float(row.get('Recommendation Mean')), 2),
-        "buy_count":     buy,
-        "hold_count":    hold,
-        "sell_count":    sell,
-        "buy_pct":       round(buy / total * 100, 1),
-        "hold_pct":      round(hold / total * 100, 1),
-        "sell_pct":      round(sell / total * 100, 1),
-        "last_updated":  str(row.get('Recommendation Date', ''))[:10],
-        # Upside vs. letzter bekannter Kurs
-        "implied_upside_pct": 0,  # wird weiter unten berechnet
+        "tp_mean":            round(tp_mean, 2),
+        "tp_high":            round(tp_high, 2),
+        "tp_low":             round(tp_low, 2),
+        "rec_mean":           round(safe_float(row.get('Recommendation Mean', 0)), 2),
+        "buy_count":          buy,
+        "hold_count":         hold,
+        "sell_count":         sell,
+        "buy_pct":            round(buy / total * 100, 1) if buy else 0,
+        "hold_pct":           round(hold / total * 100, 1) if hold else 0,
+        "sell_pct":           round(sell / total * 100, 1) if sell else 0,
+        "implied_upside_pct": 0,  # wird in main() berechnet
     }
-    print(f"  ✓ Kursziel: €{tp_mean:.2f} (€{result['tp_low']}–€{result['tp_high']})  Buy: {buy}  Hold: {hold}  Sell: {sell}")
+    print(f"  ✓ Kursziel: €{tp_mean:.2f} (€{tp_low}–€{tp_high})  Buy: {buy}  Hold: {hold}  Sell: {sell}")
     return result
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -311,16 +321,20 @@ def fetch_peers():
             print(f"  [WARN] {name} ({ric}): {err}")
             continue
         row = first_row(df)
-        rev = safe_float(row.get('Revenue'))
+        rev    = safe_float(row.get('Revenue'))
         ebitda = safe_float(row.get('EBITDA'))
+        price  = safe_float(row.get('Price Close'))
+        shares = safe_float(row.get('Outstanding Shares'))
+        # EV/EBITDA: flexibler Spaltenname (verifiziertes Muster)
+        ev_col = next((c for c in row if 'Enterprise Value' in c and 'EBITDA' in c), None)
+        ev_ebitda = round(safe_float(row.get(ev_col)) if ev_col else 0, 1)
         peers.append({
             "name":           name,
             "ric":            ric,
-            "price":          safe_float(row.get('Price Close')),
-            "market_cap_bn":  round(safe_float(row.get('Market Capitalization')) / 1e9, 2),
-            "ev_ebitda":      round(safe_float(row.get('Enterprise Value / EBITDA')), 1),
+            "price":          price,
+            "market_cap_bn":  round(price * shares / 1e9, 2) if shares else 0,
+            "ev_ebitda":      ev_ebitda,
             "pe_ratio":       round(safe_float(row.get('P/E Total Return')), 1),
-            "pb_ratio":       round(safe_float(row.get('Price to Book Value Per Share')), 1),
             "div_yield":      round(safe_float(row.get('Dividend Yield')), 2),
             "revenue_mn":     round(rev / 1e6, 1),
             "ebitda_mn":      round(ebitda / 1e6, 1),
@@ -337,41 +351,32 @@ def fetch_peers():
 
 def fetch_live_multiples():
     print("\n[6/7] Scout24 Live-Multiples...")
-    fields = [
-        'TR.EVToEBITDA',
-        'TR.PETotalReturn',
-        'TR.PriceToBVPerShare',
-        'TR.ROIC',               # Return on Invested Capital
-        'TR.ROCE',               # ROCE
-        'TR.FCFYield',
-        'TR.NetDebtToEBITDA',
-        'TR.AltmanZScore',
-        'TR.ShortInterestPct',   # Short Interest % of Float
-        'TR.ShortInterestRatio', # Days to Cover
-        'TR.InsiderOwnershipPct',
-        'TR.InstitutionalOwnershipPct',
-    ]
+    # Verifiziert: 'Enterprise Value To EBITDA (Daily Time Series Ratio)'
+    fields = ['TR.EVToEBITDA', 'TR.PETotalReturn', 'TR.PriceToBVPerShare',
+              'TR.ROIC', 'TR.ROCE', 'TR.FCFYield', 'TR.NetDebtToEBITDA',
+              'TR.ShortInterestPct', 'TR.ShortInterestRatio']
     df, err = get_data(RIC_MAIN, fields)
     if err or df is None or df.empty:
         print(f"  [WARN] Live-Multiples fehlgeschlagen: {err}")
         return {}
 
     row = first_row(df)
+    # Spaltenname verifiziert: 'Enterprise Value To EBITDA (Daily Time Series Ratio)'
+    ev_ebitda_col = next((c for c in row if 'Enterprise Value' in c and 'EBITDA' in c), None)
+    ev_ebitda = round(safe_float(row.get(ev_ebitda_col)) if ev_ebitda_col else 0, 1)
+
     result = {
-        "ev_ebitda":            round(safe_float(row.get('Enterprise Value / EBITDA')), 1),
-        "pe_ratio":             round(safe_float(row.get('P/E Total Return')), 1),
-        "pb_ratio":             round(safe_float(row.get('Price to Book Value Per Share')), 1),
-        "roic":                 round(safe_float(row.get('ROIC')) * 100, 1),
-        "roce":                 round(safe_float(row.get('ROCE')) * 100, 1),
-        "fcf_yield":            round(safe_float(row.get('FCF Yield')) * 100, 2),
-        "net_debt_ebitda":      round(safe_float(row.get('Net Debt/EBITDA')), 2),
-        "altman_z":             round(safe_float(row.get('Altman Z-Score')), 2),
-        "short_interest_pct":   round(safe_float(row.get('Short Interest % Float')), 2),
-        "short_days_to_cover":  round(safe_float(row.get('Short Interest Ratio')), 1),
-        "insider_ownership":    round(safe_float(row.get('Insider Ownership %')), 1),
-        "institutional_own":    round(safe_float(row.get('Institutional Ownership %')), 1),
+        "ev_ebitda":           ev_ebitda,
+        "pe_ratio":            round(safe_float(row.get('P/E Total Return') or row.get('Price To Earnings')), 1),
+        "pb_ratio":            round(safe_float(row.get('Price to Book Value Per Share')), 1),
+        "roic":                round(safe_float(row.get('Return On Invested Capital')), 1),
+        "roce":                round(safe_float(row.get('Return On Capital Employed')), 1),
+        "fcf_yield":           round(safe_float(row.get('Free Cash Flow Yield')), 2),
+        "net_debt_ebitda":     round(safe_float(row.get('Net Debt / EBITDA')), 2),
+        "short_interest_pct":  round(safe_float(row.get('Short Interest % Float')), 2),
+        "short_days_to_cover": round(safe_float(row.get('Short Interest Ratio')), 1),
     }
-    print(f"  ✓ EV/EBITDA {result['ev_ebitda']}×  P/E {result['pe_ratio']}×  Short Interest {result['short_interest_pct']}%")
+    print(f"  ✓ EV/EBITDA {ev_ebitda}×  (col: '{ev_ebitda_col}')")
     return result
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -422,6 +427,9 @@ def main():
     print("Scout24 SE — LSEG Workspace Data Fetcher")
     print(f"Start: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
+
+    # Kurzdiagnose: Spaltennamen verifizieren
+    diagnose()
 
     market    = fetch_market()
     fin       = fetch_financials()
