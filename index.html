@@ -618,6 +618,21 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     </div>
   </div>
 
+  <!-- ═══ QUARTALSZAHLEN + BaFin SHORTS ═══ -->
+  <div class="g2 mt16">
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-blue"></div>EBITDA-Marge — Quartalsweise <span id="q-trend-badge" style="margin-left:8px;font-size:9px;padding:2px 7px;border-radius:6px;font-weight:700"></span></div>
+      <div class="ch-300"><canvas id="ch-quarterly"></canvas></div>
+      <div id="q-trend-text" style="margin-top:8px;font-size:10px;color:var(--txt2);line-height:1.6;padding:8px 10px;background:var(--bg2);border-radius:6px;display:none"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-red"></div>BaFin Netto-Leerverkaufspositionen <span style="font-size:9px;color:var(--txt3);margin-left:auto;font-weight:400">Meldepflichtig >0,5% Float</span></div>
+      <div id="shorts-content">
+        <div style="text-align:center;padding:40px;color:var(--txt3);font-size:11px">Lade BaFin-Daten… (täglich via GitHub Actions)</div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /exec -->
 
 <!-- ══════════════════════════════════════════════════
@@ -1258,6 +1273,12 @@ async function loadData() {
     // ── Earnings Countdown mit Live-Daten
     initEarningsCountdown(d);
 
+    // ── Quartalszahlen-Chart
+    if (d.history?.quarterly?.length > 0) renderQuarterlyChart(d);
+
+    // ── BaFin Short-Interest
+    renderShortsBlock(d);
+
     // ── Makro-Panel im DCF-Tab
     if (d.macro) {
       applyMacroPanel(d);
@@ -1792,6 +1813,124 @@ function renderMA(){
       }
     }
   });
+}
+
+// ── QUARTALSZAHLEN CHART ─────────────────────────────────────
+let chQuarterly;
+function renderQuarterlyChart(d) {
+  const q = d?.history?.quarterly;
+  if (!q || q.length === 0) return;
+  if (chQuarterly) chQuarterly.destroy();
+
+  const ctx = document.getElementById('ch-quarterly');
+  if (!ctx) return;
+
+  const labels  = q.map(r => r.quarter);
+  const margins = q.map(r => r.ebitda_margin);
+  const revenues = q.map(r => r.revenue_mn);
+
+  // Trendpfeil berechnen
+  if (q.length >= 4) {
+    const recent4 = margins.slice(-4);
+    const older4  = margins.slice(-8, -4);
+    if (older4.length >= 4) {
+      const delta = (recent4.reduce((a,b)=>a+b,0)/4) - (older4.reduce((a,b)=>a+b,0)/4);
+      const badge = document.getElementById('q-trend-badge');
+      const text  = document.getElementById('q-trend-text');
+      if (badge) {
+        if (delta > 0.5) {
+          badge.textContent = '↗ Expanding +' + delta.toFixed(1) + ' PP';
+          badge.style.cssText = 'background:var(--greenDim);color:var(--green);border:1px solid rgba(0,229,160,.3)';
+        } else if (delta < -0.5) {
+          badge.textContent = '↘ Compressing ' + delta.toFixed(1) + ' PP';
+          badge.style.cssText = 'background:var(--redDim);color:var(--red);border:1px solid rgba(255,77,109,.3)';
+        } else {
+          badge.textContent = '→ Stabil';
+          badge.style.cssText = 'background:var(--bg2);color:var(--txt2);border:1px solid var(--border)';
+        }
+      }
+      if (text) {
+        text.style.display = 'block';
+        text.innerHTML = delta < -0.5
+          ? `<strong style="color:var(--red)">⚠ Margenkompression sichtbar:</strong> EBITDA-Marge letzte 4 Quartale Ø ${(recent4.reduce((a,b)=>a+b,0)/4).toFixed(1)}% vs. vorherige 4Q Ø ${(older4.reduce((a,b)=>a+b,0)/4).toFixed(1)}% — Delta ${delta.toFixed(1)} PP. Spanien-Expansion + KKR-Abwehr bereits in Zahlen messbar.`
+          : `EBITDA-Marge letzte 4Q Ø <strong>${(recent4.reduce((a,b)=>a+b,0)/4).toFixed(1)}%</strong> — aktuell stabil/leicht expandierend.`;
+      }
+    }
+  }
+
+  // Farben je Trend
+  const barColors = margins.map((m, i) => {
+    if (i === 0) return 'rgba(0,180,255,.4)';
+    return m >= margins[i-1] ? 'rgba(0,229,160,.5)' : 'rgba(255,77,109,.5)';
+  });
+
+  chQuarterly = new Chart(ctx.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { type: 'bar',  label: 'Umsatz (€M)',       data: revenues, backgroundColor: 'rgba(0,180,255,.25)', borderColor: 'rgba(0,180,255,.6)', borderWidth: 1, borderRadius: 3, yAxisID: 'y' },
+        { type: 'line', label: 'EBITDA-Marge (%)',  data: margins,  borderColor: '#FFD166', borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: '#FFD166', tension: .3, yAxisID: 'y2' },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { labels: { color: '#7BAAC8', font: { size: 10 }, boxWidth: 10 } } },
+      scales: {
+        x:  { grid: { display: false }, ticks: { color: '#7BAAC8', font: { size: 9 } } },
+        y:  { position: 'left',  beginAtZero: false, grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#7BAAC8', font: { size: 9 }, callback: v => '€' + v } },
+        y2: { position: 'right', min: 50, max: 75, grid: { display: false }, ticks: { color: '#FFD166', font: { size: 9 }, callback: v => v + '%' } },
+      }
+    }
+  });
+}
+
+// ── BaFin SHORT-INTEREST ANZEIGE ─────────────────────────────
+function renderShortsBlock(d) {
+  const s = d?.shorts || {};
+  const el = document.getElementById('shorts-content');
+  if (!el) return;
+
+  const positions = s.positions || [];
+  if (positions.length === 0) {
+    el.innerHTML = `
+      <div style="padding:16px;text-align:center">
+        <div style="font-size:24px;font-weight:900;color:var(--green);margin-bottom:4px">0 %</div>
+        <div style="font-size:11px;color:var(--txt2)">Keine meldepflichtigen Short-Positionen >0,5%</div>
+        <div style="font-size:10px;color:var(--txt3);margin-top:4px">Stand: ${s.as_of || '—'} · Quelle: BaFin</div>
+        <div style="margin-top:10px;font-size:10px;color:var(--green);background:var(--greenDim);padding:6px 10px;border-radius:6px;border:1px solid rgba(0,229,160,.2)">
+          ✓ Keine institutionellen Short-Seller bekannt — Short-These noch nicht vom Markt gespielt
+        </div>
+      </div>`;
+    return;
+  }
+
+  const totalPct = s.total_short_pct || 0;
+  const color    = totalPct > 3 ? 'var(--red)' : totalPct > 1.5 ? 'var(--amber)' : 'var(--txt2)';
+
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:10px">
+      <div style="text-align:center">
+        <div style="font-size:28px;font-weight:900;color:${color}">${totalPct.toFixed(2)} %</div>
+        <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px">Gesamt Short-Float</div>
+      </div>
+      <div style="font-size:10px;color:var(--txt2);line-height:1.6;flex:1">
+        <strong>${s.num_holders || 0}</strong> Halter mit je >0,5% des Floats. Stand: ${s.as_of || '—'}.<br>
+        ${totalPct > 2 ? '<span style="color:var(--amber)">⚡ Institutionelle Short-Seller aktiv — Short-These wird gespielt</span>' : 'Institutionelle Shorts noch moderat.'}
+      </div>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Short-Seller</th><th>Position</th><th>Stand</th></tr></thead>
+      <tbody>${positions.map(p => `
+        <tr>
+          <td style="font-weight:600">${p.holder}</td>
+          <td class="${p.pct > 1 ? 'r-val' : 'a-val'}">${p.pct.toFixed(2)} %</td>
+          <td class="c-txt2" style="font-size:11px">${p.date}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>
+    <div style="margin-top:8px;font-size:9px;color:var(--txt3)">Quelle: BaFin — Netto-Leerverkaufspositionen (meldepflichtig ≥0,5% Float)</div>`;
 }
 
 // ── EARNINGS COUNTDOWN ───────────────────────────────────────
