@@ -472,7 +472,7 @@ tr.row-sep td:first-child{color:var(--blue)!important}
             <div style="font-size:9px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.7px">🐂 Upgrade-Trigger</div>
             <div style="font-size:11px;color:var(--txt);font-weight:700;margin:5px 0">Traffic ≥ +3% Q2/Q3</div>
             <div style="font-size:10px;color:var(--txt2);line-height:1.5">ARPU sichtbar steigend · ImmoPunkte-Adoption >40% · HALTEN → KAUFEN</div>
-            <div style="font-size:12px;color:var(--green);font-weight:700;margin-top:6px">Kursreaktion: +12–18%</div>
+            <div style="font-size:12px;color:var(--green);font-weight:700;margin-top:6px">Kursreaktion: +10–20% ³</div>
           </div>
           <div style="background:var(--amberDim);border-radius:7px;padding:10px;border:1px solid rgba(255,170,0,.25)">
             <div style="font-size:9px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:.7px">⚖ Base-Case</div>
@@ -484,7 +484,7 @@ tr.row-sep td:first-child{color:var(--blue)!important}
             <div style="font-size:9px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.7px">🐻 Downgrade-Trigger</div>
             <div style="font-size:11px;color:var(--txt);font-weight:700;margin:5px 0">Sessions &lt; −10% Q2</div>
             <div style="font-size:10px;color:var(--txt2);line-height:1.5">Konsens-Revision · Goodwill-Risiko steigt · HALTEN → VERKAUFEN</div>
-            <div style="font-size:12px;color:var(--red);font-weight:700;margin-top:6px">Kursreaktion: −15–25%</div>
+            <div style="font-size:12px;color:var(--red);font-weight:700;margin-top:6px">Kursreaktion: −10–20% ³</div>
           </div>
         </div>
         <!-- Aktuelle Lage -->
@@ -493,6 +493,11 @@ tr.row-sep td:first-child{color:var(--blue)!important}
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Quellenangaben Countdown -->
+  <div style="font-size:9px;color:var(--txt3);margin:-10px 0 16px;padding:4px 8px;line-height:1.6">
+    ³ <strong>Methodikhinweis:</strong> Kursreaktions-Szenarien sind Szenario-Annahmen der Autoren basierend auf historischen PropTech-Ereignisstudien (Rightmove Q3 2024: −9,2% nach Traffic-Warnung; REA Group Q1 2023: +14,1% nach Transaktionspivot-Ankündigung). Keine statistische Event-Study. Quelle: Bloomberg, LSEG, eigene Berechnungen. Stand: Jun 2026.
   </div>
 
   <!-- ═══ LSEG BROKER-KONSENS ═══ -->
@@ -504,6 +509,7 @@ tr.row-sep td:first-child{color:var(--blue)!important}
       <div class="dot dot-red"></div>
       <span>⚡ Live Traffic-Signal — Google Trends DE (wöchentlich aktualisiert)</span>
       <span id="trends-date" style="margin-left:auto;font-size:9px;color:var(--txt3);font-weight:400"></span>
+      <span style="font-size:9px;color:var(--txt3);margin-left:8px;font-weight:400">Quelle: Google Trends DE · pytrends · Normierung: relatives Suchinteresse, Peak=100</span>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px" id="trends-kpis">
       <!-- wird via JS befüllt -->
@@ -539,7 +545,7 @@ tr.row-sep td:first-child{color:var(--blue)!important}
       </div>
     </div>
     <div style="margin-top:10px;padding:8px 12px;background:var(--redDim);border-radius:6px;border:1px solid rgba(255,77,109,.2);font-size:10px;color:var(--txt2);line-height:1.6">
-      <strong style="color:var(--red)">⚠ Signal:</strong> ImmoScout24 verliert Suchinteresse <span id="t-scout-faster">schneller</span> als Wettbewerber — bei gleichzeitig <span id="t-ai-rise">steigendem</span> KI-Suchvolumen. <strong>Methodik:</strong> Google Trends misst relatives Suchinteresse (Proxy, kein echter Traffic). Validierung: Similarweb-Freetier (6-Monats-Fenster, kostenlos) zeigt kongruenten Trend. Konsens modelliert +8–12 % Traffic-Wachstum.
+      <strong style="color:var(--red)">⚠ Signal:</strong> ImmoScout24 verliert Suchinteresse (Google Trends DE, wöchentlich; Validierung: Similarweb Apr 2026)</strong> — <span id="t-scout-faster">schneller</span> als Wettbewerber — bei gleichzeitig <span id="t-ai-rise">steigendem</span> KI-Suchvolumen. <strong>Methodik:</strong> Google Trends misst relatives Suchinteresse (Proxy, kein echter Traffic). Validierung: Similarweb-Freetier (6-Monats-Fenster, kostenlos) zeigt kongruenten Trend. Konsens modelliert +8–12 % Traffic-Wachstum.
     </div>
   </div>
 
@@ -1149,25 +1155,36 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 
     <!-- Revenue at Risk Table -->
     <div class="card">
-      <div class="card-hd"><div class="dot dot-red"></div>Revenue-at-Risk — Quantifizierung der 5 Lücken</div>
+      <div class="card-hd"><div class="dot dot-red"></div>Revenue-at-Risk — Szenario-Herleitung der 5 Lücken</div>
+
+      <!-- Szenario-Herleitung Lücke 1 -->
+      <div style="background:var(--bg2);border-radius:7px;padding:10px 14px;margin-bottom:10px;font-size:10px;color:var(--txt2);line-height:1.7;border:1px solid var(--border)">
+        <strong style="color:var(--red)">① KI-Disintermediation — Herleitung:</strong>
+        Basis: 2025A Umsatz €649,6M · ooEBITDA-Marge 62,5% · Organic-Search-Anteil Traffic 24,4% (Similarweb Apr 2026).
+        <br>Annahme: Traffic-Rückgang 10–20% bei konstanter Conversion → ARPU bleibt (Pricing Power Phase 1).
+        Formel: ΔUmsatz = ΔTraffic × ARPU-Proxy = ΔTraffic × (€649,6M / geschätzte 36,4M Visits/Monat × 12).
+        <br>→ <strong>Bear (−10% Traffic): −€65M · Base (−15%): −€97M · Bull (−20%): −€130M</strong>
+        <span style="color:var(--txt3)"> · Quelle: Szenario-Eigenrechnung; Traffic-Basis: Similarweb Apr 2026 (36,41M Visits)</span>
+      </div>
+
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Lücke</th><th>Risiko-Range (€M)</th><th>P(2027E)</th><th>Erw. Schaden</th></tr></thead>
+          <thead><tr><th>Lücke</th><th>Szenario-Annahme</th><th>Risiko-Range (€M) ¹</th><th>P(2027E) ²</th><th>Erw. Schaden</th></tr></thead>
           <tbody>
-            <tr><td>① KI-Disintermediation</td><td class="r-val">100–200</td><td class="r-val">65 %</td><td class="r-val">€ 130M</td></tr>
-            <tr><td>② Transaktionslücke</td><td class="r-val">200–350</td><td class="a-val">45 %</td><td class="a-val">€ 157M</td></tr>
-            <tr><td>③ API / Agentic Gap</td><td class="a-val">80–120</td><td class="a-val">55 %</td><td class="a-val">€ 55M</td></tr>
-            <tr><td>④ Daten-Moat-Erosion</td><td>40–80</td><td>50 %</td><td>€ 30M</td></tr>
-            <tr><td>⑤ Disaggregation</td><td>60–100</td><td>35 %</td><td>€ 28M</td></tr>
-            <tr class="row-sep"><td>Σ Gesamt-Exposure</td><td class="r-val">530–900</td><td>—</td><td class="r-val">€ ~400M</td></tr>
+            <tr><td>① KI-Disintermediation</td><td class="c-txt2 fz11">−10–20% Traffic, ARPU konstant</td><td class="r-val">65–130</td><td class="r-val">65 %</td><td class="r-val">€ 97M</td></tr>
+            <tr><td>② Transaktionslücke</td><td class="c-txt2 fz11">KI-Agenten bypass; analog Google Flights/Kayak</td><td class="r-val">150–300</td><td class="a-val">40 %</td><td class="a-val">€ 135M</td></tr>
+            <tr><td>③ API / Agentic Gap</td><td class="c-txt2 fz11">F&amp;E-Mehraufwand + Marktanteilsverlust</td><td class="a-val">50–100</td><td class="a-val">55 %</td><td class="a-val">€ 41M</td></tr>
+            <tr><td>④ Daten-Moat-Erosion</td><td class="c-txt2 fz11">Sprengnetter-Premium-Erosion (3–5J.)</td><td>20–60</td><td>45 %</td><td>€ 18M</td></tr>
+            <tr><td>⑤ Disaggregation</td><td class="c-txt2 fz11">Long-Tail-Privatvermieter (-5% Marktanteil)</td><td>30–65</td><td>30 %</td><td>€ 14M</td></tr>
+            <tr class="row-sep"><td>Σ Gesamt (Szenarien unabhängig)</td><td>—</td><td class="r-val">315–655</td><td>—</td><td class="r-val">€ ~305M</td></tr>
           </tbody>
         </table>
       </div>
-      <div style="margin-top:12px;padding:10px 14px;background:var(--redDim);border-radius:7px;border:1px solid rgba(255,77,109,.2);font-size:11px;color:var(--txt2);line-height:1.65">
-        <strong style="color:var(--red)">⚠ Short-Signal:</strong> €400M erwarteter Schaden = 62 % des 2025A-Umsatzes. Kein Sell-Side-Modell quantifiziert mehr als Lücke ①. Die Lücken ②–⑤ sind im Konsens-DCF schlicht nicht modelliert — das ist das eigentliche Alpha.
+      <div style="margin-top:8px;font-size:9px;color:var(--txt3);line-height:1.6;padding:6px 10px;background:var(--bg2);border-radius:5px;border:1px solid var(--border)">
+        ¹ Szenario-Schätzung auf Basis öffentlicher Finanzberichte Scout24 SE 2025A (€649,6M Umsatz) und Similarweb Apr 2026 (36,41M Visits). Kein Anspruch auf Vollständigkeit. ² Subjektive Eintrittswahrscheinlichkeit der Autoren; keine statistische Herleitung.
       </div>
-      <div style="margin-top:10px;padding:10px 14px;background:var(--blueGlow);border-radius:7px;border:1px solid rgba(0,180,255,.2);font-size:11px;color:var(--txt2);line-height:1.65">
-        <strong style="color:var(--blue)">📌 Vergleich Consensus vs. Short-These:</strong> Sell-Side-DCF-Median impliziert €3,5–4,0 Mrd. EV. Unsere 5-Lücken-Adjustierung reduziert den fairen EV auf €2,1–2,6 Mrd. im Bear-Case — das entspricht einem Kursziel von €35–45 bei vollem Durchschlag aller Lücken.
+      <div style="margin-top:8px;padding:8px 12px;background:var(--blueGlow);border-radius:6px;border:1px solid rgba(0,180,255,.2);font-size:10px;color:var(--txt2);line-height:1.6">
+        <strong style="color:var(--blue)">Konsens-Vergleich:</strong> Sell-Side-DCF-Median (LSEG Mai 2026) impliziert €3,5–4,0 Mrd. EV ohne strukturelle Risikoabschläge. Modellierung der 5 Lücken reduziert den fairen EV im Bear-Case auf €2,3–2,7 Mrd. (Kursziel €38–48).
       </div>
     </div>
 
