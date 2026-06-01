@@ -8,15 +8,43 @@
   },
   "immoscout24": {
     "domain": "immobilienscout24.de",
-    "note": "Hauptdomain ImmoScout24 SE",
+    "note": "Hauptdomain ImmoScout24 SE — korrekte Domain (nicht immoscout24.de Redirect)",
     "visits_mn": 36.41,
+    "change_mom_pct": -8.42,
     "month": "2026-04",
-    "rank_global": null,
-    "rank_de": null,
-    "pages_per_visit": null,
-    "bounce_rate_pct": null,
-    "visit_duration_sec": null,
-    "channels": null
+    "rank_global": 752,
+    "rank_de": 34,
+    "rank_industry": 14,
+    "device": {
+      "desktop_pct": 32.96,
+      "mobile_web_pct": 67.04
+    },
+    "channels": {
+      "direct_pct": 29.38,
+      "organic_search_pct": 24.37,
+      "paid_search_pct": 7.45,
+      "referrals_pct": 8.89,
+      "display_pct": 8.85,
+      "organic_social_pct": 3.23,
+      "paid_social_pct": 4.19,
+      "gen_ai_pct": 0.43,
+      "email_pct": 13.20,
+      "affiliates_pct": 0.01,
+      "note": "Gen AI = separater Kanal in Similarweb — KI-Tools senden 0,43% des Traffics (ca. 157.000 Visits/Monat)"
+    },
+    "top_countries": {
+      "DE": { "share_pct": 94.52, "change_pct": -8.00 },
+      "AT": { "share_pct": 0.53,  "change_pct": -8.85 },
+      "CH": { "share_pct": 0.49,  "change_pct": -33.59 },
+      "NL": { "share_pct": 0.45,  "change_pct": 7.27 },
+      "US": { "share_pct": 0.43,  "change_pct": -1.31 }
+    },
+    "analytical_notes": {
+      "gen_ai_visits_est": 156563,
+      "organic_search_visits_est_mn": 8.87,
+      "gen_ai_net_effect": "KI ersetzt ~1-2% Organic Search, gibt nur 0.43% als Referral zurück — Netto-Verlust",
+      "de_market_decline": "Deutschland -8% MoM = Kernmarkt schrumpft. Hochskaliert: ca. -30M Visits/J. Verlust in DE"
+    }
   },
   "immowelt": {
     "domain": "immowelt.de",

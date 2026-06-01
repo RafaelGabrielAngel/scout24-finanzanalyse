@@ -1840,47 +1840,66 @@ async function loadSimilarweb() {
     const block = document.getElementById('sw-block');
     if (!block) return;
 
-    const cmp = sw.comparison || {};
-    const scout = cmp.scout24_visits_mn || 0;
+    const cmp  = sw.comparison || {};
+    const main = sw.immoscout24 || {};
+    const scout = main.visits_mn || cmp.scout24_visits_mn || 0;
     const welt  = cmp.immowelt_visits_mn || 0;
-    const ratio = cmp.scout_immowelt_ratio || 0;
+    const ratio = scout > 0 && welt > 0 ? (scout / welt) : (cmp.scout_immowelt_ratio || 0);
 
-    // Monat
     const mEl = document.getElementById('sw-month');
-    if (mEl) mEl.textContent = 'Stand: ' + (cmp.month || sw._meta?.month || '—');
+    if (mEl) mEl.textContent = 'Stand: ' + (main.month || cmp.month || sw._meta?.month || '—');
 
-    // KPI-Boxen
     const kEl = document.getElementById('sw-kpis');
     if (kEl && scout > 0) {
+      const mom  = main.change_mom_pct || 0;
+      const ch   = main.channels || {};
+      const genai = ch.gen_ai_pct || 0;
+      const genaiVisits = Math.round(scout * 1e6 * genai / 100 / 1000);
+
       kEl.innerHTML = `
         <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
           <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px">ImmoScout24 Visits</div>
           <div style="font-size:22px;font-weight:900;color:var(--blue)">${scout.toFixed(2)} Mio.</div>
-          <div style="font-size:9px;color:var(--txt3);margin-top:2px">immobilienscout24.de</div>
+          <div style="font-size:9px;color:${mom < 0 ? 'var(--red)' : 'var(--green)'};margin-top:2px;font-weight:700">${mom >= 0 ? '+' : ''}${mom.toFixed(2)}% vs. Vormonat</div>
         </div>
         <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
           <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px">Immowelt Visits</div>
           <div style="font-size:22px;font-weight:900;color:var(--amber)">${welt.toFixed(2)} Mio.</div>
-          <div style="font-size:9px;color:var(--txt3);margin-top:2px">immowelt.de</div>
+          <div style="font-size:9px;color:var(--txt3);margin-top:2px">Ratio Scout:Immowelt = ${ratio.toFixed(1)}×</div>
         </div>
-        <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
-          <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px">Traffic-Ratio</div>
-          <div style="font-size:22px;font-weight:900;color:var(--txt)">${ratio.toFixed(1)}×</div>
-          <div style="font-size:9px;color:var(--txt3);margin-top:2px">Scout vs. Immowelt</div>
+        <div style="background:rgba(255,77,109,.08);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,77,109,.3)">
+          <div style="font-size:9px;color:var(--red);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;font-weight:700">⚡ Gen AI Traffic</div>
+          <div style="font-size:22px;font-weight:900;color:var(--red)">${genai.toFixed(2)} %</div>
+          <div style="font-size:9px;color:var(--txt3);margin-top:2px">~${genaiVisits}K Visits von KI-Tools</div>
         </div>`;
     }
 
-    // Channels (wenn Hauptdomain-Daten verfügbar)
-    const ch = sw.immoscout24?.channels;
+    const ch  = main.channels || {};
     const cEl = document.getElementById('sw-channels');
-    if (cEl && ch) {
+    if (cEl && ch.organic_search_pct) {
       cEl.style.display = 'block';
-      const org = ch.organic_search_pct || 0;
-      cEl.innerHTML = `<strong style="color:var(--blue)">Traffic-Mix:</strong>
-        Direct ${ch.direct_pct?.toFixed(1)}% ·
-        Organic Search <strong style="color:${org < 20 ? 'var(--red)' : 'var(--green)'}">${org.toFixed(1)}%</strong> ·
-        Paid ${ch.paid_search_pct?.toFixed(1) || '0'}%
-        ${org < 20 ? '<br><span style="color:var(--red)">⚠ Niedriger Organic-Anteil = hohe KI-Override-Verwundbarkeit (SEO-Traffic als erstes betroffen)</span>' : ''}`;
+      const org    = ch.organic_search_pct;
+      const genai  = ch.gen_ai_pct || 0;
+      const netLoss = org - genai;
+      cEl.innerHTML = `
+        <div style="margin-bottom:6px"><strong style="color:var(--blue)">Channel-Mix April 2026 (immobilienscout24.de):</strong></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+          ${[
+            ['Direct', ch.direct_pct, 'var(--txt2)'],
+            ['Organic Search', ch.organic_search_pct, 'var(--blue)'],
+            ['Email', ch.email_pct, 'var(--txt2)'],
+            ['Referrals', ch.referrals_pct, 'var(--txt2)'],
+            ['Display', ch.display_pct, 'var(--txt2)'],
+            ['Paid Search', ch.paid_search_pct, 'var(--txt2)'],
+            ['Gen AI', ch.gen_ai_pct, 'var(--red)'],
+          ].map(([n,v,c]) => `<span style="padding:3px 8px;border-radius:6px;background:var(--bg3);font-size:10px;color:${c}"><strong>${n}:</strong> ${(v||0).toFixed(1)}%</span>`).join('')}
+        </div>
+        <div style="padding:6px 10px;background:var(--redDim);border-radius:6px;border:1px solid rgba(255,77,109,.2);font-size:10px;color:var(--txt2)">
+          <strong style="color:var(--red)">⚠ KI-Netto-Effekt:</strong>
+          Organic Search ${org.toFixed(1)}% − Gen AI ${genai.toFixed(2)}% = ${netLoss.toFixed(1)}% verbleibender SEO-Traffic.
+          KI-Tools ersetzen Suchvolumen, geben aber nur ${genai.toFixed(2)}% als Referral zurück.
+          <strong>Netto-Verlust: ~${(org - genai - org * 0.85).toFixed(1)} PP SEO-Traffic an KI-Intermediation.</strong>
+        </div>`;
     }
 
     block.style.display = 'block';
