@@ -642,6 +642,15 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     </div>
   </div>
 
+  <!-- ═══ MAKRO-KONTEXT WACC ═══ -->
+  <div id="macro-panel" class="card mb16" style="display:none">
+    <div class="card-hd"><div class="dot dot-gold"></div>
+      Makro-Kontext — WACC-Verankerung (Quelle: EZB + Bundesbank, täglich)
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px" id="macro-kpis"></div>
+    <div id="macro-wacc-alert" style="padding:10px 14px;border-radius:7px;font-size:11px;line-height:1.65"></div>
+  </div>
+
   <div class="card">
     <div class="card-hd"><div class="dot dot-blue"></div>Cash-Flow-Projektion (Base-Case — aktualisiert live)</div>
     <div class="tbl-wrap"><table id="dcf-tbl"><thead><tr id="dcf-thead"></tr></thead><tbody id="dcf-tbody"></tbody></table></div>
@@ -1195,6 +1204,12 @@ async function loadData() {
     // ── Traffic-Signal Charts rendern
     renderTrafficSignal(d);
 
+    // ── Makro-Panel im DCF-Tab
+    if (d.macro) {
+      applyMacroPanel(d);
+      window._liveData = d; // für Tab-Wechsel merken
+    }
+
     // ── History-Chart + P&L-Tabelle mit Live-Daten (LSEG oder FMP)
     if (d.history?.annual?.length > 0 || d.history?.income?.length > 0) {
       renderHist(d.history);
@@ -1331,7 +1346,7 @@ function tab(id, btn){
   document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
   document.getElementById('p-'+id).classList.add('active');
   btn.classList.add('active');
-  if(id==='dcf'){setTimeout(()=>{dcf();renderSens()},60)}
+  if(id==='dcf'){setTimeout(()=>{dcf();renderSens();if(window._liveData)applyMacroPanel(window._liveData)},60)}
   if(id==='multi'){setTimeout(renderPeers,60)}
   if(id==='acq'){setTimeout(renderMA,60)}
   if(id==='gap'){setTimeout(renderGapChart,60)}
@@ -1715,6 +1730,54 @@ function renderMA(){
       }
     }
   });
+}
+
+// ── MAKRO-KONTEXT PANEL ──────────────────────────────────────
+function applyMacroPanel(d) {
+  const m = d.macro || {};
+  if (!m.bund_10y && !m.ecb_deposit_rate) return;
+
+  const panel = document.getElementById('macro-panel');
+  if (panel) panel.style.display = 'block';
+
+  // ── KPI-Boxen
+  const kpisEl = document.getElementById('macro-kpis');
+  if (kpisEl) {
+    const dcfWacc = +document.getElementById('sw')?.value || 7.5;
+    const spread  = m.bund_10y ? (dcfWacc - m.bund_10y).toFixed(1) : '—';
+
+    kpisEl.innerHTML = [
+      { lbl: 'Bund 10J (rf)', val: m.bund_10y ? m.bund_10y.toFixed(2) + ' %' : '—', col: 'var(--blue)',  sub: 'Risikofreier Zinssatz' },
+      { lbl: 'EZB Leitzins',  val: m.ecb_deposit_rate ? m.ecb_deposit_rate.toFixed(2) + ' %' : '—', col: 'var(--txt)', sub: 'Deposit Facility Rate' },
+      { lbl: 'Hypothekenzins 10J', val: m.mortgage_rate_10y ? m.mortgage_rate_10y.toFixed(2) + ' %' : '—', col: 'var(--amber)', sub: 'Wohnbaufinanzierung DE' },
+      { lbl: 'WACC impliziert', val: m.wacc_implied ? m.wacc_implied.toFixed(1) + ' %' : '—', col: m.wacc_implied > dcfWacc ? 'var(--red)' : 'var(--green)', sub: `β${m.beta_used}×ERP${m.erp_used}%+CS1.5%` },
+    ].map(k => `
+      <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px">${k.lbl}</div>
+        <div style="font-size:20px;font-weight:700;color:${k.col}">${k.val}</div>
+        <div style="font-size:9px;color:var(--txt3);margin-top:2px">${k.sub}</div>
+      </div>`).join('');
+  }
+
+  // ── WACC-Warnung / Kontexttext
+  const alertEl = document.getElementById('macro-wacc-alert');
+  if (alertEl && m.wacc_implied) {
+    const dcfWacc = +document.getElementById('sw')?.value || 7.5;
+    const diff = (m.wacc_implied - dcfWacc).toFixed(1);
+    const isOptimistic = m.wacc_implied > dcfWacc;
+    alertEl.style.background = isOptimistic ? 'var(--redDim)' : 'var(--greenDim)';
+    alertEl.style.border = `1px solid rgba(${isOptimistic ? '255,77,109' : '0,229,160'},.25)`;
+    alertEl.innerHTML = isOptimistic
+      ? `<strong style="color:var(--red)">⚠ WACC-Risiko:</strong> Der Bundesbank-/EZB-implizierte WACC beträgt <strong>${m.wacc_implied}%</strong> — das ist <strong>${diff} Prozentpunkte höher</strong> als der aktuelle DCF-Base-Case (${dcfWacc}%). Bei WACC ${m.wacc_implied}% fällt der Fair Value auf <strong style="color:var(--red)">€${calcFairValueAt(m.wacc_implied)}</strong>. Begründung: Bund 10J ${m.bund_10y}% + β${m.beta_used}×ERP${m.erp_used}% + Credit Spread 1,5%.`
+      : `<strong style="color:var(--green)">✓ WACC konservativ:</strong> Der DCF-Base-Case WACC (${dcfWacc}%) liegt ${Math.abs(diff)} PP <em>über</em> dem Bundesbank-implizierten WACC (${m.wacc_implied}%). Die Bewertung ist damit auf der sicheren Seite.`;
+  }
+}
+
+function calcFairValueAt(wacc) {
+  // Schnellberechnung mit Base-Case-Parametern
+  const BASE_W = 7.5, BASE_TG = 2.5, BASE_RG1 = 11, BASE_RG8 = 6, BASE_FCF = 40.5;
+  const r = calcDCF(wacc, BASE_TG, BASE_RG1, BASE_RG8, BASE_FCF, ND0, SH0, REV0);
+  return r.fv.toFixed(0);
 }
 
 // ── TRAFFIC SIGNAL CHARTS ────────────────────────────────────
