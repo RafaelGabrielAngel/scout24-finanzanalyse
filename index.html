@@ -1645,8 +1645,9 @@ function renderTrafficSignal(d) {
   if (chTrendMain) chTrendMain.destroy();
   const ctx1 = document.getElementById('ch-trend-main');
   if (ctx1) {
-    const labels = t.series.map(p => p.date.slice(5)); // MM-DD
-    const vals   = t.series.map(p => p.value);
+    const labels = t.series.map(p => p.date.slice(5));
+    // Feldname kann 'value' oder 'immoscout' sein je nach fetcher-Version
+    const vals = t.series.map(p => p.value !== undefined ? p.value : p.immoscout);
     chTrendMain = new Chart(ctx1.getContext('2d'), {
       type: 'line',
       data: { labels, datasets: [{
@@ -1663,19 +1664,32 @@ function renderTrafficSignal(d) {
     });
   }
 
-  // ── Chart 2: Wettbewerber-Vergleich
+  // ── Chart 2: Wettbewerber-Vergleich (nutzt competitor[] oder fällt auf series[] zurück)
   if (chTrendComp) chTrendComp.destroy();
   const ctx2 = document.getElementById('ch-trend-comp');
-  if (ctx2 && t.competitor && t.competitor.length > 0) {
-    const cLabels = t.competitor.map(p => p.date.slice(5));
+  if (ctx2) {
+    let cLabels, scoutData, weltData;
+    if (t.competitor && t.competitor.length > 0) {
+      cLabels   = t.competitor.map(p => p.date.slice(5));
+      scoutData = t.competitor.map(p => p.immoscout);
+      weltData  = t.competitor.map(p => p.immowelt);
+    } else {
+      // Fallback: nur Scout24-Linie mit series[]
+      cLabels   = t.series.map(p => p.date.slice(5));
+      scoutData = t.series.map(p => p.value !== undefined ? p.value : p.immoscout);
+      weltData  = null;
+    }
+    const datasets = [
+      { label:'ImmoScout24', data: scoutData,
+        borderColor:'#FF4D6D', borderWidth:2, fill:false, tension:.4, pointRadius:0 },
+    ];
+    if (weltData) datasets.push(
+      { label:'Immowelt', data: weltData,
+        borderColor:'#FFAA00', borderWidth:2, fill:false, tension:.4, pointRadius:0, borderDash:[4,3] }
+    );
     chTrendComp = new Chart(ctx2.getContext('2d'), {
       type: 'line',
-      data: { labels: cLabels, datasets: [
-        { label:'ImmoScout24', data: t.competitor.map(p=>p.immoscout),
-          borderColor:'#FF4D6D', borderWidth:2, fill:false, tension:.4, pointRadius:0 },
-        { label:'Immowelt', data: t.competitor.map(p=>p.immowelt),
-          borderColor:'#FFAA00', borderWidth:2, fill:false, tension:.4, pointRadius:0, borderDash:[4,3] },
-      ]},
+      data: { labels: cLabels, datasets },
       options: { responsive:true, maintainAspectRatio:false,
         plugins:{ legend:{labels:{color:'#7BAAC8',font:{size:9},boxWidth:8,padding:6}} },
         scales:{
