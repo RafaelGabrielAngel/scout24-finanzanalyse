@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-06-02T07:48:10.125666Z",
+    "generated_at": "2026-06-02T07:59:04.573870Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -176,9 +176,157 @@
         "value": 68
       }
     ],
-    "competitor": [],
-    "ai_signal": [],
-    "trend_delta": -16.4
+    "competitor": [
+      {
+        "date": "2026-02-15",
+        "immoscout": 74,
+        "immowelt": 70
+      },
+      {
+        "date": "2026-02-22",
+        "immoscout": 73,
+        "immowelt": 93
+      },
+      {
+        "date": "2026-03-01",
+        "immoscout": 83,
+        "immowelt": 82
+      },
+      {
+        "date": "2026-03-08",
+        "immoscout": 94,
+        "immowelt": 81
+      },
+      {
+        "date": "2026-03-15",
+        "immoscout": 98,
+        "immowelt": 80
+      },
+      {
+        "date": "2026-03-22",
+        "immoscout": 95,
+        "immowelt": 81
+      },
+      {
+        "date": "2026-03-29",
+        "immoscout": 100,
+        "immowelt": 79
+      },
+      {
+        "date": "2026-04-05",
+        "immoscout": 96,
+        "immowelt": 77
+      },
+      {
+        "date": "2026-04-12",
+        "immoscout": 93,
+        "immowelt": 77
+      },
+      {
+        "date": "2026-04-19",
+        "immoscout": 84,
+        "immowelt": 78
+      },
+      {
+        "date": "2026-04-26",
+        "immoscout": 83,
+        "immowelt": 78
+      },
+      {
+        "date": "2026-05-03",
+        "immoscout": 81,
+        "immowelt": 71
+      },
+      {
+        "date": "2026-05-10",
+        "immoscout": 86,
+        "immowelt": 80
+      },
+      {
+        "date": "2026-05-17",
+        "immoscout": 78,
+        "immowelt": 79
+      },
+      {
+        "date": "2026-05-24",
+        "immoscout": 72,
+        "immowelt": 79
+      },
+      {
+        "date": "2026-05-31",
+        "immoscout": 68,
+        "immowelt": 84
+      }
+    ],
+    "ai_signal": [
+      {
+        "date": "2026-03-15",
+        "Wohnung KI": 54,
+        "Wohnung ChatGPT": 74
+      },
+      {
+        "date": "2026-03-22",
+        "Wohnung KI": 56,
+        "Wohnung ChatGPT": 100
+      },
+      {
+        "date": "2026-03-29",
+        "Wohnung KI": 48,
+        "Wohnung ChatGPT": 75
+      },
+      {
+        "date": "2026-04-05",
+        "Wohnung KI": 69,
+        "Wohnung ChatGPT": 63
+      },
+      {
+        "date": "2026-04-12",
+        "Wohnung KI": 66,
+        "Wohnung ChatGPT": 65
+      },
+      {
+        "date": "2026-04-19",
+        "Wohnung KI": 69,
+        "Wohnung ChatGPT": 61
+      },
+      {
+        "date": "2026-04-26",
+        "Wohnung KI": 52,
+        "Wohnung ChatGPT": 61
+      },
+      {
+        "date": "2026-05-03",
+        "Wohnung KI": 79,
+        "Wohnung ChatGPT": 64
+      },
+      {
+        "date": "2026-05-10",
+        "Wohnung KI": 74,
+        "Wohnung ChatGPT": 70
+      },
+      {
+        "date": "2026-05-17",
+        "Wohnung KI": 29,
+        "Wohnung ChatGPT": 40
+      },
+      {
+        "date": "2026-05-24",
+        "Wohnung KI": 47,
+        "Wohnung ChatGPT": 62
+      },
+      {
+        "date": "2026-05-31",
+        "Wohnung KI": 59,
+        "Wohnung ChatGPT": 59
+      }
+    ],
+    "trend_delta": -16.4,
+    "competitor_delta": {
+      "immoscout_delta": -16.7,
+      "immowelt_delta": -7.2
+    },
+    "ai_delta_Wohnung_KI": 40.3,
+    "ai_delta_Wohnung_ChatGPT": -19.5
   },
   "macro": {
     "ecb_deposit_rate": 2.0,
