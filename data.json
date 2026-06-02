@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-06-02T07:34:47.174643Z",
+    "generated_at": "2026-06-02T07:43:54.227274Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -112,8 +112,71 @@
     "status": "ok",
     "series": [],
     "competitor": [],
-    "ai_signal": [],
-    "trend_delta": 0
+    "ai_signal": [
+      {
+        "date": "2026-03-15",
+        "Wohnung KI": 54,
+        "Wohnung ChatGPT": 74
+      },
+      {
+        "date": "2026-03-22",
+        "Wohnung KI": 56,
+        "Wohnung ChatGPT": 100
+      },
+      {
+        "date": "2026-03-29",
+        "Wohnung KI": 48,
+        "Wohnung ChatGPT": 75
+      },
+      {
+        "date": "2026-04-05",
+        "Wohnung KI": 69,
+        "Wohnung ChatGPT": 63
+      },
+      {
+        "date": "2026-04-12",
+        "Wohnung KI": 66,
+        "Wohnung ChatGPT": 65
+      },
+      {
+        "date": "2026-04-19",
+        "Wohnung KI": 69,
+        "Wohnung ChatGPT": 61
+      },
+      {
+        "date": "2026-04-26",
+        "Wohnung KI": 52,
+        "Wohnung ChatGPT": 61
+      },
+      {
+        "date": "2026-05-03",
+        "Wohnung KI": 79,
+        "Wohnung ChatGPT": 64
+      },
+      {
+        "date": "2026-05-10",
+        "Wohnung KI": 74,
+        "Wohnung ChatGPT": 70
+      },
+      {
+        "date": "2026-05-17",
+        "Wohnung KI": 29,
+        "Wohnung ChatGPT": 40
+      },
+      {
+        "date": "2026-05-24",
+        "Wohnung KI": 47,
+        "Wohnung ChatGPT": 62
+      },
+      {
+        "date": "2026-05-31",
+        "Wohnung KI": 59,
+        "Wohnung ChatGPT": 60
+      }
+    ],
+    "trend_delta": 0,
+    "ai_delta_Wohnung_KI": 40.3,
+    "ai_delta_Wohnung_ChatGPT": -19.2
   },
   "macro": {
     "ecb_deposit_rate": 2.0,
