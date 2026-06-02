@@ -556,6 +556,49 @@ tr.row-sep td:first-child{color:#7A3000!important}
     </div>
   </div>
 
+  <!-- Similarweb Traffic-Block -->
+  <div class="card mb16">
+    <div class="card-hd"><div class="dot dot-red"></div>Similarweb Traffic-Analyse — Apr 2026 (immobilienscout24.de)</div>
+    <div class="g4" style="margin-bottom:14px">
+      <div style="background:var(--redDim);border-radius:8px;padding:14px;border:1px solid rgba(166,40,32,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Visits / Monat</div>
+        <div id="sw-visits" style="font-size:24px;font-weight:900;color:var(--red)">36,41 Mio.</div>
+        <div id="sw-visits-chg" style="font-size:11px;margin-top:4px;font-weight:700;color:var(--red)">−8,42 % MoM</div>
+      </div>
+      <div style="background:var(--amberDim);border-radius:8px;padding:14px;border:1px solid rgba(139,77,0,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">vs. Immowelt</div>
+        <div id="sw-competitor" style="font-size:24px;font-weight:900;color:var(--amber)">2,7×</div>
+        <div style="font-size:11px;color:var(--txt2);margin-top:4px">Scout24 / Immowelt Ratio</div>
+      </div>
+      <div style="background:var(--redDim);border-radius:8px;padding:14px;border:1px solid rgba(166,40,32,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Gen-AI-Traffic</div>
+        <div id="sw-ai" style="font-size:24px;font-weight:900;color:var(--red)">0,43 %</div>
+        <div style="font-size:11px;color:var(--txt2);margin-top:4px">≈ 157k Visits/Monat via KI</div>
+      </div>
+      <div style="background:var(--amberDim);border-radius:8px;padding:14px;border:1px solid rgba(139,77,0,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Organic Search</div>
+        <div id="sw-organic" style="font-size:24px;font-weight:900;color:var(--amber)">24,37 %</div>
+        <div style="font-size:11px;color:var(--txt2);margin-top:4px">SEO-Abhängigkeit</div>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Traffic-Kanal</th><th>Anteil</th><th>Bewertung</th></tr></thead>
+        <tbody>
+          <tr><td>Direct</td><td class="g-val">29,38 %</td><td class="c-txt2 fz11">Markenbekanntheit stark ✓</td></tr>
+          <tr><td>Organic Search (SEO)</td><td class="a-val">24,37 %</td><td class="c-txt2 fz11">KI-Gefährdung mittel ⚠</td></tr>
+          <tr><td>E-Mail</td><td class="b-val">13,20 %</td><td class="c-txt2 fz11">Loyale User-Basis ✓</td></tr>
+          <tr><td>Paid Search (SEM)</td><td class="a-val">7,45 %</td><td class="c-txt2 fz11">Kostenanstieg bei Wettbewerb ⚠</td></tr>
+          <tr><td>Gen AI (ChatGPT etc.)</td><td class="r-val">0,43 %</td><td class="c-txt2 fz11">KI gibt weniger zurück als es nimmt ⚠</td></tr>
+          <tr class="row-hl"><td>Mobile Web</td><td>67,04 %</td><td class="c-txt2 fz11">App-Abhängigkeit steigt</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;padding:8px 12px;background:var(--redDim);border-radius:6px;border:1px solid rgba(166,40,32,.15);font-size:10px;color:var(--txt2);line-height:1.6">
+      ⚠ <strong style="color:var(--red)">KI-Netto-Effekt:</strong> Gen-AI-Tools senden nur 0,43 % als Referral zurück, ersetzen aber schätzungsweise 1–2 % Organic Search → Netto-Traffic-Verlust. DE-Kernmarkt −8,0 % MoM = hochskaliert ca. −30 Mio. Visits/Jahr. Quelle: Similarweb Free Account, Apr 2026 — manuelle Erfassung.
+    </div>
+  </div>
+
   <div class="g2">
     <div class="card">
       <div class="card-hd"><div class="dot dot-blue"></div>Umsatz & FCF 2021–2025A</div>
@@ -1692,6 +1735,28 @@ async function loadLiveData(){
       }
     }
 
+    // Similarweb (separates JSON laden)
+    fetch('similarweb_data.json?v=' + Date.now())
+      .then(r => r.ok ? r.json() : null)
+      .then(sw => {
+        if (!sw) return;
+        const s = sw.immoscout24;
+        if (!s) return;
+        const el = id => document.getElementById(id);
+        if (el('sw-visits'))    el('sw-visits').textContent    = s.visits_mn.toFixed(2).replace('.',',') + ' Mio.';
+        if (el('sw-visits-chg')) {
+          const chg = s.change_mom_pct;
+          el('sw-visits-chg').textContent = (chg >= 0 ? '+' : '') + chg.toFixed(2).replace('.',',') + ' % MoM';
+          el('sw-visits-chg').style.color = chg < 0 ? 'var(--red)' : 'var(--green)';
+        }
+        if (el('sw-competitor') && sw.immowelt?.visits_mn)
+          el('sw-competitor').textContent = (s.visits_mn / sw.immowelt.visits_mn).toFixed(1) + '×';
+        if (el('sw-ai') && s.channels?.gen_ai_pct)
+          el('sw-ai').textContent = s.channels.gen_ai_pct.toFixed(2).replace('.',',') + ' %';
+        if (el('sw-organic') && s.channels?.organic_search_pct)
+          el('sw-organic').textContent = s.channels.organic_search_pct.toFixed(2).replace('.',',') + ' %';
+      }).catch(() => {});
+
     // Makro-Block aktualisieren
     const macro = d?.macro;
     if (macro) {
@@ -1785,8 +1850,8 @@ window.addEventListener('load',()=>{
 
       <div>
         <div style="font-weight:700;color:#fff;margin-bottom:5px">📈 Markt- & Wettbewerbsdaten</div>
-        <div>• Similarweb (Traffic-Metriken, Sessions, DE-Vergleich): Apr 2026</div>
-        <div>• Bloomberg Professional: Peer-Multiples LTM 2025A (Rightmove, Auto Trader, REA Group, Hemnet, Vend, SAP)</div>
+        <div>• Similarweb Free Account (Traffic-Metriken, Sessions, DE-Vergleich): Apr 2026</div>
+        <div>• LSEG Refinitiv: Peer-Multiples LTM 2025A (Rightmove, Auto Trader, REA Group, Hemnet, Vend)</div>
         <div>• bulwiengesa / Sprengnetter: Immobilienpreisdaten DE 2025</div>
         <div>• Statista: DE-Wohnungsfertigstellungen (50J.-Tief 2024/25)</div>
         <div>• KKR/CPP Investments: Immowelt-Beteiligung — Pressemitteilung 2025</div>
