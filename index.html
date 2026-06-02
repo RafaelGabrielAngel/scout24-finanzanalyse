@@ -659,6 +659,36 @@ tr.row-sep td:first-child{color:#7A3000!important}
     <div class="tbl-wrap"><table id="dcf-tbl"><thead><tr id="dcf-thead"></tr></thead><tbody id="dcf-tbody"></tbody></table></div>
   </div>
 
+  <!-- EZB / Makro Live-Block -->
+  <div class="card mb16">
+    <div class="card-hd"><div class="dot dot-red"></div>Makro-Radar — Live (EZB · Bundesbank · WACC-Implikation)</div>
+    <div class="g4" id="macro-block">
+      <div style="background:var(--redDim);border-radius:8px;padding:14px;border:1px solid rgba(166,40,32,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">EZB Einlagesatz</div>
+        <div id="macro-ecb" style="font-size:26px;font-weight:900;color:var(--red)">2,00 %</div>
+        <div style="font-size:10px;color:var(--txt2);margin-top:4px">Leitzins aktuell</div>
+      </div>
+      <div style="background:var(--amberDim);border-radius:8px;padding:14px;border:1px solid rgba(139,77,0,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Bund 10J Rendite</div>
+        <div id="macro-bund" style="font-size:26px;font-weight:900;color:var(--amber)">2,90 %</div>
+        <div style="font-size:10px;color:var(--txt2);margin-top:4px">Risikofreier Zinssatz (Rf)</div>
+      </div>
+      <div style="background:var(--amberDim);border-radius:8px;padding:14px;border:1px solid rgba(139,77,0,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Hypothekenzins 10J</div>
+        <div id="macro-mortgage" style="font-size:26px;font-weight:900;color:var(--amber)">3,82 %</div>
+        <div style="font-size:10px;color:var(--txt2);margin-top:4px">DE Wohnbau-Signal</div>
+      </div>
+      <div style="background:var(--greenDim);border-radius:8px;padding:14px;border:1px solid rgba(13,107,56,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">WACC impliziert</div>
+        <div id="macro-wacc" style="font-size:26px;font-weight:900;color:var(--green)">7,5 %</div>
+        <div style="font-size:10px;color:var(--txt2);margin-top:4px">Rf + β×ERP + CS</div>
+      </div>
+    </div>
+    <div style="margin-top:8px;padding:7px 12px;background:var(--bg2);border-radius:6px;font-size:10px;color:var(--txt2);border:1px solid var(--border)">
+      📡 Quelle: EZB SDMX API + Bundesbank API — automatisch aktualisiert &nbsp;·&nbsp; <span id="macro-date" style="color:var(--txt3)">Stand: wird geladen</span>
+    </div>
+  </div>
+
   <div class="g2 mt16 mb16">
     <div class="card">
       <div class="card-hd"><div class="dot dot-blue"></div>WACC-Herleitung — Komponentenaufschlüsselung</div>
@@ -1660,6 +1690,30 @@ async function loadLiveData(){
         const stamp = document.getElementById('live-stamp');
         if (stamp) stamp.textContent = 'Kurs-Stand: ' + fmt + ' UTC';
       }
+    }
+
+    // Makro-Block aktualisieren
+    const macro = d?.macro;
+    if (macro) {
+      const setMacro = (id, val, decimals=2, suffix=' %') => {
+        const el = document.getElementById(id);
+        if (el && val != null) el.textContent = val.toFixed(decimals) + suffix;
+      };
+      setMacro('macro-ecb',      macro.ecb_deposit_rate);
+      setMacro('macro-bund',     macro.bund_10y);
+      setMacro('macro-mortgage', macro.mortgage_rate_10y);
+      setMacro('macro-wacc',     macro.wacc_implied);
+      // WACC-Slider auf aktuellen impliziten Wert setzen
+      if (macro.wacc_implied) {
+        const sw = document.getElementById('sw');
+        if (sw) { sw.value = macro.wacc_implied; dcf(); }
+      }
+      // Bund-Rendite in WACC-Tabelle aktualisieren
+      const bundEl = document.querySelector('#p-dcf table td:nth-child(2)');
+      if (macro.bund_10y && bundEl) bundEl.textContent = macro.bund_10y.toFixed(2) + ' %';
+      // Datum
+      const macroDate = document.getElementById('macro-date');
+      if (macroDate && macro.as_of) macroDate.textContent = 'Stand: ' + macro.as_of;
     }
 
     // Trends-Block aktualisieren
