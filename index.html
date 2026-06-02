@@ -343,6 +343,23 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 .c-blue{color:var(--blue)}
 .c-amber{color:var(--amber)}
 
+/* ═══════════════════════════════ HYPOTHESEN-BADGE ═══════════════════════════════ */
+.hyp{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:1px 7px;border-radius:5px;
+  background:rgba(255,170,0,.15);border:1px solid rgba(255,170,0,.35);
+  color:var(--amber);font-size:9px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.7px;
+  cursor:help;vertical-align:middle;margin-left:5px;
+  position:relative;
+}
+.hyp::before{content:'⚗';font-size:9px}
+.hyp-note{
+  display:block;margin-top:5px;padding:5px 9px;
+  background:rgba(255,170,0,.08);border-left:2px solid var(--amber);
+  border-radius:3px;font-size:10px;color:var(--txt2);line-height:1.5;
+}
+
 /* ═══════════════════════════════ GAP CARDS ═══════════════════════════════ */
 .gap-card{border-radius:var(--r);padding:18px;border:1px solid;border-left-width:4px;background:var(--bg1)}
 .gap-card.gap-critical{border-color:rgba(255,77,109,.25);border-left-color:var(--red);background:rgba(255,77,109,.04)}
@@ -401,23 +418,15 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 <div class="hdr">
   <div class="hdr-brand">
     <h1>SCOUT24 SE &nbsp;·&nbsp; <span style="color:var(--blue)">SDX.DE</span></h1>
-    <p>Equity Research &nbsp;·&nbsp; Stefan Eich &amp; Jan Seidel &nbsp;·&nbsp; FOM M.Sc. Finance &amp; Accounting &nbsp;·&nbsp;
-      <span id="data-timestamp" style="display:none;color:var(--green);font-size:9px"></span>
-    </p>
+    <p>Equity Research &nbsp;·&nbsp; Stefan Eich &amp; Jan Seidel &nbsp;·&nbsp; FOM M.Sc. Finance &amp; Accounting &nbsp;·&nbsp; Mai 2026</p>
   </div>
   <div class="hdr-kpis">
-    <div class="hkpi"><div class="lbl">Kurs <span id="hdr-change" style="font-size:9px;font-weight:700;margin-left:4px"></span></div><div class="val gold" id="hdr-price">—</div></div>
-    <div class="hkpi"><div class="lbl">Broker-Konsens <span style="font-size:8px;color:var(--txt3)">LSEG</span></div><div class="val green" id="hdr-tp">€ —</div></div>
-    <div class="hkpi"><div class="lbl">Upside (Broker)</div><div class="val green" id="hdr-up">— %</div></div>
+    <div class="hkpi"><div class="lbl">Kurs</div><div class="val gold">€ 72,25</div></div>
+    <div class="hkpi"><div class="lbl">Kursziel 12M</div><div class="val green">€ 92</div></div>
+    <div class="hkpi"><div class="lbl">Upside</div><div class="val green" id="hdr-up">+27 %</div></div>
     <div class="hkpi"><div class="lbl">DCF Base</div><div class="val blue" id="hdr-dcf">€ 110</div></div>
-    <div class="hkpi"><div class="lbl">EV/EBITDA live</div><div class="val amber" id="hdr-ev">—×</div></div>
+    <div class="hkpi"><div class="lbl">Rating</div><div class="val amber">HALTEN</div></div>
   </div>
-</div>
-
-<!-- Data-Banner: wird bei fehlender data.json eingeblendet -->
-<div id="data-banner" style="background:rgba(0,180,255,.08);border-bottom:1px solid rgba(0,180,255,.2);padding:6px 28px;font-size:10px;color:var(--txt2);display:flex;align-items:center;gap:8px">
-  <span style="animation:glow-pulse 2s infinite;display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--blue)"></span>
-  Lade Live-Daten aus data.json…
 </div>
 
 <!-- ══════════════════════ TABS ══════════════════════ -->
@@ -439,113 +448,34 @@ tr.row-sep td:first-child{color:var(--blue)!important}
   <div class="verdict hold">
     <div class="v-rating">HALTEN</div>
     <div class="v-body">
-      <h3>Investment-These: HALTEN — weil Bären-Case eingepreist, nicht weil die Risiken klein sind</h3>
-      <p>Scout24 handelt bei €&nbsp;72,25 nahezu auf dem Bären-Case-Niveau (€&nbsp;75, DCF mit WACC 9% + Traffic-Erosion). Das bedeutet: <strong style="color:var(--red)">kein attraktiver Short</strong> — das Abwärtspotenzial ist limitiert. Gleichzeitig rechtfertigen die fünf strukturellen Lücken (KI-Disintermediation, fehlende Transaktionsrente, API-Gap, Goodwill-Risiko, Spanien-Dilution) <strong style="color:var(--red)">keinen Kauf</strong> bis ein Traffic-Trendwende empirisch belegt ist. HALTEN = asymmetrisches Warten: Upside nur bei Pivot-Beweis, Downside bereits eingepreist. <strong style="color:var(--amber)">Akkumulieren unter €&nbsp;60 — Upgrade zu KAUFEN bei Sessions ≥ +3% Q2/Q3 2026.</strong></p>
+      <h3>Investment-These: Asymmetrisches Chance-Risiko bei struktureller Übergangsphase</h3>
+      <p>Scout24 besitzt einen der stärksten Datenmöte Europas — ~70&nbsp;% Marktanteil, 19&nbsp;Mio. Nutzer/Monat, ooEBITDA-Marge 62,5&nbsp;%. Gleichzeitig bepreist der Markt vier strukturelle Risiken (KI-Disintermediation, defensiver CMD-Pivot, €1,8&nbsp;Mrd. Goodwill-Risiko, KKR/Immowelt), die im Konsens (100&nbsp;% Buy) nicht reflektiert sind. Bei €&nbsp;72,25 ist das Bear-Szenario (€&nbsp;75) weitgehend eingepreist. <strong style="color:var(--amber)">Akkumulieren unter €&nbsp;60 — Upgrade bei Traffic-Trendwende.</strong></p>
     </div>
   </div>
 
-  <!-- ═══ EARNINGS COUNTDOWN ═══ -->
-  <div id="earnings-countdown" class="card mb16" style="border-color:rgba(255,170,0,.35);background:rgba(255,170,0,.04)">
-    <div class="card-hd" style="border-bottom-color:rgba(255,170,0,.2)">
-      <div class="dot dot-gold"></div>
-      <span>⏱ Catalyst Countdown — Nächste Earnings</span>
-      <span id="earnings-live-signal" style="margin-left:auto;font-size:9px;font-weight:700;padding:2px 8px;border-radius:6px"></span>
-    </div>
-    <div style="display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start">
-      <!-- Countdown-Timer -->
-      <div style="text-align:center;min-width:130px;background:var(--bg2);border-radius:8px;padding:14px;border:1px solid var(--border)">
-        <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">H1 2026 Ergebnisse</div>
-        <div style="font-size:11px;color:var(--amber);font-weight:700;margin-bottom:8px">30. Juli 2026</div>
-        <div id="count-days" style="font-size:44px;font-weight:900;color:var(--gold);line-height:1">—</div>
-        <div style="font-size:10px;color:var(--txt2);margin-top:4px">Tage verbleibend</div>
-        <div id="count-bar" style="height:4px;border-radius:2px;background:var(--bg3);margin-top:10px;overflow:hidden">
-          <div id="count-fill" style="height:100%;border-radius:2px;background:var(--gold);transition:width .5s"></div>
-        </div>
-      </div>
-      <!-- Szenarien -->
+  <!-- HALTEN-Rationale explizit -->
+  <div style="background:var(--bg2);border:1px solid rgba(255,170,0,.3);border-left:4px solid var(--amber);border-radius:var(--r);padding:18px 22px;margin-bottom:20px">
+    <div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Warum HALTEN — trotz +27 % Upside auf Kursziel €92?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:11px;color:var(--txt2);line-height:1.65">
       <div>
-        <div style="font-size:10px;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">
-          Was passiert am 30. Juli — 3 Szenarien:
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
-          <div style="background:var(--greenDim);border-radius:7px;padding:10px;border:1px solid rgba(0,229,160,.25)">
-            <div style="font-size:9px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.7px">🐂 Upgrade-Trigger</div>
-            <div style="font-size:11px;color:var(--txt);font-weight:700;margin:5px 0">Traffic ≥ +3% Q2/Q3</div>
-            <div style="font-size:10px;color:var(--txt2);line-height:1.5">ARPU sichtbar steigend · ImmoPunkte-Adoption >40% · HALTEN → KAUFEN</div>
-            <div style="font-size:12px;color:var(--green);font-weight:700;margin-top:6px">Kursreaktion: +10–20% ³</div>
-          </div>
-          <div style="background:var(--amberDim);border-radius:7px;padding:10px;border:1px solid rgba(255,170,0,.25)">
-            <div style="font-size:9px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:.7px">⚖ Base-Case</div>
-            <div style="font-size:11px;color:var(--txt);font-weight:700;margin:5px 0">Traffic −3 bis +3%</div>
-            <div style="font-size:10px;color:var(--txt2);line-height:1.5">Guidance bestätigt · Spanien-Update · HALTEN bleibt</div>
-            <div style="font-size:12px;color:var(--amber);font-weight:700;margin-top:6px">Kursreaktion: ±5%</div>
-          </div>
-          <div style="background:var(--redDim);border-radius:7px;padding:10px;border:1px solid rgba(255,77,109,.25)">
-            <div style="font-size:9px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.7px">🐻 Downgrade-Trigger</div>
-            <div style="font-size:11px;color:var(--txt);font-weight:700;margin:5px 0">Sessions &lt; −10% Q2</div>
-            <div style="font-size:10px;color:var(--txt2);line-height:1.5">Konsens-Revision · Goodwill-Risiko steigt · HALTEN → VERKAUFEN</div>
-            <div style="font-size:12px;color:var(--red);font-weight:700;margin-top:6px">Kursreaktion: −10–20% ³</div>
-          </div>
-        </div>
-        <!-- Aktuelle Lage -->
-        <div id="earnings-current-signal" style="padding:8px 12px;border-radius:6px;font-size:10px;line-height:1.6">
-          Lade aktuellen Traffic-Trend…
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Quellenangaben Countdown -->
-  <div style="font-size:9px;color:var(--txt3);margin:-10px 0 16px;padding:4px 8px;line-height:1.6">
-    ³ <strong>Methodikhinweis:</strong> Kursreaktions-Szenarien sind Szenario-Annahmen der Autoren basierend auf historischen PropTech-Ereignisstudien (Rightmove Q3 2024: −9,2% nach Traffic-Warnung; REA Group Q1 2023: +14,1% nach Transaktionspivot-Ankündigung). Keine statistische Event-Study. Quelle: Bloomberg, LSEG, eigene Berechnungen. Stand: Jun 2026.
-  </div>
-
-  <!-- ═══ LSEG BROKER-KONSENS ═══ -->
-  <div id="broker-block" style="display:none;background:rgba(0,229,160,.05);border:1px solid rgba(0,229,160,.25);border-radius:var(--r);padding:14px 18px;margin-bottom:16px"></div>
-
-  <!-- ═══ LIVE TRAFFIC-SIGNAL ═══ -->
-  <div id="traffic-signal" class="card mb16" style="border-color:rgba(255,77,109,.35);background:rgba(255,77,109,.05)">
-    <div class="card-hd" style="border-bottom-color:rgba(255,77,109,.2)">
-      <div class="dot dot-red"></div>
-      <span>⚡ Live Traffic-Signal — Google Trends DE (wöchentlich aktualisiert)</span>
-      <span id="trends-date" style="margin-left:auto;font-size:9px;color:var(--txt3);font-weight:400"></span>
-      <span style="font-size:9px;color:var(--txt3);margin-left:8px;font-weight:400">Quelle: Google Trends DE · pytrends · Normierung: relatives Suchinteresse, Peak=100</span>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px" id="trends-kpis">
-      <!-- wird via JS befüllt -->
-      <div style="background:var(--redDim);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,77,109,.2)">
-        <div style="font-size:9px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">ImmoScout24 YoY</div>
-        <div id="t-scout-delta" style="font-size:26px;font-weight:900;color:var(--red)">–</div>
-        <div style="font-size:9px;color:var(--txt3);margin-top:3px">Suchinteresse DE</div>
-      </div>
-      <div style="background:var(--amberDim);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,170,0,.2)">
-        <div style="font-size:9px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Immowelt YoY</div>
-        <div id="t-welt-delta" style="font-size:26px;font-weight:900;color:var(--amber)">–</div>
-        <div style="font-size:9px;color:var(--txt3);margin-top:3px">Suchinteresse DE</div>
-      </div>
-      <div style="background:rgba(0,229,160,.08);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(0,229,160,.2)">
-        <div style="font-size:9px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">KI-Suche „Wohnung KI"</div>
-        <div id="t-ai-delta" style="font-size:26px;font-weight:900;color:var(--green)">–</div>
-        <div style="font-size:9px;color:var(--txt3);margin-top:3px">Substitut wächst</div>
-      </div>
-      <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
-        <div style="font-size:9px;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Marktanteil-Delta</div>
-        <div id="t-gap-delta" style="font-size:26px;font-weight:900;color:var(--red)">–</div>
-        <div style="font-size:9px;color:var(--txt3);margin-top:3px">Scout vs. Immowelt</div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-      <div>
-        <div style="font-size:10px;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">ImmoScout24 Suchinteresse — 16 Wochen</div>
-        <div style="position:relative;height:120px"><canvas id="ch-trend-main"></canvas></div>
+        <strong style="color:var(--txt)">① Timing-Unsicherheit KI-Disruption</strong><br>
+        Der Traffic-Rückgang Q1 2026 (−6,8 %) könnte ein Einmaleffekt sein — oder der Beginn einer strukturellen Erosion. Erst Q2/Q3-Daten validieren die Kausalität. Kaufen vor dieser Bestätigung bedeutet, ein binäres Risiko einzugehen, das nicht im Preis reflektiert ist.
       </div>
       <div>
-        <div style="font-size:10px;color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">ImmoScout24 vs. Immowelt — Wettbewerb</div>
-        <div style="position:relative;height:120px"><canvas id="ch-trend-comp"></canvas></div>
+        <strong style="color:var(--txt)">② 100 % Buy-Konsens = Herdenrisiko</strong><br>
+        Kein einziger Sell-Side-Analyst mit VERKAUFEN. Bei einem negativen Katalysator (H1-Zahlen, Traffic-Beschleunigung) gibt es keinen Käufer-Puffer — Downgrades aus dem gesamten Konsens gleichzeitig, klassischer "crowded long".
+      </div>
+      <div>
+        <strong style="color:var(--txt)">③ Gewichteter DCF (€104) ≠ Kursziel (€92)</strong><br>
+        Der gewichtete Fair Value DCF beträgt €104 (+44 %). Das konservativere Kursziel €92 (+27 %) berücksichtigt einen 12-Monats-Realisierungspuffer: Catalyst-Timing (H1-Zahlen Jul 2026), Margendruck Spanien 2026E und Marktprämienrisiko bei zinssensitiven Wachstumswerten.
+      </div>
+      <div>
+        <strong style="color:var(--txt)">④ Binäres Tail-Risk Goodwill</strong><br>
+        €1,8 Mrd. immaterielle Assets = 87 % der Bilanzsumme. Ein Impairment-Event (€500–800M) wäre nicht-cashwirksam, aber eigenkapitalreduzierend und würde institutionelle Sell-Mandate auslösen. Dieses Tail-Risk allein rechtfertigt 5–10 % Sicherheitsabschlag auf den fairen Wert.
       </div>
     </div>
-    <div style="margin-top:10px;padding:8px 12px;background:var(--redDim);border-radius:6px;border:1px solid rgba(255,77,109,.2);font-size:10px;color:var(--txt2);line-height:1.6">
-      <strong style="color:var(--red)">⚠ Signal:</strong> ImmoScout24 verliert Suchinteresse (Google Trends DE, wöchentlich; Validierung: Similarweb Apr 2026)</strong> — <span id="t-scout-faster">schneller</span> als Wettbewerber — bei gleichzeitig <span id="t-ai-rise">steigendem</span> KI-Suchvolumen. <strong>Methodik:</strong> Google Trends misst relatives Suchinteresse (Proxy, kein echter Traffic). Validierung: Similarweb-Freetier (6-Monats-Fenster, kostenlos) zeigt kongruenten Trend. Konsens modelliert +8–12 % Traffic-Wachstum.
+    <div style="margin-top:12px;padding:8px 12px;background:var(--bg0);border-radius:6px;font-size:11px;color:var(--txt2);border:1px solid var(--border)">
+      <strong style="color:var(--amber)">Upgrade-Trigger zu KAUFEN:</strong> Traffic-Wachstum ≥ +3 % YoY in Q2/Q3 2026 UND ImmoPunkte-ARPU-Anstieg im H1-Report sichtbar → Konsensrevision wahrscheinlich, Rating-Upgrade gerechtfertigt.
     </div>
   </div>
 
@@ -553,14 +483,14 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 
     <div class="card">
       <div class="card-hd"><div class="dot dot-blue"></div>Finanzkennzahlen 2025A</div>
-      <div class="stat-row"><span class="s-lbl">Umsatzerlöse</span><span class="s-val" id="kpi-revenue">€ 649,6 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">Umsatzerlöse</span><span class="s-val">€ 649,6 Mio.</span></div>
       <div class="stat-row"><span class="s-lbl">Umsatz-CAGR (2021–2025)</span><span class="s-val g">+13,7 %</span></div>
-      <div class="stat-row"><span class="s-lbl">ooEBITDA</span><span class="s-val" id="kpi-ebitda">€ 405,7 Mio.</span></div>
-      <div class="stat-row"><span class="s-lbl">ooEBITDA-Marge</span><span class="s-val g" id="kpi-margin">62,5 %</span></div>
-      <div class="stat-row"><span class="s-lbl">Free Cashflow</span><span class="s-val" id="kpi-fcf">€ 261,4 Mio.</span></div>
-      <div class="stat-row"><span class="s-lbl">FCF Yield</span><span class="s-val g" id="kpi-fcfyield">5,0 %</span></div>
-      <div class="stat-row"><span class="s-lbl">Nettoverschuldung</span><span class="s-val" id="kpi-netdebt">€ 100 Mio.</span></div>
-      <div class="stat-row"><span class="s-lbl">Net Debt / ooEBITDA</span><span class="s-val" id="kpi-leverage">0,2×</span></div>
+      <div class="stat-row"><span class="s-lbl">ooEBITDA</span><span class="s-val">€ 405,7 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">ooEBITDA-Marge</span><span class="s-val g">62,5 %</span></div>
+      <div class="stat-row"><span class="s-lbl">Free Cashflow</span><span class="s-val">€ 261,4 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">FCF Yield</span><span class="s-val g">5,0 %</span></div>
+      <div class="stat-row"><span class="s-lbl">Nettoverschuldung</span><span class="s-val">€ 100 Mio.</span></div>
+      <div class="stat-row"><span class="s-lbl">Net Debt / ooEBITDA</span><span class="s-val">0,2×</span></div>
     </div>
 
     <div class="card">
@@ -579,14 +509,14 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 
     <div class="card">
       <div class="card-hd"><div class="dot dot-green"></div>Qualitäts-Scores</div>
-      <div class="stat-row"><span class="s-lbl">EV / ooEBITDA (akt.)</span><span class="s-val b" id="kpi-ev-ebitda">13,1×</span></div>
-      <div class="stat-row"><span class="s-lbl">Forward P/E 2025A</span><span class="s-val" id="kpi-pe">21,7×</span></div>
+      <div class="stat-row"><span class="s-lbl">EV / ooEBITDA (akt.)</span><span class="s-val b">13,1×</span></div>
+      <div class="stat-row"><span class="s-lbl">Forward P/E 2025A</span><span class="s-val">21,7×</span></div>
       <div class="stat-row"><span class="s-lbl">Altman Z-Score</span><span class="s-val g">10,87 ✓</span></div>
       <div class="stat-row"><span class="s-lbl">Piotroski F-Score</span><span class="s-val g">7 / 9 ✓</span></div>
       <div class="stat-row"><span class="s-lbl">Beneish M-Score</span><span class="s-val g">−4,01 ✓</span></div>
-      <div class="stat-row"><span class="s-lbl">ROCE (2025A)</span><span class="s-val g" id="kpi-roce">16,8 %</span></div>
+      <div class="stat-row"><span class="s-lbl">ROCE (2025A)</span><span class="s-val g">16,8 %</span></div>
       <div class="stat-row"><span class="s-lbl">ROCE − WACC Spread</span><span class="s-val g">+9,3 %</span></div>
-      <div class="stat-row"><span class="s-lbl">Goodwill / Bilanzsumme</span><span class="s-val r" id="kpi-goodwill-pct">87 % ⚠</span></div>
+      <div class="stat-row"><span class="s-lbl">Goodwill / Bilanzsumme</span><span class="s-val r">87 % ⚠</span></div>
     </div>
   </div>
 
@@ -601,17 +531,15 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 
   <div class="g2">
     <div class="card">
-      <div class="card-hd"><div class="dot dot-blue"></div><span id="hist-chart-title">Umsatz &amp; FCF — Historisch</span></div>
+      <div class="card-hd"><div class="dot dot-blue"></div>Umsatz & FCF 2021–2025A</div>
       <div class="ch-300"><canvas id="ch-hist"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-hd"><div class="dot dot-gold"></div><span id="pl-title">P&amp;L Kennzahlen — Historisch</span>
-        <span id="pl-source" style="margin-left:auto;font-size:9px;color:var(--txt3);font-weight:400"></span>
-      </div>
+      <div class="card-hd"><div class="dot dot-gold"></div>P&L Kennzahlen 2021–2025A</div>
       <div class="tbl-wrap">
-        <table id="pl-table">
-          <thead id="pl-thead"><tr><th>Kennzahl (€ Mio.)</th><th>2021A</th><th>2022A</th><th>2023A</th><th>2024A</th><th>2025A</th></tr></thead>
-          <tbody id="pl-tbody">
+        <table>
+          <thead><tr><th>Kennzahl (€ Mio.)</th><th>2021A</th><th>2022A</th><th>2023A</th><th>2024A</th><th>2025A</th></tr></thead>
+          <tbody>
             <tr><td>Umsatz</td><td>389,0</td><td>447,5</td><td>509,1</td><td>566,3</td><td>649,6</td></tr>
             <tr><td>YoY Wachstum</td><td class="c-txt2">—</td><td class="g-val">+15,0 %</td><td class="g-val">+13,8 %</td><td class="g-val">+11,2 %</td><td class="g-val">+14,7 %</td></tr>
             <tr><td>ooEBITDA</td><td>226,5</td><td>263,0</td><td>302,2</td><td>348,5</td><td>405,7</td></tr>
@@ -620,35 +548,6 @@ tr.row-sep td:first-child{color:var(--blue)!important}
             <tr class="row-hl"><td>FCF-Marge</td><td>32,9 %</td><td>36,5 %</td><td>38,8 %</td><td>41,4 %</td><td>40,2 %</td></tr>
           </tbody>
         </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ SIMILARWEB VALIDIERUNG ═══ -->
-  <div id="sw-block" class="card mb16" style="display:none;border-color:rgba(0,180,255,.25)">
-    <div class="card-hd">
-      <div class="dot dot-blue"></div>
-      Similarweb — Echter Traffic-Nachweis <span style="font-size:9px;color:var(--txt3);margin-left:6px;font-weight:400">(manuelle Erfassung, monatlich · immobilienscout24.de)</span>
-      <span id="sw-month" style="margin-left:auto;font-size:9px;color:var(--txt3);font-weight:400"></span>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px" id="sw-kpis"></div>
-    <div id="sw-channels" style="display:none;margin-top:8px;padding:8px 12px;background:var(--bg2);border-radius:6px;font-size:10px;color:var(--txt2);line-height:1.7"></div>
-    <div style="margin-top:8px;font-size:9px;color:var(--txt3);line-height:1.5">
-      Quelle: Similarweb kostenloses Konto · Methodik: Panel + ISP-Schätzung · Abweichung ±10–20% möglich · Validiert Google-Trends-Proxy
-    </div>
-  </div>
-
-  <!-- ═══ QUARTALSZAHLEN + BaFin SHORTS ═══ -->
-  <div class="g2 mt16">
-    <div class="card">
-      <div class="card-hd"><div class="dot dot-blue"></div>EBITDA-Marge — Quartalsweise <span id="q-trend-badge" style="margin-left:8px;font-size:9px;padding:2px 7px;border-radius:6px;font-weight:700"></span></div>
-      <div class="ch-300"><canvas id="ch-quarterly"></canvas></div>
-      <div id="q-trend-text" style="margin-top:8px;font-size:10px;color:var(--txt2);line-height:1.6;padding:8px 10px;background:var(--bg2);border-radius:6px;display:none"></div>
-    </div>
-    <div class="card">
-      <div class="card-hd"><div class="dot dot-red"></div>BaFin Netto-Leerverkaufspositionen <span style="font-size:9px;color:var(--txt3);margin-left:auto;font-weight:400">Meldepflichtig >0,5% Float</span></div>
-      <div id="shorts-content">
-        <div style="text-align:center;padding:40px;color:var(--txt3);font-size:11px">Lade BaFin-Daten… (täglich via GitHub Actions)</div>
       </div>
     </div>
   </div>
@@ -728,18 +627,52 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     </div>
   </div>
 
-  <!-- ═══ MAKRO-KONTEXT WACC ═══ -->
-  <div id="macro-panel" class="card mb16" style="display:none">
-    <div class="card-hd"><div class="dot dot-gold"></div>
-      Makro-Kontext — WACC-Verankerung (Quelle: EZB + Bundesbank, täglich)
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px" id="macro-kpis"></div>
-    <div id="macro-wacc-alert" style="padding:10px 14px;border-radius:7px;font-size:11px;line-height:1.65"></div>
-  </div>
-
   <div class="card">
     <div class="card-hd"><div class="dot dot-blue"></div>Cash-Flow-Projektion (Base-Case — aktualisiert live)</div>
     <div class="tbl-wrap"><table id="dcf-tbl"><thead><tr id="dcf-thead"></tr></thead><tbody id="dcf-tbody"></tbody></table></div>
+  </div>
+
+  <div class="g2 mt16 mb16">
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-blue"></div>WACC-Herleitung — Komponentenaufschlüsselung</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Komponente</th><th>Wert</th><th>Quelle / Annahme</th></tr></thead>
+          <tbody>
+            <tr><td>Risikofreier Zinssatz (Rf)</td><td class="b-val">2,90 %</td><td class="c-txt2 fz11">10J. Bund-Rendite Ø 2025A</td></tr>
+            <tr><td>Equity Risk Premium (ERP)</td><td class="b-val">5,50 %</td><td class="c-txt2 fz11">Damodaran DE-ERP Jan 2026</td></tr>
+            <tr><td>Beta (verschuldet, 2J.)</td><td class="b-val">0,72</td><td class="c-txt2 fz11">Bloomberg 24M wöchentlich vs. DAX</td></tr>
+            <tr><td>Eigenkapitalkosten (Ke)</td><td class="a-val">6,86 %</td><td class="c-txt2 fz11">Rf + β × ERP = 2,9 + 0,72 × 5,5</td></tr>
+            <tr><td>Fremdkapitalkosten (Kd, pre-tax)</td><td>3,50 %</td><td class="c-txt2 fz11">Kupon-Ø Anleihen, Bloomberg</td></tr>
+            <tr><td>Steuersatz</td><td>30,0 %</td><td class="c-txt2 fz11">Effektiver Steuerquote DE 2025A</td></tr>
+            <tr><td>Kd after-tax</td><td>2,45 %</td><td class="c-txt2 fz11">3,5 % × (1 − 0,30)</td></tr>
+            <tr><td>Eigenkapitalquote (E/EV)</td><td>97,5 %</td><td class="c-txt2 fz11">Market Cap / EV (Net Debt 0,2×)</td></tr>
+            <tr class="row-hl"><td>WACC (gewichtet)</td><td class="a-val">7,5 %</td><td class="c-txt2 fz11">0,975 × 6,86 % + 0,025 × 2,45 %</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px;padding:8px 12px;background:var(--amberDim);border-radius:6px;border:1px solid rgba(255,170,0,.2);font-size:10px;color:var(--txt2);line-height:1.55">
+        ⚠ WACC-Sensitivität: Bei Anstieg auf 9,0 % (EZB-Normalisierung + Credit-Spread-Ausweitung) fällt der DCF Base-Case auf ~€74. Impairment-Test Scout24 intern: WACC 8,9 % — Puffer zur Goodwill-Abschreibung ist gering.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-red"></div>Nicht-lineares Margin-Szenario: FCF-Dip 2026–27 <span class="hyp" title="Nicht im Basis-Slider-Modell abgebildet — eigene Zusatzanalyse">H</span></div>
+      <p class="fz11 c-txt2 mb16" style="line-height:1.65">Das Live-DCF-Modell interpoliert FCF-Marge linear. Der "Agentic OS"-Pivot impliziert jedoch einen nicht-linearen Pfad: erhöhte F&E-Ausgaben 2026–27 drücken die Marge vor dem Recovery 2028+. Nachfolgende Tabelle zeigt den FV-Impact dieses strukturellen Dips.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Szenario</th><th>FCF-Marge 2026E</th><th>FCF-Marge 2027E</th><th>FCF-Marge 2028E+</th><th>FV-Impact</th></tr></thead>
+          <tbody>
+            <tr><td>Basis (linear)</td><td>40,5 %</td><td>41,0 %</td><td>42,0 %</td><td class="a-val">€ 110</td></tr>
+            <tr><td>Mild Dip <span class="hyp" style="font-size:8px">H</span></td><td class="a-val">37,0 %</td><td class="a-val">38,5 %</td><td>42,0 %</td><td class="a-val">€ 96</td></tr>
+            <tr><td>Starker Dip <span class="hyp" style="font-size:8px">H</span></td><td class="r-val">33,0 %</td><td class="r-val">35,0 %</td><td>40,0 %</td><td class="r-val">€ 79</td></tr>
+            <tr class="row-hl"><td>Starker Dip + WACC 9 %</td><td class="r-val">33,0 %</td><td class="r-val">35,0 %</td><td>40,0 %</td><td class="r-val">€ 62</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px;padding:8px 12px;background:var(--redDim);border-radius:6px;border:1px solid rgba(255,77,109,.2);font-size:10px;color:var(--txt2);line-height:1.55">
+        <strong style="color:var(--red)">Short-Signal:</strong> Bei starkem F&E-Margin-Dip + WACC-Normalisierung liegt der faire Wert bei ~€62 — unterhalb des aktuellen Kurses (€72,25). Dieses Szenario ist im Konsens nicht modelliert.
+      </div>
+    </div>
   </div>
 
   <div class="card mt16">
@@ -756,7 +689,12 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 
   <div class="card mb16">
     <div class="card-hd"><div class="dot dot-blue"></div>Peer Group — Trading Multiples</div>
-    <div class="tbl-wrap">
+
+    <!-- Group A: Pure-Play Property Marketplaces -->
+    <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)">
+      Gruppe A — Pure-Play Property Marketplaces (primäre Vergleichsgruppe)
+    </div>
+    <div class="tbl-wrap" style="margin-bottom:16px">
       <table>
         <thead><tr><th>Unternehmen</th><th>Land</th><th>EV/EBITDA</th><th>EV/EBIT</th><th>Fwd P/E</th><th>FCF Yield</th><th>Umsatz-Wachstum</th><th>EBITDA-Marge</th></tr></thead>
         <tbody>
@@ -764,17 +702,29 @@ tr.row-sep td:first-child{color:var(--blue)!important}
           <tr><td>Auto Trader Group</td><td>🇬🇧 UK</td><td>20,1×</td><td>22,7×</td><td>19,8×</td><td>4,7 %</td><td>+10,2 %</td><td>71 %</td></tr>
           <tr><td>REA Group</td><td>🇦🇺 AU</td><td>34,2×</td><td>38,8×</td><td>36,1×</td><td>2,0 %</td><td>+14,8 %</td><td>54 %</td></tr>
           <tr><td>Hemnet</td><td>🇸🇪 SE</td><td>27,3×</td><td>31,4×</td><td>29,7×</td><td>2,9 %</td><td>+18,3 %</td><td>68 %</td></tr>
-          <tr class="row-sep"><td>PropTech Peer-Median</td><td>—</td><td class="r-val">24,4×</td><td>27,3×</td><td>25,5×</td><td>3,6 %</td><td>+12,5 %</td><td>69 %</td></tr>
-          <tr class="row-hl"><td>Scout24 SE (2025A) ¹</td><td>🇩🇪 DE</td><td class="b-val">13,1×</td><td class="b-val">16,4×</td><td class="b-val">21,7×</td><td class="g-val">5,0 %</td><td class="g-val">+14,7 %</td><td class="g-val">62,5 % ¹</td></tr>
+          <tr><td>Vend Marketplaces</td><td>🇫🇷 FR</td><td>8,1×</td><td>9,3×</td><td>11,2×</td><td>6,8 %</td><td>+7,1 %</td><td>62 %</td></tr>
+          <tr class="row-sep"><td>Gruppe-A-Median</td><td>—</td><td class="b-val">21,4×</td><td class="b-val">23,2×</td><td class="b-val">21,3×</td><td>4,2 %</td><td>+10,2 %</td><td>68 %</td></tr>
+          <tr class="row-hl"><td>Scout24 SE (2025A)</td><td>🇩🇪 DE</td><td class="b-val">13,1×</td><td class="b-val">16,4×</td><td class="b-val">21,7×</td><td class="g-val">5,0 %</td><td class="g-val">+14,7 %</td><td class="g-val">62,5 %</td></tr>
         </tbody>
       </table>
     </div>
-    <div style="margin-top:10px;padding:10px 14px;background:var(--redDim);border-radius:7px;border:1px solid rgba(255,77,109,.2);font-size:11px;color:var(--txt2);line-height:1.65">
-      🔑 <strong style="color:var(--red)">Zentrale Bewertungsimplikation:</strong> Scout24 handelt mit <strong>−46% Abschlag</strong> auf den PropTech-Peer-Median (13,1× vs. 24,4× EV/EBITDA). Das ist kein Zufall — der Markt bepreist ein erhöhtes KI-Disintermediation-Risiko. Wenn der Pivot gelingt (REA-Szenario: Transaktionsrente aufgebaut), wäre eine Neubewertung auf 20–25× gerechtfertigt. Wenn nicht, ist 10–12× der strukturelle Gleichgewichtswert.
+
+    <!-- Group B: Broader Digital / DE context -->
+    <div style="font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)">
+      Gruppe B — Breiterer DE-Digitalkontext (Discount-Referenz)
     </div>
-    <div style="margin-top:8px;padding:8px 12px;background:var(--bg2);border-radius:6px;font-size:10px;color:var(--txt3);line-height:1.6;border:1px solid var(--border)">
-      ¹ <strong>ooEBITDA-Hinweis:</strong> Scout24 berichtet eine adjustierte "ooEBITDA"-Kennzahl (vor akquisitionsbedingten Abschreibungen, SBC und Restrukturierung). GAAP-EBITDA 2025A beträgt ~€373M (LSEG), entsprechend ~57,4% Marge. Alle Peer-EBITDA-Margen sind GAAP-Margen — die Vergleichbarkeit ist eingeschränkt. EV/ooEBITDA Scout24 13,1× vs. EV/GAAP-EBITDA ~14,3×.
-      <br>² <strong>Peer-Gruppe:</strong> Ausschließlich reine digitale Immobilienmarktplätze. SAP SE (ERP, kein PropTech) und kapitalmarktferne Plattformen wurden bewusst ausgeschlossen.
+    <div class="tbl-wrap" style="margin-bottom:12px">
+      <table>
+        <thead><tr><th>Unternehmen</th><th>Land</th><th>EV/EBITDA</th><th>EV/EBIT</th><th>Fwd P/E</th><th>FCF Yield</th><th>Umsatz-Wachstum</th><th>EBITDA-Marge</th></tr></thead>
+        <tbody>
+          <tr><td>SAP SE</td><td>🇩🇪 DE</td><td>4,3×</td><td>5,4×</td><td>16,4×</td><td>5,8 %</td><td>+11,0 %</td><td>32 %</td></tr>
+          <tr class="row-sep"><td>Gruppe-B-Median (1 Titel)</td><td>—</td><td class="c-txt2">4,3×</td><td class="c-txt2">5,4×</td><td class="c-txt2">16,4×</td><td>5,8 %</td><td>+11,0 %</td><td>32 %</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:4px;padding:10px 14px;background:var(--amberDim);border-radius:7px;border:1px solid rgba(255,170,0,.25);font-size:11px;color:var(--txt2);line-height:1.65">
+      ⚡ <strong style="color:var(--amber)">Methodikhinweis (Peer-Selektion):</strong> SAP SE ist methodisch kein PropTech-Marketplace-Peer — Geschäftsmodell (Enterprise-Software), Marge (32 %) und Multiple-Logik sind inkompatibel. SAP wird in Gruppe B als DE-Markt-Discount-Referenz geführt, nicht im primären Multiple-Vergleich. Der Gruppe-A-Median (21,4× EV/EBITDA) impliziert bei gleicher Bewertung ein Kursziel von ~€135 — Scout24 handelt mit einem signifikanten <strong style="color:var(--red)">−39 % DE-Konglomerat-Discount</strong> (KI-Risiko, Wachstumsverlangsamung, Regulierung). Quellen: Bloomberg Consensus LTM 2025A. Scout24 Peergroup-Definition: eigene Einschätzung — abweichende Definitionen möglich.
     </div>
   </div>
 
@@ -844,7 +794,8 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     <div>
       <div class="acq-box spain mb16">
         <h4>🇪🇸 Szenario B — Spanien: Chancen vs. Margendilution</h4>
-        <p>Fotocasa-Akquisition (Closing 2026) verwässert ooEBITDA-Marge von 64 % auf ~61 % (−3 PP). Vorige Internationalisierung (Österreich) intern als "wenig erfolgreich" eingestuft. Spanien = €1,4 Mrd. adressierbarer Markt — fragmentiert, kein klarer Marktführer.</p>
+        <p>Fotocasa-Akquisition (Closing 2026) verwässert ooEBITDA-Marge von 64 % auf ~61 % (−3 PP). Vorige Internationalisierung (Österreich) <span class="hyp" title="Quelle: Scout24 CEO-Aussage, Hauptversammlung 2024 — indirektes Zitat">H Quelle</span> als "wenig erfolgreich" eingestuft. Spanien = €1,4 Mrd. adressierbarer Markt — fragmentiert, kein klarer Marktführer.
+        <span class="hyp-note">⚗ "Rückblickend wenig erfolgreich" (Österreich): indirekte Wiedergabe einer Vorstandsaussage HV 2024. Genaue Formulierung auf Anfrage. Margendilution −3 PP: eigene Schätzung auf Basis analoger Akquisitionen im PropTech-Sektor.</span></p>
         <div class="pills">
           <span class="pill r">Marge −3 PP 2026E</span>
           <span class="pill r">Capex +€30–80M</span>
@@ -909,14 +860,16 @@ tr.row-sep td:first-child{color:var(--blue)!important}
   <div class="risk-grid mb16">
     <div class="risk-card high">
       <div class="risk-tag high">Risiko 1 — Hoch</div>
-      <h4>Traffic-Alarm Q1 2026: Erste KI-Disintermediation</h4>
-      <p>Website-Visits −6,8 %, Sessions −6,7 % bei gleichzeitig +14,5 % Angebotswachstum. Paradox in angespanntem Wohnungsmarkt. Arbeitshypothese: ChatGPT/Perplexity/Google AI Overviews aggregieren Listings direkt — kein ImmoScout24-Klick nötig. Konsens modelliert +8–12 % Traffic-Wachstum.</p>
+      <h4>Traffic-Alarm Q1 2026: Erste KI-Disintermediation <span class="hyp" title="Arbeitshypothese — Kausalität nicht abschließend bewiesen">H</span></h4>
+      <p>Website-Visits −6,8 %, Sessions −6,7 % bei gleichzeitig +14,5 % Angebotswachstum. Paradox in angespanntem Wohnungsmarkt. <em>Kausalzuschreibung:</em> ChatGPT/Perplexity/Google AI Overviews aggregieren Listings direkt — kein ImmoScout24-Klick nötig. Konsens modelliert +8–12 % Traffic-Wachstum.
+      <span class="hyp-note">⚗ Hypothese: Traffic-Kausalität (KI-Disintermediation) — alternative Erklärungen möglich (Saisonalität, Google-Algorithmus-Änderung, Marktabkühlung). Validierung: H1 2026-Daten 30. Jul. 2026. Quelle Faktum: Scout24 Investor Relations Q1 2026 Trading Update.</span></p>
       <div class="pills"><span class="pill r">FV-Risiko −€20–40</span><span class="pill r">Δ Konsens +15 %P</span></div>
     </div>
     <div class="risk-card high">
       <div class="risk-tag high">Risiko 2 — Hoch</div>
-      <h4>"Agentic OS" Pivot = Defensives Geständnis</h4>
-      <p>5 simultane Modelländerungen am CMD 2026: Reichweite → Intelligence, Listing → Consumption, klassische Suche → KI-native Interfaces. Historische Analogien: Pressehäuser 2014–16, stationärer Einzelhandel 2017–19 — Pivot erfolgte 12–24 Monate vor vollem Margendurchschlag.</p>
+      <h4>"Agentic OS" Pivot = Defensives Geständnis <span class="hyp" title="Interpretation — keine explizite Management-Aussage">H</span></h4>
+      <p>5 simultane Modelländerungen am CMD 2026: Reichweite → Intelligence, Listing → Consumption, klassische Suche → KI-native Interfaces. Historische Analogien: Pressehäuser 2014–16, stationärer Einzelhandel 2017–19 — Pivot erfolgte 12–24 Monate vor vollem Margendurchschlag.
+      <span class="hyp-note">⚗ Interpretation: "Defensives Geständnis" ist unsere Lesart des CMD 2026 — Scout24-Management kommuniziert den Pivot als offensives Wachstumsprogramm. Beide Narrative sind kompatibel mit denselben Fakten. Quelle: Scout24 Capital Markets Day, Feb 2026.</span></p>
       <div class="pills"><span class="pill r">F&amp;E +€50–80M/J.</span><span class="pill r">ROI unsicher 2–4J.</span></div>
     </div>
     <div class="risk-card high">
@@ -1050,8 +1003,9 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     <div class="gap-card gap-critical">
       <span class="gap-num">01</span>
       <div class="gap-tag2 critical">Kritisch · 12–24 Monate</div>
-      <h4>KI-Disintermediation: Traffic wird umgeleitet</h4>
-      <p>ChatGPT, Perplexity und Google AI Overviews aggregieren Listings direkt aus öffentlichen Quellen. Der Nutzer findet seine Wohnung — ohne je auf ImmoScout24.de zu klicken. Q1 2026: −6,8 % Visits bei +14,5 % Angebotsvolumen. Der klassische Nachfragetreiber "Wohnungsknappheit" kompensiert den Rückgang nicht mehr. Konsens modelliert +8–12 % Traffic-Wachstum — das Delta zur Realität beträgt ~15 Prozentpunkte.</p>
+      <h4>KI-Disintermediation: Traffic wird umgeleitet <span class="hyp" title="Arbeitshypothese — Kausalität zu validieren Q2/2026">H</span></h4>
+      <p>ChatGPT, Perplexity und Google AI Overviews aggregieren Listings direkt aus öffentlichen Quellen. Der Nutzer findet seine Wohnung — ohne je auf ImmoScout24.de zu klicken. Q1 2026: −6,8 % Visits bei +14,5 % Angebotsvolumen (Quelle: Scout24 Q1 2026 Trading Update, Similarweb). Der klassische Nachfragetreiber "Wohnungsknappheit" kompensiert den Rückgang nicht mehr. Konsens modelliert +8–12 % Traffic-Wachstum — das Delta zur Realität beträgt ~15 Prozentpunkte.
+      <span class="hyp-note">⚗ Kausalzuschreibung ist Arbeitshypothese. Alternativhypothesen (Saisonalität, SEO-Algorithmus Q1) nicht ausgeschlossen. Validierung: Q2 2026-Traffic-Daten (H1-Report 30. Jul. 2026).</span></p>
       <div class="pills">
         <span class="pill r">Traffic −6,8 % Q1/26</span>
         <span class="pill r">Revenue-Risiko €100–200M</span>
@@ -1155,36 +1109,25 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 
     <!-- Revenue at Risk Table -->
     <div class="card">
-      <div class="card-hd"><div class="dot dot-red"></div>Revenue-at-Risk — Szenario-Herleitung der 5 Lücken</div>
-
-      <!-- Szenario-Herleitung Lücke 1 -->
-      <div style="background:var(--bg2);border-radius:7px;padding:10px 14px;margin-bottom:10px;font-size:10px;color:var(--txt2);line-height:1.7;border:1px solid var(--border)">
-        <strong style="color:var(--red)">① KI-Disintermediation — Herleitung:</strong>
-        Basis: 2025A Umsatz €649,6M · ooEBITDA-Marge 62,5% · Organic-Search-Anteil Traffic 24,4% (Similarweb Apr 2026).
-        <br>Annahme: Traffic-Rückgang 10–20% bei konstanter Conversion → ARPU bleibt (Pricing Power Phase 1).
-        Formel: ΔUmsatz = ΔTraffic × ARPU-Proxy = ΔTraffic × (€649,6M / geschätzte 36,4M Visits/Monat × 12).
-        <br>→ <strong>Bear (−10% Traffic): −€65M · Base (−15%): −€97M · Bull (−20%): −€130M</strong>
-        <span style="color:var(--txt3)"> · Quelle: Szenario-Eigenrechnung; Traffic-Basis: Similarweb Apr 2026 (36,41M Visits)</span>
-      </div>
-
+      <div class="card-hd"><div class="dot dot-red"></div>Revenue-at-Risk — Quantifizierung der 5 Lücken</div>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Lücke</th><th>Szenario-Annahme</th><th>Risiko-Range (€M) ¹</th><th>P(2027E) ²</th><th>Erw. Schaden</th></tr></thead>
+          <thead><tr><th>Lücke</th><th>Risiko-Range (€M)</th><th>P(2027E)</th><th>Erw. Schaden</th></tr></thead>
           <tbody>
-            <tr><td>① KI-Disintermediation</td><td class="c-txt2 fz11">−10–20% Traffic, ARPU konstant</td><td class="r-val">65–130</td><td class="r-val">65 %</td><td class="r-val">€ 97M</td></tr>
-            <tr><td>② Transaktionslücke</td><td class="c-txt2 fz11">KI-Agenten bypass; analog Google Flights/Kayak</td><td class="r-val">150–300</td><td class="a-val">40 %</td><td class="a-val">€ 135M</td></tr>
-            <tr><td>③ API / Agentic Gap</td><td class="c-txt2 fz11">F&amp;E-Mehraufwand + Marktanteilsverlust</td><td class="a-val">50–100</td><td class="a-val">55 %</td><td class="a-val">€ 41M</td></tr>
-            <tr><td>④ Daten-Moat-Erosion</td><td class="c-txt2 fz11">Sprengnetter-Premium-Erosion (3–5J.)</td><td>20–60</td><td>45 %</td><td>€ 18M</td></tr>
-            <tr><td>⑤ Disaggregation</td><td class="c-txt2 fz11">Long-Tail-Privatvermieter (-5% Marktanteil)</td><td>30–65</td><td>30 %</td><td>€ 14M</td></tr>
-            <tr class="row-sep"><td>Σ Gesamt (Szenarien unabhängig)</td><td>—</td><td class="r-val">315–655</td><td>—</td><td class="r-val">€ ~305M</td></tr>
+            <tr><td>① KI-Disintermediation</td><td class="r-val">100–200</td><td class="r-val">65 %</td><td class="r-val">€ 130M</td></tr>
+            <tr><td>② Transaktionslücke</td><td class="r-val">200–350</td><td class="a-val">45 %</td><td class="a-val">€ 157M</td></tr>
+            <tr><td>③ API / Agentic Gap</td><td class="a-val">80–120</td><td class="a-val">55 %</td><td class="a-val">€ 55M</td></tr>
+            <tr><td>④ Daten-Moat-Erosion</td><td>40–80</td><td>50 %</td><td>€ 30M</td></tr>
+            <tr><td>⑤ Disaggregation</td><td>60–100</td><td>35 %</td><td>€ 28M</td></tr>
+            <tr class="row-sep"><td>Σ Gesamt-Exposure</td><td class="r-val">530–900</td><td>—</td><td class="r-val">€ ~400M</td></tr>
           </tbody>
         </table>
       </div>
-      <div style="margin-top:8px;font-size:9px;color:var(--txt3);line-height:1.6;padding:6px 10px;background:var(--bg2);border-radius:5px;border:1px solid var(--border)">
-        ¹ Szenario-Schätzung auf Basis öffentlicher Finanzberichte Scout24 SE 2025A (€649,6M Umsatz) und Similarweb Apr 2026 (36,41M Visits). Kein Anspruch auf Vollständigkeit. ² Subjektive Eintrittswahrscheinlichkeit der Autoren; keine statistische Herleitung.
+      <div style="margin-top:12px;padding:10px 14px;background:var(--redDim);border-radius:7px;border:1px solid rgba(255,77,109,.2);font-size:11px;color:var(--txt2);line-height:1.65">
+        <strong style="color:var(--red)">⚠ Short-Signal:</strong> €400M erwarteter Schaden = 62 % des 2025A-Umsatzes. Kein Sell-Side-Modell quantifiziert mehr als Lücke ①. Die Lücken ②–⑤ sind im Konsens-DCF schlicht nicht modelliert — das ist das eigentliche Alpha.
       </div>
-      <div style="margin-top:8px;padding:8px 12px;background:var(--blueGlow);border-radius:6px;border:1px solid rgba(0,180,255,.2);font-size:10px;color:var(--txt2);line-height:1.6">
-        <strong style="color:var(--blue)">Konsens-Vergleich:</strong> Sell-Side-DCF-Median (LSEG Mai 2026) impliziert €3,5–4,0 Mrd. EV ohne strukturelle Risikoabschläge. Modellierung der 5 Lücken reduziert den fairen EV im Bear-Case auf €2,3–2,7 Mrd. (Kursziel €38–48).
+      <div style="margin-top:10px;padding:10px 14px;background:var(--blueGlow);border-radius:7px;border:1px solid rgba(0,180,255,.2);font-size:11px;color:var(--txt2);line-height:1.65">
+        <strong style="color:var(--blue)">📌 Vergleich Consensus vs. Short-These:</strong> Sell-Side-DCF-Median impliziert €3,5–4,0 Mrd. EV. Unsere 5-Lücken-Adjustierung reduziert den fairen EV auf €2,1–2,6 Mrd. im Bear-Case — das entspricht einem Kursziel von €35–45 bei vollem Durchschlag aller Lücken.
       </div>
     </div>
 
@@ -1239,222 +1182,7 @@ tr.row-sep td:first-child{color:var(--blue)!important}
      JAVASCRIPT
 ══════════════════════════════════════════════════════ -->
 <script>
-// ── GLOBALE DATENVARIABLEN (werden via loadData() aus data.json befüllt) ────
-let PRICE = 72.25, ND0 = 100, SH0 = 72.07, REV0 = 649.6;
-let LIVE_DATA = null;   // vollständiges data.json Objekt
-
-// ── DATA LOADER ──────────────────────────────────────────────────────────────
-async function loadData() {
-  const banner = document.getElementById('data-banner');
-  try {
-    // Fix #4: raw.githubusercontent.com umgeht GitHub Pages CDN-Cache zuverlässig
-    const RAW = 'https://raw.githubusercontent.com/RafaelGabrielAngel/scout24-finanzanalyse/main/data.json?t=' + Date.now();
-    let resp;
-    try {
-      resp = await fetch(RAW);
-      if (!resp.ok) throw new Error('raw failed');
-    } catch {
-      resp = await fetch('data.json?v=' + Date.now()); // lokaler Fallback
-    }
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const d = await resp.json();
-    LIVE_DATA = d;
-
-    // ── Globale Variablen setzen
-    PRICE  = d.market?.price            || PRICE;
-    ND0    = d.kpis?.net_debt_mn        || ND0;
-    SH0    = d.profile?.shares_diluted_mn || SH0;
-    REV0   = d.kpis?.revenue_mn         || REV0;
-
-    // ── Fix #3: Header-KPIs robust aktualisieren
-    const m = d.market || {}, k = d.kpis || {};
-
-    // Kurs im Header — mit Tagesveränderung
-    if (m.price > 0) {
-      const priceEl = document.getElementById('hdr-price');
-      if (priceEl) priceEl.textContent = '€ ' + m.price.toFixed(2);
-
-      // Δ Tagesveränderung
-      const chEl = document.getElementById('hdr-change');
-      if (chEl && m.change_pct !== undefined) {
-        const sign = m.change_pct >= 0 ? '+' : '';
-        chEl.textContent = sign + m.change_pct.toFixed(2) + '%';
-        chEl.style.color = m.change_pct >= 0 ? 'var(--green)' : 'var(--red)';
-      }
-
-      // Upside neu berechnen
-      const upEl = document.getElementById('hdr-up');
-      if (upEl) {
-        const up = ((92 - m.price) / m.price * 100).toFixed(0);
-        upEl.textContent = (up >= 0 ? '+' : '') + up + ' %';
-      }
-
-      // DCF Globals updaten
-      PRICE = m.price;
-      renderFF();
-    }
-
-    // ── Exec Summary KPI-Karten befüllen
-    applyKpiCards(d);
-
-    // ── Peer-Tabelle befüllen (falls Daten vorhanden)
-    if (d.peers && d.peers.length > 0) applyPeerTable(d.peers);
-
-    // ── Traffic-Signal Charts rendern
-    renderTrafficSignal(d);
-
-    // ── Earnings Countdown mit Live-Daten
-    initEarningsCountdown(d);
-
-    // ── Quartalszahlen-Chart
-    if (d.history?.quarterly?.length > 0) renderQuarterlyChart(d);
-
-    // ── BaFin Short-Interest
-    renderShortsBlock(d);
-
-    // ── Makro-Panel im DCF-Tab
-    if (d.macro) {
-      applyMacroPanel(d);
-      window._liveData = d; // für Tab-Wechsel merken
-    }
-
-    // ── History-Chart + P&L-Tabelle mit Live-Daten (LSEG oder FMP)
-    if (d.history?.annual?.length > 0 || d.history?.income?.length > 0) {
-      renderHist(d.history);
-      applyHistoryTable(d);
-    }
-
-    // Banner ausblenden
-    if (banner) banner.style.display = 'none';
-
-    // Update-Timestamp anzeigen
-    const ts = document.getElementById('data-timestamp');
-    if (ts && d._meta?.generated_at) {
-      const dt = new Date(d._meta.generated_at);
-      ts.textContent = 'Daten: ' + dt.toLocaleDateString('de-DE') + ' ' + dt.toLocaleTimeString('de-DE', {hour:'2-digit',minute:'2-digit'}) + ' UTC';
-      ts.style.display = 'inline';
-    }
-
-    console.log('[Scout24] data.json geladen:', d._meta);
-
-  } catch(e) {
-    console.warn('[Scout24] data.json nicht verfügbar, nutze Fallback-Werte:', e.message);
-    if (banner) {
-      banner.textContent = '⚠ Statische Daten (Stand Mai 2026) — data.json nicht gefunden. Bitte fetcher.py ausführen.';
-      banner.style.background = 'rgba(255,170,0,.15)';
-      banner.style.borderColor = 'rgba(255,170,0,.3)';
-    }
-  }
-}
-
-function applyKpiCards(d) {
-  // Fix #3: direkte ID-Selektoren auf die neu gesetzten HTML-Elemente
-  const k = d.kpis || {}, m = d.market || {};
-
-  const set = (id, val) => { const el = document.getElementById(id); if (el && val !== null) el.textContent = val; };
-
-  // Finanzkennzahlen-Karte
-  if (k.revenue_mn)    set('kpi-revenue',  '€ ' + k.revenue_mn.toFixed(1) + ' Mio.');
-  if (k.ebitda_mn)     set('kpi-ebitda',   '€ ' + k.ebitda_mn.toFixed(1)  + ' Mio.');
-  if (k.ebitda_margin) set('kpi-margin',   k.ebitda_margin.toFixed(1)      + ' %');
-  if (k.fcf_mn)        set('kpi-fcf',      '€ ' + k.fcf_mn.toFixed(1)     + ' Mio.');
-  if (k.fcf_yield)     set('kpi-fcfyield', k.fcf_yield.toFixed(1)          + ' %');
-  if (k.net_debt_mn !== undefined) set('kpi-netdebt', '€ ' + k.net_debt_mn.toFixed(0) + ' Mio.');
-  if (k.net_debt_ebitda !== undefined) set('kpi-leverage', k.net_debt_ebitda.toFixed(1) + '×');
-
-  // Qualitäts-Scores-Karte
-  if (k.ev_ebitda)    set('kpi-ev-ebitda',   k.ev_ebitda.toFixed(1)    + '×');
-  if (k.pe_ratio)     set('kpi-pe',           k.pe_ratio.toFixed(1)     + '×');
-  if (k.roce)         set('kpi-roce',         k.roce.toFixed(1)         + ' %');
-  if (k.goodwill_pct) set('kpi-goodwill-pct', k.goodwill_pct.toFixed(1) + ' % ⚠');
-
-  // DCF-Slider Basiswert aktualisieren
-  if (k.revenue_mn > 0) {
-    const srev = document.getElementById('srev');
-    if (srev) { srev.value = k.revenue_mn.toFixed(1); dcf(); }
-  }
-
-  // ── LSEG Broker-Ziele im Header (mit Fallback)
-  const b = d.brokers || {};
-  const tpEl = document.getElementById('hdr-tp');
-  const upEl = document.getElementById('hdr-up');
-
-  if (b.tp_mean > 0) {
-    // LSEG-Daten vorhanden
-    if (tpEl) { tpEl.textContent = '€ ' + b.tp_mean.toFixed(2); tpEl.title = `Range: €${b.tp_low}–€${b.tp_high}`; }
-    if (upEl && m.price > 0) {
-      const up = ((b.tp_mean - m.price) / m.price * 100).toFixed(1);
-      upEl.textContent = (up >= 0 ? '+' : '') + up + ' %';
-      upEl.style.color = up >= 0 ? 'var(--green)' : 'var(--red)';
-    }
-  } else {
-    // Fallback: statischer Analysewert
-    if (tpEl) { tpEl.textContent = '€ 92'; tpEl.title = 'Eigene Analyse (kein LSEG-Update)'; tpEl.style.opacity = '.6'; }
-    if (upEl && m.price > 0) {
-      const up = ((92 - m.price) / m.price * 100).toFixed(0);
-      upEl.textContent = (up >= 0 ? '+' : '') + up + ' %';
-    }
-  }
-
-  // ── EV/EBITDA im Header — LSEG live, sonst KPI-Fallback
-  const mult = d.multiples || {};
-  const evVal = mult.ev_ebitda || k.ev_ebitda || 0;
-  if (evVal > 0) {
-    const evEl = document.getElementById('hdr-ev');
-    if (evEl) {
-      evEl.textContent = evVal.toFixed(1) + '×';
-      // LSEG-Wert ist live (grün), Fallback ist gedimmt
-      if (!mult.ev_ebitda) evEl.style.opacity = '.6';
-    }
-    set('kpi-ev-ebitda', evVal.toFixed(1) + '×');
-  }
-
-  // ── Broker-Block in Exec Summary einblenden wenn Daten vorhanden
-  if (b.tp_mean > 0) applyBrokerBlock(d);
-}
-
-function applyBrokerBlock(d) {
-  const b = d.brokers || {}, m = d.market || {};
-  let el = document.getElementById('broker-block');
-  if (!el) return;
-  const upside = m.price > 0 ? ((b.tp_mean - m.price) / m.price * 100).toFixed(1) : '—';
-  el.innerHTML = `
-    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-      <div style="text-align:center;min-width:80px">
-        <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px">Broker-Konsens</div>
-        <div style="font-size:22px;font-weight:900;color:var(--green)">€${b.tp_mean.toFixed(2)}</div>
-        <div style="font-size:9px;color:var(--green)">${upside >= 0 ? '+' : ''}${upside}% Upside</div>
-      </div>
-      <div style="text-align:center;min-width:70px">
-        <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:3px">Range</div>
-        <div style="font-size:13px;font-weight:700;color:var(--txt)">€${b.tp_low}–€${b.tp_high}</div>
-        <div style="font-size:9px;color:var(--txt3)">Low–High</div>
-      </div>
-      <div style="flex:1;min-width:120px;font-size:10px;color:var(--txt2);line-height:1.6">
-        <span style="color:var(--blue);font-weight:700">LSEG Workspace</span> — Institutioneller Sell-Side-Konsens.
-        Scout24 handelt mit <span style="color:var(--red);font-weight:700">${((m.price - b.tp_mean)/b.tp_mean*100).toFixed(1)}%</span> Abschlag
-        auf das Broker-Kursziel — ungewöhnlich für 100% Buy-Konsens.
-      </div>
-    </div>`;
-  el.style.display = 'block';
-}
-
-function applyPeerTable(peers) {
-  const tbody = document.querySelector('#peer-table-body');
-  if (!tbody) return;
-  const scout = LIVE_DATA?.kpis || {};
-  // Vorhandene Peer-Zeilen aktualisieren (match by data-peer)
-  peers.forEach(p => {
-    const row = tbody.querySelector(`tr[data-peer="${p.name}"]`);
-    if (!row) return;
-    const cells = row.querySelectorAll('td');
-    if (cells[2]) cells[2].textContent = p.ev_ebitda ? p.ev_ebitda.toFixed(1) + '×' : '—';
-    if (cells[4]) cells[4].textContent = p.pe_ratio  ? p.pe_ratio.toFixed(1)  + '×' : '—';
-    if (cells[5]) cells[5].textContent = p.fcf_yield ? p.fcf_yield.toFixed(1) + ' %' : '—';
-    if (cells[6]) cells[6].textContent = p.revenue_growth ? (p.revenue_growth > 0 ? '+' : '') + p.revenue_growth.toFixed(1) + ' %' : '—';
-    if (cells[7]) cells[7].textContent = p.ebitda_margin  ? p.ebitda_margin.toFixed(1) + ' %' : '—';
-  });
-}
+const PRICE = 72.25, ND0 = 100, SH0 = 72.07, REV0 = 649.6;
 
 // ── TAB SWITCHER ─────────────────────────────────────────────
 function tab(id, btn){
@@ -1462,7 +1190,7 @@ function tab(id, btn){
   document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
   document.getElementById('p-'+id).classList.add('active');
   btn.classList.add('active');
-  if(id==='dcf'){setTimeout(()=>{dcf();renderSens();if(window._liveData)applyMacroPanel(window._liveData)},60)}
+  if(id==='dcf'){setTimeout(()=>{dcf();renderSens()},60)}
   if(id==='multi'){setTimeout(renderPeers,60)}
   if(id==='acq'){setTimeout(renderMA,60)}
   if(id==='gap'){setTimeout(renderGapChart,60)}
@@ -1701,77 +1429,14 @@ function renderFF(){
     `<div style="padding-top:26px;">` + headerTrack + rows + scale + `</div>`;
 }
 
-// ── P&L TABELLE AUS LSEG-DATEN ───────────────────────────────
-function applyHistoryTable(d) {
-  const annual = d?.history?.annual;
-  if (!annual || annual.length === 0) return;
-
-  // Letzte 5 Jahre nehmen
-  const rows = annual.slice(-5);
-  const thead = document.getElementById('pl-thead');
-  const tbody = document.getElementById('pl-tbody');
-  if (!thead || !tbody) return;
-
-  // Header
-  thead.innerHTML = '<tr><th>Kennzahl (€ Mio.)</th>' +
-    rows.map(r => `<th>${r.year}</th>`).join('') + '</tr>';
-
-  // Wachstum berechnen
-  const growths = rows.map((r, i) => {
-    if (i === 0) return '—';
-    const prev = rows[i-1].revenue_mn;
-    const curr = r.revenue_mn;
-    if (!prev) return '—';
-    const g = ((curr - prev) / prev * 100).toFixed(1);
-    return (g > 0 ? '+' : '') + g + ' %';
-  });
-
-  const fmt = v => v ? v.toFixed(1) : '—';
-  const fmtPct = v => v ? v.toFixed(1) + ' %' : '—';
-  const isLast = i => i === rows.length - 1;
-
-  tbody.innerHTML = `
-    <tr><td>Umsatz</td>${rows.map((r,i) => `<td${isLast(i)?' class="g-val"':''}>${fmt(r.revenue_mn)}</td>`).join('')}</tr>
-    <tr><td>YoY Wachstum</td>${growths.map((g,i) => `<td class="${g!=='—'&&g.startsWith('+')? 'g-val':'c-txt2'}">${g}</td>`).join('')}</tr>
-    <tr><td>EBITDA</td>${rows.map(r => `<td>${fmt(r.ebitda_mn)}</td>`).join('')}</tr>
-    <tr><td>EBITDA-Marge</td>${rows.map((r,i) => `<td${isLast(i)?' class="g-val"':''}>${fmtPct(r.ebitda_margin)}</td>`).join('')}</tr>
-    <tr><td>Free Cashflow</td>${rows.map(r => `<td>${fmt(r.fcf_mn)}</td>`).join('')}</tr>
-    <tr class="row-hl"><td>FCF-Marge</td>${rows.map(r => `<td>${fmtPct(r.fcf_margin)}</td>`).join('')}</tr>
-  `;
-
-  // Quellenhinweis
-  const src = document.getElementById('pl-source');
-  const titleEl = document.getElementById('pl-title');
-  if (src) src.textContent = d._meta?.source === 'LSEG Workspace' ? 'Quelle: LSEG Workspace' : '';
-  if (titleEl) titleEl.textContent = `P&L Kennzahlen ${rows[0].year}–${rows[rows.length-1].year}`;
-  const chartTitle = document.getElementById('hist-chart-title');
-  if (chartTitle) chartTitle.textContent = `Umsatz & FCF ${rows[0].year}–${rows[rows.length-1].year}`;
-}
-
 // ── HISTORY CHART ────────────────────────────────────────────
 let chHist;
-function renderHist(history){
+function renderHist(){
   if(chHist){chHist.destroy();chHist=null;}
   const ctx=document.getElementById('ch-hist').getContext('2d');
-  // Fallback-Werte
-  let labels=['2021A','2022A','2023A','2024A','2025A'];
-  let rev=[389,447.5,509.1,566.3,649.6];
-  let fcf=[127.8,163.2,197.4,234.6,261.4];
-
-  // LSEG Format: history.annual
-  if(history?.annual?.length > 0){
-    const rows = history.annual.slice(-6);
-    labels = rows.map(r => r.year + '');
-    rev    = rows.map(r => r.revenue_mn || 0);
-    fcf    = rows.map(r => r.fcf_mn || 0);
-  // FMP Format: history.income + history.cashflow
-  } else if(history?.income?.length > 0){
-    const inc = history.income.slice(-5);
-    const cf  = (history.cashflow||[]).slice(-5);
-    labels = inc.map(r=>r.year+'');
-    rev    = inc.map(r=>r.revenue||0);
-    fcf    = cf.length ? cf.map(r=>r.free_cashflow||0) : fcf;
-  }
+  const labels=['2021A','2022A','2023A','2024A','2025A'];
+  const rev=[389,447.5,509.1,566.3,649.6];
+  const fcf=[127.8,163.2,197.4,234.6,261.4];
   chHist=new Chart(ctx,{
     type:'bar',
     data:{
@@ -1810,9 +1475,9 @@ let chPeers;
 function renderPeers(){
   if(chPeers)chPeers.destroy();
   const ctx=document.getElementById('ch-peers').getContext('2d');
-  const peers=['Rightmove','Auto Trader','REA Group','Hemnet','Scout24'];
-  const vals=[21.4,20.1,34.2,27.3,13.1];
-  const colors=peers.map(p=>p==='Scout24'?'#FFD166':'rgba(0,180,255,.55)');
+  const peers=['Rightmove','Auto Trader','REA Group','Hemnet','Vend','Gr.A Median','Scout24'];
+  const vals=[21.4,20.1,34.2,27.3,8.1,21.4,13.1];
+  const colors=peers.map(p=>p==='Scout24'?'#FFD166':p==='Gr.A Median'?'rgba(255,170,0,.45)':'rgba(0,180,255,.55)');
   chPeers=new Chart(ctx,{
     type:'bar',
     data:{labels:peers,datasets:[{label:'EV/EBITDA',data:vals,backgroundColor:colors,borderColor:colors.map(c=>c==='#FFD166'?c:c.replace('.55','.9')),borderWidth:1.5,borderRadius:5}]},
@@ -1846,434 +1511,6 @@ function renderMA(){
       }
     }
   });
-}
-
-// ── SIMILARWEB INTEGRATION ───────────────────────────────────
-async function loadSimilarweb() {
-  try {
-    const r = await fetch('similarweb_data.json?v=' + Date.now());
-    if (!r.ok) return;
-    const sw = await r.json();
-    const block = document.getElementById('sw-block');
-    if (!block) return;
-
-    const cmp  = sw.comparison || {};
-    const main = sw.immoscout24 || {};
-    const scout = main.visits_mn || cmp.scout24_visits_mn || 0;
-    const welt  = cmp.immowelt_visits_mn || 0;
-    const ratio = scout > 0 && welt > 0 ? (scout / welt) : (cmp.scout_immowelt_ratio || 0);
-
-    const mEl = document.getElementById('sw-month');
-    if (mEl) mEl.textContent = 'Stand: ' + (main.month || cmp.month || sw._meta?.month || '—');
-
-    const kEl = document.getElementById('sw-kpis');
-    if (kEl && scout > 0) {
-      const mom  = main.change_mom_pct || 0;
-      const ch   = main.channels || {};
-      const genai = ch.gen_ai_pct || 0;
-      const genaiVisits = Math.round(scout * 1e6 * genai / 100 / 1000);
-
-      kEl.innerHTML = `
-        <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
-          <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px">ImmoScout24 Visits</div>
-          <div style="font-size:22px;font-weight:900;color:var(--blue)">${scout.toFixed(2)} Mio.</div>
-          <div style="font-size:9px;color:${mom < 0 ? 'var(--red)' : 'var(--green)'};margin-top:2px;font-weight:700">${mom >= 0 ? '+' : ''}${mom.toFixed(2)}% vs. Vormonat</div>
-        </div>
-        <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
-          <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px">Immowelt Visits</div>
-          <div style="font-size:22px;font-weight:900;color:var(--amber)">${welt.toFixed(2)} Mio.</div>
-          <div style="font-size:9px;color:var(--txt3);margin-top:2px">Ratio Scout:Immowelt = ${ratio.toFixed(1)}×</div>
-        </div>
-        <div style="background:rgba(255,77,109,.08);border-radius:8px;padding:12px;text-align:center;border:1px solid rgba(255,77,109,.3)">
-          <div style="font-size:9px;color:var(--red);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px;font-weight:700">⚡ Gen AI Traffic</div>
-          <div style="font-size:22px;font-weight:900;color:var(--red)">${genai.toFixed(2)} %</div>
-          <div style="font-size:9px;color:var(--txt3);margin-top:2px">~${genaiVisits}K Visits von KI-Tools</div>
-        </div>`;
-    }
-
-    const ch  = main.channels || {};
-    const cEl = document.getElementById('sw-channels');
-    if (cEl && ch.organic_search_pct) {
-      cEl.style.display = 'block';
-      const org    = ch.organic_search_pct;
-      const genai  = ch.gen_ai_pct || 0;
-      const netLoss = org - genai;
-      cEl.innerHTML = `
-        <div style="margin-bottom:6px"><strong style="color:var(--blue)">Channel-Mix April 2026 (immobilienscout24.de):</strong></div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
-          ${[
-            ['Direct', ch.direct_pct, 'var(--txt2)'],
-            ['Organic Search', ch.organic_search_pct, 'var(--blue)'],
-            ['Email', ch.email_pct, 'var(--txt2)'],
-            ['Referrals', ch.referrals_pct, 'var(--txt2)'],
-            ['Display', ch.display_pct, 'var(--txt2)'],
-            ['Paid Search', ch.paid_search_pct, 'var(--txt2)'],
-            ['Gen AI', ch.gen_ai_pct, 'var(--red)'],
-          ].map(([n,v,c]) => `<span style="padding:3px 8px;border-radius:6px;background:var(--bg3);font-size:10px;color:${c}"><strong>${n}:</strong> ${(v||0).toFixed(1)}%</span>`).join('')}
-        </div>
-        <div style="padding:6px 10px;background:var(--redDim);border-radius:6px;border:1px solid rgba(255,77,109,.2);font-size:10px;color:var(--txt2)">
-          <strong style="color:var(--red)">⚠ KI-Netto-Effekt:</strong>
-          Organic Search ${org.toFixed(1)}% − Gen AI ${genai.toFixed(2)}% = ${netLoss.toFixed(1)}% verbleibender SEO-Traffic.
-          KI-Tools ersetzen Suchvolumen, geben aber nur ${genai.toFixed(2)}% als Referral zurück.
-          <strong>Netto-Verlust: ~${(org - genai - org * 0.85).toFixed(1)} PP SEO-Traffic an KI-Intermediation.</strong>
-        </div>`;
-    }
-
-    block.style.display = 'block';
-  } catch(e) {
-    console.log('[Similarweb] Keine Daten:', e.message);
-  }
-}
-
-// ── QUARTALSZAHLEN CHART ─────────────────────────────────────
-let chQuarterly;
-function renderQuarterlyChart(d) {
-  const q = d?.history?.quarterly;
-  if (!q || q.length === 0) return;
-  if (chQuarterly) chQuarterly.destroy();
-
-  const ctx = document.getElementById('ch-quarterly');
-  if (!ctx) return;
-
-  const labels  = q.map(r => r.quarter);
-  const margins = q.map(r => r.ebitda_margin);
-  const revenues = q.map(r => r.revenue_mn);
-
-  // Trendpfeil berechnen
-  if (q.length >= 4) {
-    const recent4 = margins.slice(-4);
-    const older4  = margins.slice(-8, -4);
-    if (older4.length >= 4) {
-      const delta = (recent4.reduce((a,b)=>a+b,0)/4) - (older4.reduce((a,b)=>a+b,0)/4);
-      const badge = document.getElementById('q-trend-badge');
-      const text  = document.getElementById('q-trend-text');
-      if (badge) {
-        if (delta > 0.5) {
-          badge.textContent = '↗ Expanding +' + delta.toFixed(1) + ' PP';
-          badge.style.cssText = 'background:var(--greenDim);color:var(--green);border:1px solid rgba(0,229,160,.3)';
-        } else if (delta < -0.5) {
-          badge.textContent = '↘ Compressing ' + delta.toFixed(1) + ' PP';
-          badge.style.cssText = 'background:var(--redDim);color:var(--red);border:1px solid rgba(255,77,109,.3)';
-        } else {
-          badge.textContent = '→ Stabil';
-          badge.style.cssText = 'background:var(--bg2);color:var(--txt2);border:1px solid var(--border)';
-        }
-      }
-      if (text) {
-        text.style.display = 'block';
-        text.innerHTML = delta < -0.5
-          ? `<strong style="color:var(--red)">⚠ Margenkompression sichtbar:</strong> EBITDA-Marge letzte 4 Quartale Ø ${(recent4.reduce((a,b)=>a+b,0)/4).toFixed(1)}% vs. vorherige 4Q Ø ${(older4.reduce((a,b)=>a+b,0)/4).toFixed(1)}% — Delta ${delta.toFixed(1)} PP. Spanien-Expansion + KKR-Abwehr bereits in Zahlen messbar.`
-          : `EBITDA-Marge letzte 4Q Ø <strong>${(recent4.reduce((a,b)=>a+b,0)/4).toFixed(1)}%</strong> — aktuell stabil/leicht expandierend.`;
-      }
-    }
-  }
-
-  // Farben je Trend
-  const barColors = margins.map((m, i) => {
-    if (i === 0) return 'rgba(0,180,255,.4)';
-    return m >= margins[i-1] ? 'rgba(0,229,160,.5)' : 'rgba(255,77,109,.5)';
-  });
-
-  chQuarterly = new Chart(ctx.getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        { type: 'bar',  label: 'Umsatz (€M)',       data: revenues, backgroundColor: 'rgba(0,180,255,.25)', borderColor: 'rgba(0,180,255,.6)', borderWidth: 1, borderRadius: 3, yAxisID: 'y' },
-        { type: 'line', label: 'EBITDA-Marge (%)',  data: margins,  borderColor: '#FFD166', borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: '#FFD166', tension: .3, yAxisID: 'y2' },
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { labels: { color: '#7BAAC8', font: { size: 10 }, boxWidth: 10 } } },
-      scales: {
-        x:  { grid: { display: false }, ticks: { color: '#7BAAC8', font: { size: 9 } } },
-        y:  { position: 'left',  beginAtZero: false, grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#7BAAC8', font: { size: 9 }, callback: v => '€' + v } },
-        y2: { position: 'right', min: 50, max: 75, grid: { display: false }, ticks: { color: '#FFD166', font: { size: 9 }, callback: v => v + '%' } },
-      }
-    }
-  });
-}
-
-// ── BaFin SHORT-INTEREST ANZEIGE ─────────────────────────────
-function renderShortsBlock(d) {
-  const s = d?.shorts || {};
-  const el = document.getElementById('shorts-content');
-  if (!el) return;
-
-  const positions = s.positions || [];
-  if (positions.length === 0) {
-    el.innerHTML = `
-      <div style="padding:16px;text-align:center">
-        <div style="font-size:24px;font-weight:900;color:var(--green);margin-bottom:4px">0 %</div>
-        <div style="font-size:11px;color:var(--txt2)">Keine meldepflichtigen Short-Positionen >0,5%</div>
-        <div style="font-size:10px;color:var(--txt3);margin-top:4px">Stand: ${s.as_of || '—'} · Quelle: BaFin</div>
-        <div style="margin-top:10px;font-size:10px;color:var(--green);background:var(--greenDim);padding:6px 10px;border-radius:6px;border:1px solid rgba(0,229,160,.2)">
-          ✓ Keine institutionellen Short-Seller bekannt — Short-These noch nicht vom Markt gespielt
-        </div>
-      </div>`;
-    return;
-  }
-
-  const totalPct = s.total_short_pct || 0;
-  const color    = totalPct > 3 ? 'var(--red)' : totalPct > 1.5 ? 'var(--amber)' : 'var(--txt2)';
-
-  el.innerHTML = `
-    <div style="display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:10px">
-      <div style="text-align:center">
-        <div style="font-size:28px;font-weight:900;color:${color}">${totalPct.toFixed(2)} %</div>
-        <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.7px">Gesamt Short-Float</div>
-      </div>
-      <div style="font-size:10px;color:var(--txt2);line-height:1.6;flex:1">
-        <strong>${s.num_holders || 0}</strong> Halter mit je >0,5% des Floats. Stand: ${s.as_of || '—'}.<br>
-        ${totalPct > 2 ? '<span style="color:var(--amber)">⚡ Institutionelle Short-Seller aktiv — Short-These wird gespielt</span>' : 'Institutionelle Shorts noch moderat.'}
-      </div>
-    </div>
-    <div class="tbl-wrap"><table>
-      <thead><tr><th>Short-Seller</th><th>Position</th><th>Stand</th></tr></thead>
-      <tbody>${positions.map(p => `
-        <tr>
-          <td style="font-weight:600">${p.holder}</td>
-          <td class="${p.pct > 1 ? 'r-val' : 'a-val'}">${p.pct.toFixed(2)} %</td>
-          <td class="c-txt2" style="font-size:11px">${p.date}</td>
-        </tr>`).join('')}
-      </tbody>
-    </table></div>
-    <div style="margin-top:8px;font-size:9px;color:var(--txt3)">Quelle: BaFin — Netto-Leerverkaufspositionen (meldepflichtig ≥0,5% Float)</div>`;
-}
-
-// ── EARNINGS COUNTDOWN ───────────────────────────────────────
-const EARNINGS_DATES = [
-  { label: "H1 2026 Ergebnisse",   date: "2026-07-30", critical: true  },
-  { label: "Q3 Trading Update",    date: "2026-10-01", critical: false },
-  { label: "FY 2026 + CMD-Update", date: "2027-03-12", critical: false },
-];
-
-function initEarningsCountdown(liveData) {
-  const now       = new Date();
-  const next      = EARNINGS_DATES.find(e => new Date(e.date) > now) || EARNINGS_DATES[0];
-  const target    = new Date(next.date);
-  const msLeft    = target - now;
-  const daysLeft  = Math.max(0, Math.floor(msLeft / 86400000));
-  const totalDays = 59; // Abstand von heutigem Stand zum H1-Termin ca. 59 Tage
-
-  // Countdown-Anzeige
-  const daysEl = document.getElementById('count-days');
-  const fillEl = document.getElementById('count-fill');
-  if (daysEl) daysEl.textContent = daysLeft;
-  if (fillEl) {
-    const pct = Math.max(0, Math.min(100, 100 - (daysLeft / totalDays * 100)));
-    fillEl.style.width = pct + '%';
-    fillEl.style.background = daysLeft < 14 ? 'var(--red)' : daysLeft < 30 ? 'var(--amber)' : 'var(--gold)';
-  }
-
-  // Traffic-Signal aus Live-Daten
-  const t = liveData?.trends || {};
-  const trendDelta   = t.trend_delta || 0;
-  const compDelta    = t.competitor_delta?.immoscout_delta || trendDelta;
-  const aiDelta      = t['ai_delta_Wohnung_KI'] || 0;
-
-  // Ampel-Bewertung
-  let signalColor, signalText, signalBg, currentText;
-  if (compDelta >= 3) {
-    signalColor = 'var(--green)'; signalBg = 'var(--greenDim)';
-    signalText  = '🟢 UPGRADE-KANDIDAT';
-    currentText = `<strong style="color:var(--green)">Bullisches Signal:</strong> ImmoScout24 Suchinteresse +${compDelta.toFixed(1)}% YoY. Wenn dieser Trend in Q2/Q3-Zahlen bestätigt wird → Upgrade zu KAUFEN möglich.`;
-  } else if (compDelta >= -5) {
-    signalColor = 'var(--amber)'; signalBg = 'var(--amberDim)';
-    signalText  = '🟡 NEUTRAL — BEOBACHTEN';
-    currentText = `<strong style="color:var(--amber)">Neutrale Lage:</strong> Suchinteresse ${compDelta.toFixed(1)}% YoY — im Beobachtungsbereich. KI-Suche wächst +${aiDelta.toFixed(1)}% und ist das Hauptrisiko für die Earnings.`;
-  } else {
-    signalColor = 'var(--red)'; signalBg = 'var(--redDim)';
-    signalText  = '🔴 DOWNGRADE-RISIKO';
-    currentText = `<strong style="color:var(--red)">Bearisches Signal:</strong> ImmoScout24 Suchinteresse ${compDelta.toFixed(1)}% YoY während KI-Suche +${aiDelta.toFixed(1)}% wächst. Wenn Sessions am 30. Juli <−10% — Downgrade-Trigger. <strong>In ${daysLeft} Tagen wissen wir es.</strong>`;
-  }
-
-  const liveSignalEl = document.getElementById('earnings-live-signal');
-  if (liveSignalEl) {
-    liveSignalEl.textContent = signalText;
-    liveSignalEl.style.background = signalBg;
-    liveSignalEl.style.color = signalColor;
-    liveSignalEl.style.border = `1px solid ${signalColor}`;
-  }
-
-  const currentEl = document.getElementById('earnings-current-signal');
-  if (currentEl) {
-    currentEl.innerHTML = currentText;
-    currentEl.style.background = signalBg;
-    currentEl.style.border = `1px solid rgba(${signalColor === 'var(--red)' ? '255,77,109' : signalColor === 'var(--green)' ? '0,229,160' : '255,170,0'},.2)`;
-  }
-}
-
-// ── MAKRO-KONTEXT PANEL ──────────────────────────────────────
-function applyMacroPanel(d) {
-  const m = d.macro || {};
-  if (!m.bund_10y && !m.ecb_deposit_rate) return;
-
-  const panel = document.getElementById('macro-panel');
-  if (panel) panel.style.display = 'block';
-
-  // ── KPI-Boxen
-  const kpisEl = document.getElementById('macro-kpis');
-  if (kpisEl) {
-    const dcfWacc = +document.getElementById('sw')?.value || 7.5;
-    const spread  = m.bund_10y ? (dcfWacc - m.bund_10y).toFixed(1) : '—';
-
-    kpisEl.innerHTML = [
-      { lbl: 'Bund 10J (rf)', val: m.bund_10y ? m.bund_10y.toFixed(2) + ' %' : '—', col: 'var(--blue)',  sub: 'Risikofreier Zinssatz' },
-      { lbl: 'EZB Leitzins',  val: m.ecb_deposit_rate ? m.ecb_deposit_rate.toFixed(2) + ' %' : '—', col: 'var(--txt)', sub: 'Deposit Facility Rate' },
-      { lbl: 'Hypothekenzins 10J', val: m.mortgage_rate_10y ? m.mortgage_rate_10y.toFixed(2) + ' %' : '—', col: 'var(--amber)', sub: 'Wohnbaufinanzierung DE' },
-      { lbl: 'WACC impliziert', val: m.wacc_implied ? m.wacc_implied.toFixed(1) + ' %' : '—', col: m.wacc_implied > dcfWacc ? 'var(--red)' : 'var(--green)', sub: `β${m.beta_used}×ERP${m.erp_used}%+CS1.5%` },
-    ].map(k => `
-      <div style="background:var(--bg2);border-radius:8px;padding:12px;text-align:center;border:1px solid var(--border)">
-        <div style="font-size:9px;color:var(--txt2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px">${k.lbl}</div>
-        <div style="font-size:20px;font-weight:700;color:${k.col}">${k.val}</div>
-        <div style="font-size:9px;color:var(--txt3);margin-top:2px">${k.sub}</div>
-      </div>`).join('');
-  }
-
-  // ── WACC-Warnung / Kontexttext
-  const alertEl = document.getElementById('macro-wacc-alert');
-  if (alertEl && m.wacc_implied) {
-    const dcfWacc = +document.getElementById('sw')?.value || 7.5;
-    const diff = (m.wacc_implied - dcfWacc).toFixed(1);
-    const isOptimistic = m.wacc_implied > dcfWacc;
-    alertEl.style.background = isOptimistic ? 'var(--redDim)' : 'var(--greenDim)';
-    alertEl.style.border = `1px solid rgba(${isOptimistic ? '255,77,109' : '0,229,160'},.25)`;
-    alertEl.innerHTML = isOptimistic
-      ? `<strong style="color:var(--red)">⚠ WACC-Risiko:</strong> Der Bundesbank-/EZB-implizierte WACC beträgt <strong>${m.wacc_implied}%</strong> — das ist <strong>${diff} Prozentpunkte höher</strong> als der aktuelle DCF-Base-Case (${dcfWacc}%). Bei WACC ${m.wacc_implied}% fällt der Fair Value auf <strong style="color:var(--red)">€${calcFairValueAt(m.wacc_implied)}</strong>. Begründung: Bund 10J ${m.bund_10y}% + β${m.beta_used}×ERP${m.erp_used}% + Credit Spread 1,5%.`
-      : `<strong style="color:var(--green)">✓ WACC konservativ:</strong> Der DCF-Base-Case WACC (${dcfWacc}%) liegt ${Math.abs(diff)} PP <em>über</em> dem Bundesbank-implizierten WACC (${m.wacc_implied}%). Die Bewertung ist damit auf der sicheren Seite.`;
-  }
-}
-
-function calcFairValueAt(wacc) {
-  // Schnellberechnung mit Base-Case-Parametern
-  const BASE_W = 7.5, BASE_TG = 2.5, BASE_RG1 = 11, BASE_RG8 = 6, BASE_FCF = 40.5;
-  const r = calcDCF(wacc, BASE_TG, BASE_RG1, BASE_RG8, BASE_FCF, ND0, SH0, REV0);
-  return r.fv.toFixed(0);
-}
-
-// ── TRAFFIC SIGNAL CHARTS ────────────────────────────────────
-let chTrendMain, chTrendComp;
-function renderTrafficSignal(d) {
-  const t = d.trends || {};
-  if (!t.series || t.series.length === 0) return;
-
-  // ── KPI-Boxen befüllen
-  const fmt = v => (v >= 0 ? '+' : '') + v.toFixed(1) + ' %';
-
-  if (t.trend_delta !== undefined) {
-    const el = document.getElementById('t-scout-delta');
-    if (el) { el.textContent = fmt(t.trend_delta); el.style.color = t.trend_delta < 0 ? 'var(--red)' : 'var(--green)'; }
-  }
-  if (t.competitor_delta) {
-    const weltEl = document.getElementById('t-welt-delta');
-    if (weltEl) {
-      const wd = t.competitor_delta.immowelt_delta;
-      weltEl.textContent = fmt(wd);
-      weltEl.style.color = wd < 0 ? 'var(--red)' : 'var(--amber)';
-    }
-    // Gap-Delta: Scout verliert X mehr als Immowelt
-    const gap = (t.competitor_delta.immoscout_delta || 0) - (t.competitor_delta.immowelt_delta || 0);
-    const gapEl = document.getElementById('t-gap-delta');
-    if (gapEl) { gapEl.textContent = fmt(gap); gapEl.style.color = gap < 0 ? 'var(--red)' : 'var(--green)'; }
-
-    // Textbaustein
-    const fasterEl = document.getElementById('t-scout-faster');
-    if (fasterEl && gap < -2) fasterEl.textContent = Math.abs(gap).toFixed(1) + ' PP schneller';
-  }
-  // KI-Signal: ai_delta_Wohnung_KI oder Fallback aus ai_signal-Reihe
-  const aiKey   = 'ai_delta_Wohnung_KI';
-  const aiDelta = t[aiKey] !== undefined ? t[aiKey]
-    : (t.ai_signal && t.ai_signal.length >= 2
-        ? (() => {
-            const vals = t.ai_signal.map(p => p['Wohnung KI'] || 0).filter(v => v > 0);
-            if (vals.length < 4) return null;
-            const recent = vals.slice(-4).reduce((a,b)=>a+b,0)/4;
-            const old    = vals.slice(0,4).reduce((a,b)=>a+b,0)/4;
-            return old ? Math.round((recent-old)/old*1000)/10 : null;
-          })()
-        : null);
-  const aiEl = document.getElementById('t-ai-delta');
-  if (aiEl) {
-    if (aiDelta !== null) {
-      aiEl.textContent = fmt(aiDelta);
-      aiEl.style.color = aiDelta > 0 ? 'var(--green)' : 'var(--txt2)';
-    } else {
-      aiEl.textContent = 'N/A';
-      aiEl.style.color = 'var(--txt3)';
-    }
-  }
-  const riseEl = document.getElementById('t-ai-rise');
-  if (riseEl && aiDelta !== null) {
-    riseEl.textContent = aiDelta > 0 ? '+' + aiDelta.toFixed(1) + '% steigendem' : 'rückläufigem';
-  }
-
-  // Datum
-  if (t.series.length > 0) {
-    const dateEl = document.getElementById('trends-date');
-    if (dateEl) dateEl.textContent = 'Stand: ' + t.series[t.series.length-1].date;
-  }
-
-  // ── Chart 1: ImmoScout24 Haupttrend
-  if (chTrendMain) chTrendMain.destroy();
-  const ctx1 = document.getElementById('ch-trend-main');
-  if (ctx1) {
-    const labels = t.series.map(p => p.date.slice(5));
-    // Feldname kann 'value' oder 'immoscout' sein je nach fetcher-Version
-    const vals = t.series.map(p => p.value !== undefined ? p.value : p.immoscout);
-    chTrendMain = new Chart(ctx1.getContext('2d'), {
-      type: 'line',
-      data: { labels, datasets: [{
-        data: vals, borderColor: '#FF4D6D', backgroundColor: 'rgba(255,77,109,.1)',
-        borderWidth: 2, fill: true, tension: .4, pointRadius: 0
-      }]},
-      options: { responsive:true, maintainAspectRatio:false,
-        plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>'Index: '+c.raw}} },
-        scales:{
-          x:{grid:{display:false},ticks:{color:'#3D6A8A',font:{size:9},maxTicksLimit:6}},
-          y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#3D6A8A',font:{size:9}},min:60,max:105}
-        }
-      }
-    });
-  }
-
-  // ── Chart 2: Wettbewerber-Vergleich (nutzt competitor[] oder fällt auf series[] zurück)
-  if (chTrendComp) chTrendComp.destroy();
-  const ctx2 = document.getElementById('ch-trend-comp');
-  if (ctx2) {
-    let cLabels, scoutData, weltData;
-    if (t.competitor && t.competitor.length > 0) {
-      cLabels   = t.competitor.map(p => p.date.slice(5));
-      scoutData = t.competitor.map(p => p.immoscout);
-      weltData  = t.competitor.map(p => p.immowelt);
-    } else {
-      // Fallback: nur Scout24-Linie mit series[]
-      cLabels   = t.series.map(p => p.date.slice(5));
-      scoutData = t.series.map(p => p.value !== undefined ? p.value : p.immoscout);
-      weltData  = null;
-    }
-    const datasets = [
-      { label:'ImmoScout24', data: scoutData,
-        borderColor:'#FF4D6D', borderWidth:2, fill:false, tension:.4, pointRadius:0 },
-    ];
-    if (weltData) datasets.push(
-      { label:'Immowelt', data: weltData,
-        borderColor:'#FFAA00', borderWidth:2, fill:false, tension:.4, pointRadius:0, borderDash:[4,3] }
-    );
-    chTrendComp = new Chart(ctx2.getContext('2d'), {
-      type: 'line',
-      data: { labels: cLabels, datasets },
-      options: { responsive:true, maintainAspectRatio:false,
-        plugins:{ legend:{labels:{color:'#7BAAC8',font:{size:9},boxWidth:8,padding:6}} },
-        scales:{
-          x:{grid:{display:false},ticks:{color:'#3D6A8A',font:{size:9},maxTicksLimit:6}},
-          y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#3D6A8A',font:{size:9}},min:0}
-        }
-      }
-    });
-  }
 }
 
 // ── GAP SCATTER CHART ────────────────────────────────────────
@@ -2357,14 +1594,51 @@ function renderGapChart(){
 }
 
 // ── INIT ─────────────────────────────────────────────────────
-window.addEventListener('load', async ()=>{
+window.addEventListener('load',()=>{
+  renderHist();
   renderFF();
   dcf();
-  renderHist();
-  initEarningsCountdown({});
-  await loadData();
-  await loadSimilarweb();   // Similarweb-Daten separat laden
 });
 </script>
+
+<!-- ══════════════════════════════════════════════════
+     QUELLEN-FOOTER
+══════════════════════════════════════════════════ -->
+<div style="background:var(--bg1);border-top:1px solid var(--border);padding:20px 28px;margin-top:0">
+  <div style="max-width:1280px;margin:0 auto">
+    <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Quellen & Methodiknachweise</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;font-size:10px;color:var(--txt2);line-height:1.65">
+
+      <div>
+        <div style="font-weight:700;color:var(--blue);margin-bottom:5px">📊 Finanzdaten & Primärquellen</div>
+        <div>• Scout24 SE Geschäftsbericht 2025 (GJ 2025, veröff. Mär 2026)</div>
+        <div>• Scout24 Capital Markets Day (CMD), Feb 2026 — Guidance 2026–2028E</div>
+        <div>• Scout24 Q1 2026 Trading Update (Traffic-Daten: −6,8 % Visits)</div>
+        <div>• Scout24 Hauptversammlung 2024 (Österreich-Einschätzung Vorstand)</div>
+        <div>• Bundesbank: DAX-40 Aufnahme Sep. 2025 — Index-Datenbank</div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--gold);margin-bottom:5px">📈 Markt- & Wettbewerbsdaten</div>
+        <div>• Similarweb (Traffic-Metriken, Sessions, DE-Vergleich): Apr 2026</div>
+        <div>• Bloomberg Professional: Peer-Multiples LTM 2025A (Rightmove, Auto Trader, REA Group, Hemnet, Vend, SAP)</div>
+        <div>• bulwiengesa / Sprengnetter: Immobilienpreisdaten DE 2025</div>
+        <div>• Statista: DE-Wohnungsfertigstellungen (50J.-Tief 2024/25)</div>
+        <div>• KKR/CPP Investments: Immowelt-Beteiligung — Pressemitteilung 2025</div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--green);margin-bottom:5px">🔬 Methodikhinweise</div>
+        <div>• DCF-Modell: 8-Jahres-Projektion, Gordon-Growth-TV, WACC 7,5 % (selbst hergeleitet — siehe DCF-Tab)</div>
+        <div>• Peer-Group-Selektion: eigene Einschätzung — Pure-Play Property Marketplaces; SAP als DE-Discount-Referenz</div>
+        <div>• Szenarien-Gewichtung (30/50/20): eigene Einschätzung, subjektiv</div>
+        <div>• Revenue-at-Risk-Schätzungen (Lücken 1–5): eigene Modellierung, keine externe Verifikation</div>
+        <div>• ⚗ Hypothesen (mit H markiert): Arbeitshypothesen ohne abschließende empirische Bestätigung</div>
+        <div style="margin-top:6px;color:var(--txt3)">Stand: Mai 2026 · Stefan Eich & Jan Seidel · FOM M.Sc. Finance & Accounting · Nicht zur externen Weiterverbreitung</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
