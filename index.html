@@ -11,11 +11,11 @@
 :root{
   --bg0:#F2F3F4;--bg1:#FFFFFF;--bg2:#F7F7F7;--bg3:#EEEEEE;
   --glass:rgba(255,255,255,0.92);
-  --blue:#F47920;--blue2:#D4600A;--blueGlow:rgba(244,121,32,0.12);
-  --gold:#D4600A;--goldDim:rgba(212,96,10,0.10);
-  --green:#1A8C4E;--greenDim:rgba(26,140,78,0.10);
-  --red:#C0392B;--redDim:rgba(192,57,43,0.10);
-  --amber:#E07B00;--amberDim:rgba(224,123,0,0.10);
+  --blue:#D4600A;--blue2:#A84500;--blueGlow:rgba(212,96,10,0.12);
+  --gold:#8B3D00;--goldDim:rgba(139,61,0,0.10);
+  --green:#0D6B38;--greenDim:rgba(13,107,56,0.10);
+  --red:#A62820;--redDim:rgba(166,40,32,0.10);
+  --amber:#8B4D00;--amberDim:rgba(139,77,0,0.10);
   --txt:#1A1A1A;--txt2:#444444;--txt3:#777777;
   --border:rgba(244,121,32,0.18);--borderB:rgba(244,121,32,0.40);
   --r:10px;
@@ -34,7 +34,7 @@ body{font-family:'Arial',sans-serif;background:var(--bg0);color:var(--txt);font-
 .hdr{
   position:sticky;top:0;z-index:200;
   background:#F47920;
-  border-bottom:3px solid #D4600A;
+  border-bottom:3px solid #C05A00;
   padding:0 28px;
   display:flex;align-items:center;justify-content:space-between;
   height:58px;
@@ -225,8 +225,8 @@ td:first-child{text-align:left;color:var(--txt2);font-weight:600}
 tr:hover td{background:var(--bg2)}
 tr.row-hl td{background:rgba(244,121,32,.10)!important;color:var(--gold)!important}
 tr.row-hl td:first-child{color:var(--gold)!important}
-tr.row-sep td{background:var(--bg3)!important;color:var(--blue)!important;font-weight:700}
-tr.row-sep td:first-child{color:var(--blue)!important}
+tr.row-sep td{background:rgba(244,121,32,.14)!important;color:#7A3000!important;font-weight:700}
+tr.row-sep td:first-child{color:#7A3000!important}
 .g-val{color:var(--green)!important}
 .r-val{color:var(--red)!important}
 .a-val{color:var(--amber)!important}
@@ -528,6 +528,31 @@ tr.row-sep td:first-child{color:var(--blue)!important}
     <div style="font-size:10px;color:var(--txt3);text-align:center;margin-top:8px">
       <span style="color:var(--red)">●</span> Aktueller Kurs €&nbsp;72,25 &nbsp;·&nbsp;
       <span style="color:var(--gold)">●</span> Kursziel 12M €&nbsp;92 &nbsp;·&nbsp; Skala: €&nbsp;40 – €&nbsp;160
+    </div>
+  </div>
+
+  <!-- Google Trends Live-Signal -->
+  <div class="card mb16" id="trends-block">
+    <div class="card-hd"><div class="dot dot-red"></div>Traffic-Signal — Google Trends (Live aus data.json)</div>
+    <div class="g3" style="gap:12px">
+      <div style="background:var(--redDim);border-radius:8px;padding:14px;border:1px solid rgba(166,40,32,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">ImmoScout24 Trend YoY</div>
+        <div id="trend-immoscout" style="font-size:26px;font-weight:900;color:var(--red)">−14,2 %</div>
+        <div style="font-size:10px;color:var(--txt2);margin-top:4px">Google Trends DE · 12M</div>
+      </div>
+      <div style="background:var(--amberDim);border-radius:8px;padding:14px;border:1px solid rgba(139,77,0,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Immowelt Trend YoY</div>
+        <div id="trend-immowelt" style="font-size:26px;font-weight:900;color:var(--amber)">−4,9 %</div>
+        <div style="font-size:10px;color:var(--txt2);margin-top:4px">Wettbewerber-Vergleich</div>
+      </div>
+      <div style="background:var(--redDim);border-radius:8px;padding:14px;border:1px solid rgba(166,40,32,.2);text-align:center">
+        <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">KI-Suche (Wohnung+KI)</div>
+        <div id="trend-ai" style="font-size:26px;font-weight:900;color:var(--red)">+34,9 %</div>
+        <div style="font-size:10px;color:var(--txt2);margin-top:4px">KI-Disintermediation-Signal</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;padding:8px 12px;background:var(--bg2);border-radius:6px;font-size:10px;color:var(--txt2);border:1px solid var(--border)">
+      📡 <span id="trend-signal" style="font-weight:700">Wird geladen…</span> &nbsp;·&nbsp; Quelle: Google Trends DE, automatisch aktualisiert via GitHub Actions &nbsp;·&nbsp; <span id="trend-date" style="color:var(--txt3)">Stand: wird geladen</span>
     </div>
   </div>
 
@@ -1355,7 +1380,7 @@ function renderSens(){
   let h='<table><thead><tr><th>WACC \\ tg</th>'+tgs.map(t=>'<th>'+t.toFixed(1)+' %</th>').join('')+'</tr></thead><tbody>';
   waccs.forEach(w=>{
     h+='<tr'+(Math.abs(w-7.5)<.01?' class="row-sep"':'')+'>';
-    h+='<td style="font-weight:700;color:var(--blue)">'+w.toFixed(1)+' %</td>';
+    h+='<td style="font-weight:700;color:#7A3000;background:rgba(244,121,32,.08)">'+w.toFixed(1)+' %</td>';
     tgs.forEach(t=>{
       const r=calcDCF(w,t,BASE.rg1,BASE.rg8,BASE.fcfm,ND0,SH0,REV0);
       const v=r.fv.toFixed(0);
@@ -1637,14 +1662,38 @@ async function loadLiveData(){
       }
     }
 
-    // Trends-Signal aktualisieren
-    const trendDelta = d?.trends?.trend_delta;
-    if (typeof trendDelta === 'number') {
-      const el = document.getElementById('trend-signal');
-      if (el) {
-        const sign = trendDelta >= 0 ? '+' : '';
-        el.textContent = 'Google Trends ImmoScout24: ' + sign + trendDelta + '% YoY';
-        el.style.color = trendDelta >= 0 ? 'var(--green)' : 'var(--red)';
+    // Trends-Block aktualisieren
+    const trends = d?.trends;
+    if (trends) {
+      const fmt = (v, el) => {
+        if (!el) return;
+        const sign = v >= 0 ? '+' : '';
+        el.textContent = sign + v.toFixed(1) + ' %';
+        el.style.color = v >= 0 ? 'var(--green)' : 'var(--red)';
+      };
+      const trendDelta = trends.trend_delta;
+      if (typeof trendDelta === 'number') {
+        fmt(trendDelta, document.getElementById('trend-immoscout'));
+        const sig = document.getElementById('trend-signal');
+        if (sig) {
+          const sign = trendDelta >= 0 ? '+' : '';
+          sig.textContent = 'ImmoScout24 Trend: ' + sign + trendDelta.toFixed(1) + '% YoY — ' + (trendDelta < -5 ? '⚠ Warnsignal aktiv' : trendDelta < 0 ? 'Negativ, beobachten' : '✓ Positiv');
+          sig.style.color = trendDelta < -5 ? 'var(--red)' : trendDelta < 0 ? 'var(--amber)' : 'var(--green)';
+        }
+      }
+      const compDelta = trends.competitor_delta;
+      if (compDelta?.immowelt_delta !== undefined) {
+        fmt(compDelta.immowelt_delta, document.getElementById('trend-immowelt'));
+      }
+      // KI-Signal
+      const aiDelta = trends['ai_delta_Wohnung_KI'] || trends['ai_delta_Wohnung ChatGPT'];
+      if (typeof aiDelta === 'number') {
+        fmt(aiDelta, document.getElementById('trend-ai'));
+      }
+      // Datum
+      const dateEl = document.getElementById('trend-date');
+      if (dateEl && trends.series?.length) {
+        dateEl.textContent = 'Stand: ' + trends.series[trends.series.length-1]?.date;
       }
     }
 
