@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "generated_at": "2026-06-01T20:39:19.041887Z",
+    "generated_at": "2026-06-02T06:39:55.879668Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
   "market": {
-    "price": 72.25,
-    "change_pct": 3.66,
+    "price": 74.45,
+    "change_pct": 3.04,
     "market_cap_bn": 0,
-    "year_high": 72.7,
-    "year_low": 70.0,
+    "year_high": 74.85,
+    "year_low": 71.45,
     "pe_ratio": 0
   },
   "profile": {
@@ -149,7 +149,7 @@
       },
       {
         "date": "2026-04-19",
-        "value": 81
+        "value": 79
       },
       {
         "date": "2026-04-26",
@@ -165,22 +165,22 @@
       },
       {
         "date": "2026-05-17",
-        "value": 74
+        "value": 72
       },
       {
         "date": "2026-05-24",
-        "value": 70
+        "value": 69
       },
       {
         "date": "2026-05-31",
-        "value": 69
+        "value": 67
       }
     ],
     "competitor": [
       {
         "date": "2026-02-15",
         "immoscout": 72,
-        "immowelt": 68
+        "immowelt": 70
       },
       {
         "date": "2026-02-22",
@@ -224,13 +224,13 @@
       },
       {
         "date": "2026-04-19",
-        "immoscout": 81,
+        "immoscout": 79,
         "immowelt": 80
       },
       {
         "date": "2026-04-26",
         "immoscout": 79,
-        "immowelt": 79
+        "immowelt": 75
       },
       {
         "date": "2026-05-03",
@@ -244,25 +244,25 @@
       },
       {
         "date": "2026-05-17",
-        "immoscout": 74,
-        "immowelt": 77
+        "immoscout": 72,
+        "immowelt": 75
       },
       {
         "date": "2026-05-24",
-        "immoscout": 70,
-        "immowelt": 78
+        "immoscout": 69,
+        "immowelt": 77
       },
       {
         "date": "2026-05-31",
-        "immoscout": 69,
-        "immowelt": 90
+        "immoscout": 68,
+        "immowelt": 78
       }
     ],
     "ai_signal": [
       {
         "date": "2026-03-15",
         "Wohnung KI": 60,
-        "Wohnung ChatGPT": 71
+        "Wohnung ChatGPT": 72
       },
       {
         "date": "2026-03-22",
@@ -281,23 +281,23 @@
       },
       {
         "date": "2026-04-12",
-        "Wohnung KI": 40,
+        "Wohnung KI": 60,
         "Wohnung ChatGPT": 61
       },
       {
         "date": "2026-04-19",
-        "Wohnung KI": 63,
+        "Wohnung KI": 62,
         "Wohnung ChatGPT": 54
       },
       {
         "date": "2026-04-26",
-        "Wohnung KI": 57,
+        "Wohnung KI": 58,
         "Wohnung ChatGPT": 52
       },
       {
         "date": "2026-05-03",
         "Wohnung KI": 94,
-        "Wohnung ChatGPT": 54
+        "Wohnung ChatGPT": 55
       },
       {
         "date": "2026-05-10",
@@ -306,27 +306,27 @@
       },
       {
         "date": "2026-05-17",
-        "Wohnung KI": 35,
-        "Wohnung ChatGPT": 51
+        "Wohnung KI": 27,
+        "Wohnung ChatGPT": 38
       },
       {
         "date": "2026-05-24",
-        "Wohnung KI": 45,
-        "Wohnung ChatGPT": 58
+        "Wohnung KI": 44,
+        "Wohnung ChatGPT": 57
       },
       {
         "date": "2026-05-31",
-        "Wohnung KI": 58,
-        "Wohnung ChatGPT": 54
+        "Wohnung KI": 53,
+        "Wohnung ChatGPT": 55
       }
     ],
-    "trend_delta": -18.4,
+    "trend_delta": -19.8,
     "competitor_delta": {
-      "immoscout_delta": -18.4,
-      "immowelt_delta": -2.4
+      "immoscout_delta": -19.5,
+      "immowelt_delta": -7.0
     },
-    "ai_delta_Wohnung_KI": 49.3,
-    "ai_delta_Wohnung_ChatGPT": -14.3
+    "ai_delta_Wohnung_KI": 38.1,
+    "ai_delta_Wohnung_ChatGPT": -19.4
   },
   "macro": {
     "ecb_deposit_rate": 2.0,
@@ -334,7 +334,7 @@
     "mortgage_rate_10y": 3.82,
     "wacc_floor": 7.5,
     "wacc_implied": 8.9,
-    "as_of": "2026-06-01",
+    "as_of": "2026-06-02",
     "source": "EZB + Bundesbank SDMX API",
     "ecb_next_hike_prob": 0.91,
     "erp_used": 5.5,
@@ -344,7 +344,7 @@
     "positions": [],
     "total_short_pct": 0,
     "num_holders": 0,
-    "as_of": "2026-06-01",
+    "as_of": "2026-06-02",
     "source": "BaFin — Netto-Leerverkaufspositionen (öffentlich)"
   },
   "brokers": {},
