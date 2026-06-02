@@ -420,7 +420,7 @@ tr.row-sep td:first-child{color:var(--blue)!important}
 <div class="hdr">
   <div class="hdr-brand">
     <h1>SCOUT24 SE &nbsp;·&nbsp; <span style="color:var(--blue)">SDX.DE</span></h1>
-    <p>Equity Research &nbsp;·&nbsp; Stefan Eich &amp; Jan Seidel &nbsp;·&nbsp; FOM M.Sc. Finance &amp; Accounting &nbsp;·&nbsp; Mai 2026</p>
+    <p>Equity Research &nbsp;·&nbsp; Stefan Eich &amp; Jan Seidel &nbsp;·&nbsp; FOM M.Sc. Finance &amp; Accounting &nbsp;·&nbsp; Mai 2026 &nbsp;·&nbsp; <span id="live-stamp" style="color:rgba(255,255,255,0.65)">Kurs wird geladen…</span></p>
   </div>
   <div class="hdr-kpis">
     <div class="hkpi"><div class="lbl">Kurs</div><div class="val gold">€ 72,25</div></div>
@@ -1595,8 +1595,67 @@ function renderGapChart(){
   chGapScatter.draw();
 }
 
+// ── LIVE DATA LOADER (data.json) ─────────────────────────────
+async function loadLiveData(){
+  try {
+    const r = await fetch('data.json?v=' + Date.now());
+    if (!r.ok) return;
+    const d = await r.json();
+
+    const price = d?.market?.price;
+    const chgPct = d?.market?.change_pct;
+    const meta = d?._meta?.generated_at;
+
+    if (price && price > 0) {
+      // Header KPIs aktualisieren
+      document.querySelectorAll('.hkpi').forEach(el => {
+        const lbl = el.querySelector('.lbl')?.textContent?.trim();
+        const val = el.querySelector('.val');
+        if (!val) return;
+        if (lbl === 'Kurs') {
+          val.textContent = '€ ' + price.toFixed(2);
+          const sign = chgPct >= 0 ? '+' : '';
+          val.title = `Δ ${sign}${chgPct?.toFixed(2) ?? ''}% (${d?.market?.latest_day ?? ''})`;
+        }
+        if (lbl === 'Upside') {
+          const up = ((92 - price) / price * 100).toFixed(1);
+          val.textContent = (up >= 0 ? '+' : '') + up + ' %';
+          document.getElementById('hdr-up') && (document.getElementById('hdr-up').textContent = (up >= 0 ? '+' : '') + up + ' %');
+        }
+      });
+
+      // Globale PRICE-Variable für DCF/Charts aktualisieren
+      window.LIVE_PRICE = price;
+
+      // Stand-Zeitstempel einblenden
+      if (meta) {
+        const dt = new Date(meta);
+        const fmt = dt.toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'})
+                  + ' ' + dt.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
+        const stamp = document.getElementById('live-stamp');
+        if (stamp) stamp.textContent = 'Kurs-Stand: ' + fmt + ' UTC';
+      }
+    }
+
+    // Trends-Signal aktualisieren
+    const trendDelta = d?.trends?.trend_delta;
+    if (typeof trendDelta === 'number') {
+      const el = document.getElementById('trend-signal');
+      if (el) {
+        const sign = trendDelta >= 0 ? '+' : '';
+        el.textContent = 'Google Trends ImmoScout24: ' + sign + trendDelta + '% YoY';
+        el.style.color = trendDelta >= 0 ? 'var(--green)' : 'var(--red)';
+      }
+    }
+
+  } catch(e) {
+    console.warn('data.json nicht geladen:', e);
+  }
+}
+
 // ── INIT ─────────────────────────────────────────────────────
 window.addEventListener('load',()=>{
+  loadLiveData();
   renderHist();
   renderFF();
   dcf();
