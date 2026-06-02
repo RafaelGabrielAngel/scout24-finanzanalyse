@@ -526,7 +526,7 @@ tr.row-sep td:first-child{color:#7A3000!important}
     <div class="card-hd"><div class="dot dot-blue"></div>Football Field — Bewertungsbandbreite (alle Methoden)</div>
     <div class="ff-wrap" id="ff-container"></div>
     <div style="font-size:10px;color:var(--txt3);text-align:center;margin-top:8px">
-      <span style="color:var(--red)">●</span> Aktueller Kurs €&nbsp;72,25 &nbsp;·&nbsp;
+      <span style="color:var(--red)">●</span> Aktueller Kurs €&nbsp;<span id="ff-price-label">72,25</span> &nbsp;·&nbsp;
       <span style="color:var(--gold)">●</span> Kursziel 12M €&nbsp;92 &nbsp;·&nbsp; Skala: €&nbsp;40 – €&nbsp;160
     </div>
   </div>
@@ -1470,8 +1470,9 @@ function renderSens(){
 // ── FOOTBALL FIELD ───────────────────────────────────────────
 function renderFF(){
   const MIN=40, MAX=160, R=MAX-MIN;
-  const pct=v=>(((v-MIN)/R)*100);        // returns number 0–100
+  const pct=v=>(((v-MIN)/R)*100);
   const fmt2=v=>v.toFixed(2)+'%';
+  const livePrice = window.LIVE_PRICE || PRICE;   // live wenn vorhanden, sonst Fallback
 
   const methods=[
     {lbl:'DCF (Bär / Base / Bulle)', lo:75,  hi:137, col:'#1A6BB5'},
@@ -1484,8 +1485,8 @@ function renderFF(){
     {lbl:'M&A Prämie (30–50 %)',     lo:94,  hi:108, col:'#009977'},
   ];
 
-  const pp = pct(PRICE);   // e.g. 26.875
-  const tp = pct(92);      // e.g. 43.33
+  const pp = pct(livePrice);
+  const tp = pct(92);
 
   // ── Price / Target indicator header (a track-shaped ruler)
   let headerTrack =
@@ -1494,7 +1495,7 @@ function renderFF(){
     `<div style="flex:1;height:24px;background:var(--bg3);border-radius:3px;position:relative;">` +
       // price line
       `<div style="position:absolute;left:${fmt2(pp)};top:0;bottom:0;width:2px;background:var(--red);z-index:5;"></div>` +
-      `<div style="position:absolute;left:${fmt2(pp)};top:-18px;transform:translateX(-50%);background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;white-space:nowrap;z-index:6;">Kurs € ${PRICE}</div>` +
+      `<div style="position:absolute;left:${fmt2(pp)};top:-18px;transform:translateX(-50%);background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;white-space:nowrap;z-index:6;">Kurs € ${livePrice.toFixed(2)}</div>` +
       // target line
       `<div style="position:absolute;left:${fmt2(tp)};top:0;bottom:0;width:2px;background:var(--gold);z-index:5;"></div>` +
       `<div style="position:absolute;left:${fmt2(tp)};top:-18px;transform:translateX(-50%);background:var(--gold);color:#000;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;white-space:nowrap;z-index:6;">Ziel € 92</div>` +
@@ -1514,7 +1515,7 @@ function renderFF(){
         `<div class="ff-lbl">${m.lbl}</div>` +
         `<div class="ff-track">` +
           // price indicator inside track (thin, no label)
-          `<div style="position:absolute;left:${fmt2(pp)};top:0;bottom:0;width:2px;background:rgba(192,57,43,.9);z-index:5;"></div>` +
+          `<div style="position:absolute;left:${fmt2(pct(livePrice))};top:0;bottom:0;width:2px;background:rgba(192,57,43,.9);z-index:5;"></div>` +
           `<div style="position:absolute;left:${fmt2(tp)};top:0;bottom:0;width:2px;background:rgba(212,96,10,.9);z-index:5;"></div>` +
           `<div class="ff-bar" style="left:${fmt2(lo)};width:${fmt2(w)};background:${m.col};">${label}</div>` +
         `</div>` +
@@ -1705,6 +1706,12 @@ async function loadLiveData(){
     const meta = d?._meta?.generated_at;
 
     if (price && price > 0) {
+      // Football Field mit aktuellem Kurs neu rendern
+      window.LIVE_PRICE = price;
+      renderFF();
+      const ffLbl = document.getElementById('ff-price-label');
+      if (ffLbl) ffLbl.textContent = price.toFixed(2).replace('.',',');
+
       // Header KPIs aktualisieren
       document.querySelectorAll('.hkpi').forEach(el => {
         const lbl = el.querySelector('.lbl')?.textContent?.trim();
