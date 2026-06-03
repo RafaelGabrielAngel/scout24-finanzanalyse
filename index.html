@@ -438,7 +438,9 @@ tr.row-sep td:first-child{color:#7A3000!important}
   <button class="tb" onclick="tab('multi',this)"><span class="dot"></span>Peer Multiples</button>
   <button class="tb" onclick="tab('acq',this)"><span class="dot"></span>Übernahme-Szenario</button>
   <button class="tb" onclick="tab('gap',this)"><span class="dot"></span>Geschäftsmodell-Lücken</button>
+  <button class="tb" onclick="tab('lev',this)"><span class="dot"></span>Levermann-Score</button>
   <button class="tb" onclick="tab('risk',this)"><span class="dot"></span>Investment-Urteil</button>
+  <button class="tb" onclick="tab('live',this)"><span class="dot"></span>Live-Daten</button>
 </div>
 
 <!-- ══════════════════════════════════════════════════
@@ -518,7 +520,7 @@ tr.row-sep td:first-child{color:#7A3000!important}
       <div class="stat-row"><span class="s-lbl">Beneish M-Score</span><span class="s-val g">−4,01 ✓</span></div>
       <div class="stat-row"><span class="s-lbl">ROCE (2025A)</span><span class="s-val g">16,8 %</span></div>
       <div class="stat-row"><span class="s-lbl">ROCE − WACC Spread</span><span class="s-val g">+9,3 %</span></div>
-      <div class="stat-row"><span class="s-lbl">Goodwill / Bilanzsumme</span><span class="s-val r">87 % ⚠</span></div>
+      <div class="stat-row"><span class="s-lbl">Immaterielle VG inkl. Goodwill + Marke / BS</span><span class="s-val r">87 % ⚠</span></div>
     </div>
   </div>
 
@@ -826,6 +828,78 @@ tr.row-sep td:first-child{color:#7A3000!important}
     <div style="margin-top:4px;padding:10px 14px;background:var(--amberDim);border-radius:7px;border:1px solid rgba(255,170,0,.25);font-size:11px;color:var(--txt2);line-height:1.65">
       ⚡ <strong style="color:var(--amber)">Methodikhinweis (Peer-Selektion):</strong> SAP SE ist methodisch kein PropTech-Marketplace-Peer — Geschäftsmodell (Enterprise-Software), Marge (32 %) und Multiple-Logik sind inkompatibel. SAP wird in Gruppe B als DE-Markt-Discount-Referenz geführt, nicht im primären Multiple-Vergleich. Der Gruppe-A-Median (21,4× EV/EBITDA) impliziert bei gleicher Bewertung ein Kursziel von ~€135 — Scout24 handelt mit einem signifikanten <strong style="color:var(--red)">−39 % DE-Konglomerat-Discount</strong> (KI-Risiko, Wachstumsverlangsamung, Regulierung). Quellen: Bloomberg Consensus LTM 2025A. Scout24 Peergroup-Definition: eigene Einschätzung — abweichende Definitionen möglich.
     </div>
+
+    <!-- Peer Comparability Scoring -->
+    <div style="margin-top:16px">
+      <div style="font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)">
+        Peer-Vergleichbarkeits-Scoring — Methodische Einschränkungen
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Kriterium</th>
+              <th>Scout24</th>
+              <th>Rightmove 🇬🇧</th>
+              <th>REA Group 🇦🇺</th>
+              <th>Hemnet 🇸🇪</th>
+              <th>Auto Trader 🇬🇧</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Immobilienportal (rein)</td>
+              <td class="g-val">✓ hoch</td>
+              <td class="g-val">✓ hoch</td>
+              <td class="g-val">✓ hoch</td>
+              <td class="g-val">✓ hoch</td>
+              <td class="r-val">✗ Auto</td>
+            </tr>
+            <tr>
+              <td>Transaktionsnähe</td>
+              <td class="a-val">mittel</td>
+              <td class="r-val">niedrig</td>
+              <td class="g-val">höher</td>
+              <td class="a-val">mittel</td>
+              <td class="a-val">mittel</td>
+            </tr>
+            <tr>
+              <td>Geogr. Vergleichbarkeit (DE)</td>
+              <td class="g-val">Basis</td>
+              <td class="a-val">mittel (UK)</td>
+              <td class="r-val">niedrig (AU)</td>
+              <td class="a-val">mittel (SE)</td>
+              <td class="a-val">mittel (UK)</td>
+            </tr>
+            <tr>
+              <td>Margenprofil (EBITDA)</td>
+              <td class="g-val">62,5 % — hoch</td>
+              <td class="g-val">sehr hoch</td>
+              <td class="g-val">hoch</td>
+              <td class="g-val">hoch</td>
+              <td class="g-val">hoch</td>
+            </tr>
+            <tr>
+              <td>Regulatorische Vergleichbarkeit</td>
+              <td class="g-val">Basis (DE/EU)</td>
+              <td class="a-val">mittel (UK post-Brexit)</td>
+              <td class="r-val">niedrig (AU)</td>
+              <td class="a-val">mittel (SE/EU)</td>
+              <td class="a-val">mittel (UK)</td>
+            </tr>
+            <tr style="background:var(--amberDim)">
+              <td><strong>Gesamteignung als Peer</strong></td>
+              <td>—</td>
+              <td class="g-val"><strong>gut</strong></td>
+              <td class="a-val"><strong>eingeschränkt</strong></td>
+              <td class="g-val"><strong>gut</strong></td>
+              <td class="a-val"><strong>eingeschränkt</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:10px;color:var(--txt3);margin-top:6px;line-height:1.5">Scoring: eigene Einschätzung. REA und Auto Trader bleiben im Vergleich, da international anerkannte PropTech/Marketplace-Benchmarks fehlen — Einschränkung ist beim Multiple-Abgleich zu berücksichtigen.</div>
+    </div>
   </div>
 
   <div class="g2">
@@ -848,6 +922,21 @@ tr.row-sep td:first-child{color:#7A3000!important}
             <tr class="row-hl"><td>Gewichteter FV</td><td>40/35/25</td><td>—</td><td class="a-val">€ 92</td><td>—</td><td class="c-txt2 fz11">DCF+EBITDA+P/E</td></tr>
           </tbody>
         </table>
+      </div>
+      <!-- Gewichtungsbegründung -->
+      <div style="margin-top:14px">
+        <div style="font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)">Gewichtungslogik — Begründung der 40/35/25-Aufteilung</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Methode</th><th>Gewicht</th><th>Begründung</th><th>Einschränkung</th></tr></thead>
+            <tbody>
+              <tr><td>DCF</td><td class="b-val">40 %</td><td>Abbildung langfristiger Plattform-Cashflows; adäquat für Unternehmen mit hoher FCF-Konvertierung (~93 %) und mehrjährigem Investitionshorizont</td><td>Sensitiv auf WACC und Terminal Growth; hohe Modellabhängigkeit</td></tr>
+              <tr><td>EV/ooEBITDA</td><td class="b-val">35 %</td><td>Marktübliche Primärmethode für profitable Plattformunternehmen; eliminiert Verzerrungen durch Goodwill-Abschreibungen; direkt vergleichbar mit Peer-Gruppe</td><td>Peer-Vergleichbarkeit eingeschränkt (geografische Unterschiede — siehe Scoring oben)</td></tr>
+              <tr><td>Forward P/E</td><td class="b-val">25 %</td><td>Ergebnisorientierte Kapitalmarktsicht; relevant für institutionelle Investoren mit EPS-Fokus</td><td>Durch Goodwill-Abschreibungen und Einmaleffekte verzerrt — daher geringste Gewichtung</td></tr>
+              <tr style="background:var(--amberDim)"><td colspan="2"><strong>Hinweis Szenarien-Gewichtung (30/50/20)</strong></td><td colspan="2">Bär 30 % wegen erhöhter KI-Unsicherheit und Traffic-Signal Q1 2026 (asymmetrisches Risiko). Bull 20 % weil "Agentic OS"-Monetarisierung erst 2027–28 greift. Eigene Einschätzung — alternative Gewichtungen ändern FV um ±€8–12.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -974,8 +1063,8 @@ tr.row-sep td:first-child{color:#7A3000!important}
     </div>
     <div class="risk-card high">
       <div class="risk-tag high">Risiko 3 — Hoch</div>
-      <h4>€ 1,8 Mrd. Goodwill = 87 % der Bilanzsumme</h4>
-      <p>Goodwill (€925,8M) + Marke (€869,6M) = €1,795 Mrd. Werthaltigkeitstests basieren auf fortgesetzter Marktführerschaft. Impairment €500–800M wäre nicht-cashwirksam, aber eigenkapitalreduzierend. Kein Sell-Side-Modell quantifiziert dieses Tail-Risk.</p>
+      <h4>€ 1,8 Mrd. immaterielle Vermögenswerte (Goodwill + Marke) = 87 % der Bilanzsumme</h4>
+      <p>Goodwill (€925,8M, 44,8 % BS) + Marke ImmoScout24 (€869,6M, 42,1 % BS) + sonstige Immateriell (€67,3M) = €1,795 Mrd. Werthaltigkeitstests basieren auf fortgesetzter Marktführerschaft. Impairment €500–800M wäre nicht-cashwirksam, aber eigenkapitalreduzierend. Kein Sell-Side-Modell quantifiziert dieses Tail-Risk.</p>
       <div class="pills"><span class="pill r">Impairment €500–800M</span><span class="pill r">EPS-Verwässerung −15–25 %</span></div>
     </div>
     <div class="risk-card med">
@@ -1057,7 +1146,7 @@ tr.row-sep td:first-child{color:#7A3000!important}
         </div>
         <div style="background:var(--redDim);border-radius:8px;padding:14px;border:1px solid rgba(255,77,109,.2)">
           <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">❌ Schwächen</div>
-          <div class="stat-row"><span class="s-lbl">Goodwill / Bilanzsumme</span><span class="s-val r">87 % ⚠</span></div>
+          <div class="stat-row"><span class="s-lbl">Immaterielle WG inkl. Goodwill + Marke / BS</span><span class="s-val r">87 % ⚠</span></div>
           <div class="stat-row"><span class="s-lbl">DE-Abhängigkeit</span><span class="s-val r">~96 % Umsatz</span></div>
           <div class="stat-row"><span class="s-lbl">Traffic-Erosion</span><span class="s-val r">Q1 2026 −6,8 %</span></div>
           <div class="stat-row"><span class="s-lbl">M&A-Integrationsrisiken</span><span class="s-val r">Fotocasa, AT-Erfahrung</span></div>
@@ -1082,6 +1171,58 @@ tr.row-sep td:first-child{color:#7A3000!important}
     </div>
   </div>
 
+  <!-- KI vs. Klassisch -->
+  <div class="card" style="margin-top:20px;border-color:var(--borderB);background:linear-gradient(135deg,var(--bg2),var(--bg1))">
+    <div class="card-hd"><div class="dot dot-blue"></div>🤖 Was hat die KI-gestützte Analyse zusätzlich erkannt? — Klassisch vs. KI-View</div>
+    <p class="fz12 c-txt2 mb16" style="line-height:1.6">Diese Tabelle macht transparent, wo die KI-gestützte Analyse über klassische Finanzanalyse hinausgeht — ein direkter Vergleich auf Basis derselben Faktenlage.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:28%">Klassische Finanzanalyse</th>
+            <th style="width:36%">KI-gestützte Zusatzsicht <span class="hyp" title="Hypothesengenerator — kein kausal bewiesener Befund">H</span></th>
+            <th style="width:36%">Implikation für die Bewertung</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Umsatz, EBITDA, FCF steigen — Plattform operativ gesund</td>
+            <td>Plattformmodell könnte durch Agentic Search angegriffen werden: KI-Assistenten aggregieren Listings ohne ImmoScout24-Klick</td>
+            <td>Wachstumsannahmen im DCF (+6–11 % p.a.) könnten strukturell zu optimistisch sein — Bär-Case bekommt höheres Gewicht</td>
+          </tr>
+          <tr>
+            <td>Multiples zeigen Bewertungsabschlag vs. Rightmove/REA (13× vs. 21× EV/EBITDA)</td>
+            <td>Abschlag könnte Ausdruck fehlender Transaktionskontrolle sein — Scout24 endet am Listing, besitzt keinen Transaktions-Layer</td>
+            <td>Multiple-Gap zu Peers ist möglicherweise strukturell, nicht zyklisch — Aufholung braucht Transaktions-Pivot (ImmoPunkte, BauFi)</td>
+          </tr>
+          <tr>
+            <td>DCF zeigt 27–44 % Upside — klares Kaufsignal nach Standardlogik</td>
+            <td>Szenarioanalyse zeigt hohe Modellsensitivität: kleine Parameter-Verschiebungen (WACC +150 bps, Traffic −5 %) kippen die Empfehlung</td>
+            <td>„Kaufen wegen Upside" unterschätzt binäres Catalyst-Risiko: bei WACC 9 % und Traffic −5 % p.a. fällt FV auf ~€58 — HALTEN rational bis Daten vorliegen</td>
+          </tr>
+          <tr>
+            <td>Goodwill bilanziell nicht cashwirksam — kein sofortiger P&amp;L-Effekt</td>
+            <td>Kapitalmarkt interpretiert Impairment als Vertrauenssignal — historische Analogien zeigen KGV-Kompression post-Impairment unabhängig vom cashwirksamen Effekt</td>
+            <td>Tail-Risk: €500–800M Impairment könnte über bilanziellen Effekt hinaus eine Neubewertung des Multiple auslösen</td>
+          </tr>
+          <tr>
+            <td>100 % Buy-Konsens Sell-Side — klarer Marktauftrag</td>
+            <td>Herdenrisiko: Konsens-Modelle quantifizieren kein KI-Disintermediation-Szenario — Modellkonvergenz erhöht Downside bei negativem Catalyst überproportional</td>
+            <td>Contrarian-Signal: wenn alle Kaufen und das Modell identisch ist, ist das Downside-Potential bei negativer Überraschung asymmetrisch groß</td>
+          </tr>
+          <tr style="background:var(--amberDim)">
+            <td><strong>Ergebnis klassisch</strong><br><span class="fz11 c-txt2">Kauf, Kursziel €92–110 — Upside vorhanden</span></td>
+            <td><strong>Ergebnis KI-Analyse</strong><br><span class="fz11 c-txt2">HALTEN — Upside reell, aber Timing-Risiko durch binäre Catalyst-Abhängigkeit</span></td>
+            <td><strong>Schlussfolgerung</strong><br><span class="fz11 c-txt2">KI liefert nicht abweichende Zahlen, sondern abweichende Risikogewichtung — gleiche Fakten, härtere Szenarien</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;padding:10px 14px;background:var(--blueGlow);border-radius:7px;border:1px solid var(--border);font-size:11px;color:var(--txt2);line-height:1.6">
+      <strong style="color:var(--blue)">ℹ Methodiknote:</strong> Die KI-gestützte Sicht basiert auf Mustererkennung aus analoger Plattformgeschichte (Medien 2014–16, Einzelhandel 2017–19), Traffic-Signalauswertung und Szenariokombination. Sie ist Hypothesengenerator, kein kausal bewiesener Befund — und ergänzt die klassische Analyse um Risiken, die Sell-Side-Modelle systematisch ausblenden.
+    </div>
+  </div>
+
 </div><!-- /risk -->
 
 <!-- ══════════════════════════════════════════════════
@@ -1093,7 +1234,7 @@ tr.row-sep td:first-child{color:#7A3000!important}
     <div class="v-rating" style="font-size:17px;min-width:80px;letter-spacing:1px">5 LÜCKEN</div>
     <div class="v-body">
       <h3>Short-Thesis: Scout24 ist ein Aggregator — der gerade selbst aggregiert wird</h3>
-      <p>ImmoScout24's Kernmoat basiert auf einem Engpass: Nutzer brauchen die Plattform, Makler brauchen die Nutzer. Generative KI bricht beide Seiten dieses Gleichgewichts gleichzeitig auf. Q1 2026 liefert den ersten empirischen Beweis: Traffic −6,8 %, Sessions −6,7 % — <em>obwohl</em> das Angebotsvolumen um +14,5 % stieg. Das ist kein Konjunktureffekt. Das ist strukturelle Disintermediation. Fünf Schichten fehlen Scout24, um diesen Wandel strukturell zu überleben: Transaktionskontrolle, API-Ökosystem, Netzwerktiefe, Datensouveränität und geografische Diversifikation. <strong style="color:var(--red)">Keines dieser Defizite ist im Konsens-DCF modelliert.</strong></p>
+      <p>ImmoScout24's Kernmoat basiert auf einem Engpass: Nutzer brauchen die Plattform, Makler brauchen die Nutzer. Generative KI bricht beide Seiten dieses Gleichgewichts gleichzeitig auf. Q1 2026 liefert ein erstes empirisches Indiz: Traffic −6,8 %, Sessions −6,7 % — <em>obwohl</em> das Angebotsvolumen um +14,5 % stieg. Das ist kein klassischer Konjunktureffekt. Dies ist mit der These struktureller Disintermediation vereinbar. Fünf Schichten fehlen Scout24, um diesen Wandel strukturell zu überleben: Transaktionskontrolle, API-Ökosystem, Netzwerktiefe, Datensouveränität und geografische Diversifikation. <strong style="color:var(--red)">Keines dieser Defizite ist im Konsens-DCF modelliert.</strong></p>
     </div>
   </div>
 
@@ -1229,6 +1370,9 @@ tr.row-sep td:first-child{color:#7A3000!important}
       <div style="margin-top:10px;padding:10px 14px;background:var(--blueGlow);border-radius:7px;border:1px solid rgba(0,180,255,.2);font-size:11px;color:var(--txt2);line-height:1.65">
         <strong style="color:var(--blue)">📌 Vergleich Consensus vs. Short-These:</strong> Sell-Side-DCF-Median impliziert €3,5–4,0 Mrd. EV. Unsere 5-Lücken-Adjustierung reduziert den fairen EV auf €2,1–2,6 Mrd. im Bear-Case — das entspricht einem Kursziel von €35–45 bei vollem Durchschlag aller Lücken.
       </div>
+      <div style="margin-top:10px;padding:10px 14px;background:var(--amberDim);border-radius:7px;border:1px solid rgba(255,170,0,.25);font-size:11px;color:var(--txt2);line-height:1.65">
+        <strong style="color:var(--amber)">🔬 Methodiknote Revenue-at-Risk:</strong> Die Werte beruhen auf einer eigenen Szenariomodellierung. Der erwartete Schaden ergibt sich aus dem Mittelwert der geschätzten Risiko-Range multipliziert mit der Eintrittswahrscheinlichkeit P(2027E). Die Wahrscheinlichkeiten sind subjektive Einschätzungen auf Basis von Analogieschlüssen (Plattformgeschichte, Traffic-Signale, Wettbewerbsdaten) — keine statistisch abgeleiteten Werte. Die Tabelle ist kein Forecast, sondern ein Sensitivitätsinstrument zur Quantifizierung strategischer Risiken, die im Konsens-DCF unmodelliert bleiben.
+      </div>
     </div>
 
     <!-- Probability-Impact Chart -->
@@ -1276,6 +1420,65 @@ tr.row-sep td:first-child{color:#7A3000!important}
 
 </div><!-- /gap -->
 
+<!-- ══════════════════════════════════════════════════
+     PANE — LEVERMANN-SCORE
+══════════════════════════════════════════════════ -->
+<div id="p-lev" class="pane">
+
+  <div id="lev-loading" class="verdict hold" style="background:rgba(0,180,255,.05);border-color:rgba(0,180,255,.3)">
+    <div class="v-rating" style="font-size:16px;min-width:80px;color:var(--blue)">LSEG</div>
+    <div class="v-body">
+      <h3>Levermann-Score — wird via LSEG Workspace befüllt</h3>
+      <p>Der Levermann-Score (Susan Levermann, "Der entspannte Weg zum Reichtum") bewertet 13 quantitative Kriterien systematisch. Für Large Caps (DAX): Gesamt ≥ +4 = KAUFEN · −3 bis +3 = HALTEN · ≤ −4 = VERKAUFEN.<br><strong style="color:var(--blue)">Bitte lokalen Fetcher ausführen:</strong> <code style="background:var(--bg3);padding:2px 6px;border-radius:4px">python levermann_lseg.py</code> → git push</p>
+    </div>
+  </div>
+
+  <div id="lev-content" style="display:none">
+
+    <!-- Score-Header -->
+    <div class="g2 mb16">
+      <div class="card" style="text-align:center">
+        <div class="card-hd"><div class="dot dot-gold"></div>Gesamtscore (13 Kriterien)</div>
+        <div id="lev-score-num" style="font-size:72px;font-weight:900;line-height:1;margin:16px 0">—</div>
+        <div id="lev-rating-badge" style="display:inline-block;padding:8px 24px;border-radius:8px;font-size:18px;font-weight:900;letter-spacing:2px">—</div>
+        <div id="lev-scale" style="font-size:10px;color:var(--txt3);margin-top:10px">≥+4 = KAUFEN · −3/+3 = HALTEN · ≤−4 = VERKAUFEN · Large Cap (DAX)</div>
+        <div id="lev-meta" style="font-size:9px;color:var(--txt3);margin-top:6px"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div class="dot dot-blue"></div>Score-Verteilung</div>
+        <div style="position:relative;height:260px"><canvas id="ch-lev-bar"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Kriterienliste -->
+    <div class="card mb16">
+      <div class="card-hd"><div class="dot dot-gold"></div>13 Kriterien im Detail (Levermann Large Cap)</div>
+      <div class="tbl-wrap">
+        <table id="lev-table">
+          <thead><tr>
+            <th style="width:30px">#</th>
+            <th>Kriterium</th>
+            <th>Wert</th>
+            <th>Schwellenwert</th>
+            <th style="width:80px">Punkte</th>
+          </tr></thead>
+          <tbody id="lev-tbody"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:8px;font-size:9px;color:var(--txt3);line-height:1.6">
+        Quelle: LSEG Workspace (Refinitiv) · Methodik: Levermann (2011), "Der entspannte Weg zum Reichtum", DTV Verlag · Large Cap-Kriterien für DAX-Unternehmen · Kriterium 6 (Analystenrating) ist bewusst konträr.
+      </div>
+    </div>
+
+    <!-- Interpretation -->
+    <div id="lev-interpretation" class="card"></div>
+
+  </div>
+
+</div><!-- /lev -->
+
+</div><!-- /gap -->
+
 </div><!-- /content -->
 
 <!-- ══════════════════════════════════════════════════════
@@ -1294,6 +1497,7 @@ function tab(id, btn){
   if(id==='multi'){setTimeout(renderPeers,60)}
   if(id==='acq'){setTimeout(renderMA,60)}
   if(id==='gap'){setTimeout(renderGapChart,60)}
+  if(id==='lev'){setTimeout(renderLevermann,60)}
 }
 
 // ── DCF ENGINE ───────────────────────────────────────────────
@@ -1481,7 +1685,7 @@ function renderFF(){
     {lbl:'EV/EBIT (24,85×)',         lo:54,  hi:118, col:'#4488BB'},
     {lbl:'Forward P/E (19,09×)',     lo:53,  hi:85,  col:'#3377AA'},
     {lbl:'FCF Yield (4,0 %)',        lo:71,  hi:104, col:'#2266AA'},
-    {lbl:'Gewichteter FV',           lo:89,  hi:95,  col:'#CC9900'},
+    {lbl:'Gewichteter FV',           lo:89,  hi:95,  col:'#F47920'},
     {lbl:'M&A Prämie (30–50 %)',     lo:94,  hi:108, col:'#009977'},
   ];
 
@@ -1498,7 +1702,7 @@ function renderFF(){
       `<div style="position:absolute;left:${fmt2(pp)};top:-18px;transform:translateX(-50%);background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;white-space:nowrap;z-index:6;">Kurs € ${livePrice.toFixed(2)}</div>` +
       // target line
       `<div style="position:absolute;left:${fmt2(tp)};top:0;bottom:0;width:2px;background:var(--gold);z-index:5;"></div>` +
-      `<div style="position:absolute;left:${fmt2(tp)};top:-18px;transform:translateX(-50%);background:var(--gold);color:#000;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;white-space:nowrap;z-index:6;">Ziel € 92</div>` +
+      `<div style="position:absolute;left:${fmt2(tp)};top:-18px;transform:translateX(-50%);background:#F47920;color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;white-space:nowrap;z-index:6;">Ziel € 92</div>` +
     `</div>` +
     `<div style="width:100px;flex-shrink:0"></div>` +
     `</div>`;
@@ -1517,9 +1721,9 @@ function renderFF(){
           // price indicator inside track (thin, no label)
           `<div style="position:absolute;left:${fmt2(pct(livePrice))};top:0;bottom:0;width:2px;background:rgba(192,57,43,.9);z-index:5;"></div>` +
           `<div style="position:absolute;left:${fmt2(tp)};top:0;bottom:0;width:2px;background:rgba(212,96,10,.9);z-index:5;"></div>` +
-          `<div class="ff-bar" style="left:${fmt2(lo)};width:${fmt2(w)};background:${m.col};">${label}</div>` +
+          `<div class="ff-bar" style="left:${fmt2(lo)};width:${fmt2(w)};background:${m.col};color:${m.col==='#F47920'?'#000':'#fff'};">${label}</div>` +
         `</div>` +
-        `<div class="ff-rng">€${m.lo}–€${m.hi}</div>` +
+        `<div class="ff-rng" style="color:${m.col==='#F47920'?'#000':''};font-weight:${m.col==='#F47920'?'700':'400'}">€${m.lo}–€${m.hi}</div>` +
       `</div>`;
   });
 
@@ -1612,6 +1816,122 @@ function renderMA(){
       }
     }
   });
+}
+
+// ── LEVERMANN SCORE ──────────────────────────────────────────
+let chLevBar;
+const LEV_LABELS = {
+  k1_roe:             { num:1,  label:'Return on Equity (RoE)',          thresholds:'≥20%=+1 · 10-20%=0 · <10%=-1', unit:'%' },
+  k2_ebit_margin:     { num:2,  label:'EBIT-Marge',                      thresholds:'≥12%=+1 · 6-12%=0 · <6%=-1', unit:'%' },
+  k3_equity_ratio:    { num:3,  label:'Eigenkapitalquote',               thresholds:'≥25%=+1 · 15-25%=0 · <15%=-1', unit:'%' },
+  k4_pe:              { num:4,  label:'KGV aktuell',                     thresholds:'<12=+1 · 12-16=0 · >16=-1', unit:'×' },
+  k5_pe5y:            { num:5,  label:'KGV 5-Jahres-Ø',                 thresholds:'<12=+1 · 12-16=0 · >16=-1', unit:'×' },
+  k6_analyst:         { num:6,  label:'Analystenrating (konträr!)',      thresholds:'Buy-Konsens=-1 · Hold=0 · Sell=+1', unit:'' },
+  k7_earnings_react:  { num:7,  label:'Kursreaktion Quartalsbericht',   thresholds:'≥+1%=+1 · ±1%=0 · ≤-1%=-1', unit:'%' },
+  k8_eps_revision:    { num:8,  label:'Gewinnrevision (6M)',             thresholds:'>+5%=+1 · ±5%=0 · <-5%=-1', unit:'%' },
+  k9_perf_6m:         { num:9,  label:'Kursentwicklung 6 Monate',       thresholds:'>+5%=+1 · ±5%=0 · <-5%=-1', unit:'%' },
+  k10_perf_12m:       { num:10, label:'Kursentwicklung 12 Monate',      thresholds:'>+5%=+1 · ±5%=0 · <-5%=-1', unit:'%' },
+  k11_momentum:       { num:11, label:'Kursmomentum (6M vs 12M)',       thresholds:'6M>12M & positiv=+1 · sonst 0/-1', unit:'%' },
+  k12_eps_rev_3m:     { num:12, label:'Gewinnrevision (3M)',             thresholds:'>+2%=+1 · ±2%=0 · <-2%=-1', unit:'%' },
+  k13_eps_surprise:   { num:13, label:'Gewinnüberraschung',             thresholds:'>+2%=+1 · ±2%=0 · <-2%=-1', unit:'%' },
+};
+
+function renderLevermann() {
+  const d = window._liveData;
+  const lev = d?.levermann;
+  if (!lev || !lev.criteria) {
+    document.getElementById('lev-loading').style.display = 'flex';
+    document.getElementById('lev-content').style.display = 'none';
+    return;
+  }
+  document.getElementById('lev-loading').style.display = 'none';
+  document.getElementById('lev-content').style.display = 'block';
+
+  const total = lev.total_score || 0;
+  const rating = lev.rating || 'HALTEN';
+  const color = rating === 'KAUFEN' ? 'var(--green)' : rating === 'VERKAUFEN' ? 'var(--red)' : 'var(--amber)';
+  const bg    = rating === 'KAUFEN' ? 'var(--greenDim)' : rating === 'VERKAUFEN' ? 'var(--redDim)' : 'var(--amberDim)';
+
+  const numEl = document.getElementById('lev-score-num');
+  if (numEl) { numEl.textContent = (total >= 0 ? '+' : '') + total; numEl.style.color = color; }
+  const badgeEl = document.getElementById('lev-rating-badge');
+  if (badgeEl) { badgeEl.textContent = rating; badgeEl.style.background = bg; badgeEl.style.color = color; badgeEl.style.border = `2px solid ${color}`; }
+  const metaEl = document.getElementById('lev-meta');
+  if (metaEl && lev._meta) metaEl.textContent = `Berechnet: ${lev._meta.calculated?.slice(0,16).replace('T',' ')} · Quelle: ${lev._meta.source}`;
+
+  // Tabelle
+  const tbody = document.getElementById('lev-tbody');
+  if (tbody) {
+    const keys = lev.ordered_keys || Object.keys(lev.criteria);
+    tbody.innerHTML = keys.map(k => {
+      const c = lev.criteria[k] || {};
+      const info = LEV_LABELS[k] || LEV_LABS[k] || { num:'?', label: k, thresholds:'', unit:'' };
+      const val = c.value != null ? c.value.toFixed(2) + info.unit : 'n/a';
+      const sc  = c.score || 0;
+      const icon = sc === 1 ? '✅ +1' : sc === -1 ? '❌ −1' : '➖  0';
+      const rowBg = sc === 1 ? 'rgba(0,229,160,.07)' : sc === -1 ? 'rgba(255,77,109,.07)' : '';
+      return `<tr style="background:${rowBg}">
+        <td style="text-align:center;font-weight:700;color:var(--txt3)">${info.num}</td>
+        <td style="font-weight:600">${info.label}${k==='k6_analyst' ? ' <span style="font-size:9px;color:var(--red)">★ konträr</span>' : ''}</td>
+        <td style="font-variant-numeric:tabular-nums">${val}</td>
+        <td style="font-size:10px;color:var(--txt3)">${info.thresholds}</td>
+        <td style="text-align:center;font-size:13px;font-weight:700;color:${sc===1?'var(--green)':sc===-1?'var(--red)':'var(--txt3)'}">${icon}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Bar Chart
+  if (chLevBar) chLevBar.destroy();
+  const ctx = document.getElementById('ch-lev-bar');
+  if (ctx) {
+    const keys = lev.ordered_keys || Object.keys(lev.criteria);
+    const scores = keys.map(k => (lev.criteria[k]?.score || 0));
+    const lbls   = keys.map(k => LEV_LABELS[k]?.num || k);
+    const cols   = scores.map(s => s===1?'rgba(0,229,160,.7)':s===-1?'rgba(255,77,109,.7)':'rgba(255,170,0,.5)');
+    chLevBar = new Chart(ctx.getContext('2d'), {
+      type:'bar',
+      data:{ labels: lbls, datasets:[{ label:'Punkte', data: scores, backgroundColor: cols, borderColor: cols, borderWidth:1, borderRadius:4 }] },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>`K${lbls[c.dataIndex]}: ${c.raw>0?'+':''}${c.raw} Pkt`}} },
+        scales:{
+          x:{ grid:{display:false}, ticks:{color:'#7BAAC8'} },
+          y:{ min:-1.5, max:1.5, ticks:{color:'#7BAAC8',stepSize:1,callback:v=>v>0?'+'+v:v}, grid:{color:'rgba(255,255,255,.06)'} }
+        },
+        annotation:{ annotations:{ zero:{ type:'line', yMin:0, yMax:0, borderColor:'rgba(255,255,255,.2)', borderWidth:1 } } }
+      }
+    });
+  }
+
+  // Interpretation
+  const intEl = document.getElementById('lev-interpretation');
+  if (intEl) {
+    const plus  = Object.values(lev.criteria).filter(c=>c.score===1).length;
+    const minus = Object.values(lev.criteria).filter(c=>c.score===-1).length;
+    const zero  = Object.values(lev.criteria).filter(c=>c.score===0).length;
+    intEl.innerHTML = `
+      <div class="card-hd"><div class="dot dot-blue"></div>Interpretation & Einordnung</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+        <div style="text-align:center;background:var(--greenDim);border-radius:8px;padding:12px;border:1px solid rgba(0,229,160,.2)">
+          <div style="font-size:28px;font-weight:900;color:var(--green)">${plus}</div>
+          <div style="font-size:10px;color:var(--txt2)">Positive Kriterien</div>
+        </div>
+        <div style="text-align:center;background:var(--amberDim);border-radius:8px;padding:12px;border:1px solid rgba(255,170,0,.2)">
+          <div style="font-size:28px;font-weight:900;color:var(--amber)">${zero}</div>
+          <div style="font-size:10px;color:var(--txt2)">Neutrale Kriterien</div>
+        </div>
+        <div style="text-align:center;background:var(--redDim);border-radius:8px;padding:12px;border:1px solid rgba(255,77,109,.2)">
+          <div style="font-size:28px;font-weight:900;color:var(--red)">${minus}</div>
+          <div style="font-size:10px;color:var(--txt2)">Negative Kriterien</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--txt2);line-height:1.7;padding:10px 14px;background:var(--bg2);border-radius:6px;border:1px solid var(--border)">
+        <strong style="color:var(--blue)">Levermann-Kontext:</strong> Die Methode ist mechanisch-systematisch und bewusst konträr (Kriterium 6).
+        Scout24 SE ist ein DAX-40-Unternehmen mit hoher Analystendeckung (100% Buy-Konsens) — das führt konträr zu Minus-Punkten.
+        Der Score sollte zusammen mit dem DCF-Modell und der Geschäftsmodell-Analyse interpretiert werden, nicht isoliert.
+        <br><em style="color:var(--txt3)">Quelle: Levermann, S. (2011). "Der entspannte Weg zum Reichtum". DTV Verlag. ISBN 978-3-423-34685-0.</em>
+      </div>`;
+  }
 }
 
 // ── GAP SCATTER CHART ────────────────────────────────────────
@@ -1836,6 +2156,204 @@ window.addEventListener('load',()=>{
   dcf();
   renderSens();   // vorrendern — zeigt sofort beim Tab-Klick
 });
+</script>
+
+<!-- ══════════════════════════════════════════════════
+     PANE 7 — LIVE-DATEN
+══════════════════════════════════════════════════ -->
+<div id="p-live" class="pane">
+
+  <!-- IR News -->
+  <div class="card mb16">
+    <div class="card-hd"><div class="dot dot-blue"></div>📰 Scout24 IR — Aktuelle Meldungen <span id="ir-status" style="font-size:10px;color:var(--txt3);font-weight:400;margin-left:8px"></span></div>
+    <div id="ir-news-list" style="display:flex;flex-direction:column;gap:10px">
+      <div style="color:var(--txt3);font-size:11px">⏳ Wird geladen…</div>
+    </div>
+    <div style="margin-top:10px;font-size:10px;color:var(--txt3)">Quelle: Scout24 Investor Relations · täglich via GitHub Actions aktualisiert</div>
+  </div>
+
+  <!-- Peer Multiples Live -->
+  <div class="card mb16">
+    <div class="card-hd"><div class="dot dot-gold"></div>📊 Peer Multiples — Live (yfinance) <span id="peers-as-of" style="font-size:10px;color:var(--txt3);font-weight:400;margin-left:8px"></span></div>
+    <div class="tbl-wrap">
+      <table id="peers-live-tbl">
+        <thead>
+          <tr><th>Unternehmen</th><th>Ticker</th><th>EV/EBITDA</th><th>P/E</th><th>FCF Yield</th><th>EBITDA-Marge</th><th>Umsatz-Wachstum</th></tr>
+        </thead>
+        <tbody id="peers-live-body">
+          <tr><td colspan="7" style="color:var(--txt3);text-align:center">⏳ Wird geladen…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:8px;font-size:10px;color:var(--txt3)">Quelle: yfinance (täglich) · EV/EBITDA = enterpriseToEbitda · Manuelle Prüfung empfohlen</div>
+  </div>
+
+  <div class="g2 mb16">
+
+    <!-- BaFin Short-Positionen -->
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-red"></div>🩳 BaFin Netto-Leerverkauf &gt;0,5% <span id="shorts-as-of" style="font-size:10px;color:var(--txt3);font-weight:400;margin-left:8px"></span></div>
+      <div id="shorts-content">
+        <div style="color:var(--txt3);font-size:11px">⏳ Wird geladen…</div>
+      </div>
+      <div style="margin-top:10px;font-size:10px;color:var(--txt3)">Quelle: BaFin API · ISIN DE000A12DM80 · Meldepflicht ab 0,5% des Floats</div>
+    </div>
+
+    <!-- Makro Live -->
+    <div class="card">
+      <div class="card-hd"><div class="dot dot-amber"></div>🏦 Makro Live — EZB · Bund · Hypothek <span id="macro-as-of" style="font-size:10px;color:var(--txt3);font-weight:400;margin-left:8px"></span></div>
+      <div id="macro-content">
+        <div style="color:var(--txt3);font-size:11px">⏳ Wird geladen…</div>
+      </div>
+      <div style="margin-top:10px;font-size:10px;color:var(--txt3)">Quelle: EZB SDMX API + Bundesbank API · täglich aktualisiert</div>
+    </div>
+
+  </div>
+
+</div><!-- /live -->
+
+<script>
+// ── Live-Daten aus data.json laden und rendern ──────────────────
+(function() {
+  const DATA_URL = 'data.json';
+
+  function fmt(v, dec=1) { return v == null || v === 0 ? '—' : Number(v).toFixed(dec); }
+  function fmtPct(v) { return v == null || v === 0 ? '—' : Number(v).toFixed(1) + '%'; }
+
+  fetch(DATA_URL + '?t=' + Date.now())
+    .then(r => r.json())
+    .then(d => {
+      renderIRNews(d.ir_news || {});
+      renderPeers(d.peers || []);
+      renderShorts(d.shorts || {});
+      renderMacro(d.macro || {});
+    })
+    .catch(e => console.warn('Live-Daten: data.json nicht geladen', e));
+
+  function renderIRNews(ir) {
+    const el = document.getElementById('ir-news-list');
+    const st = document.getElementById('ir-status');
+    if (!el) return;
+    if (ir.as_of) st.textContent = 'Stand: ' + ir.as_of;
+    const items = (ir.items || []).slice(0, 6);
+    if (!items.length) { el.innerHTML = '<div style="color:var(--txt3);font-size:11px">Keine Meldungen verfügbar</div>'; return; }
+
+    el.innerHTML = items.map(item => {
+      const color = item.sentiment === 'positive' ? 'var(--green)'
+                  : item.sentiment === 'negative' ? 'var(--red)'
+                  : 'var(--txt2)';
+      const badge = item.is_catalyst
+        ? '<span style="background:var(--amberDim);color:var(--amber);padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;margin-left:6px;border:1px solid rgba(255,170,0,.3)">CATALYST</span>'
+        : '';
+      const dot = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};margin-right:8px;flex-shrink:0;margin-top:3px"></span>`;
+      return `<div style="display:flex;align-items:flex-start;padding:10px 12px;background:var(--bg2);border-radius:7px;border:1px solid var(--border)">
+        ${dot}
+        <div style="flex:1">
+          <div style="font-size:12px;font-weight:600;color:var(--txt)">
+            <a href="${item.url}" target="_blank" style="color:inherit;text-decoration:none">${item.title}</a>${badge}
+          </div>
+          <div style="font-size:10px;color:var(--txt3);margin-top:3px">${item.date || ''}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderPeers(peers) {
+    const tbody = document.getElementById('peers-live-body');
+    const asOf  = document.getElementById('peers-as-of');
+    if (!tbody || !peers.length) return;
+
+    const first = peers.find(p => p.as_of);
+    if (first) asOf.textContent = 'Stand: ' + first.as_of;
+
+    tbody.innerHTML = peers.map(p => {
+      const isSubject = p.is_subject;
+      const style = isSubject ? 'background:var(--amberDim);font-weight:700' : '';
+      const nameCell = isSubject ? `<strong>${p.name}</strong>` : p.name;
+      return `<tr style="${style}">
+        <td>${nameCell}</td>
+        <td style="color:var(--txt3);font-size:10px">${p.ticker}</td>
+        <td class="${isSubject ? 'a-val' : 'b-val'}">${fmt(p.ev_ebitda)}×</td>
+        <td>${fmt(p.pe_ratio)}×</td>
+        <td class="g-val">${fmtPct(p.fcf_yield)}</td>
+        <td>${fmtPct(p.ebitda_margin)}</td>
+        <td>${p.rev_growth != null && p.rev_growth !== 0 ? (p.rev_growth > 0 ? '+' : '') + fmt(p.rev_growth) + '%' : '—'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function renderShorts(s) {
+    const el = document.getElementById('shorts-content');
+    const asOf = document.getElementById('shorts-as-of');
+    if (!el) return;
+    if (s.as_of) asOf.textContent = 'Stand: ' + s.as_of;
+
+    if (s.status === 'api_error') {
+      el.innerHTML = '<div style="color:var(--txt3);font-size:11px">⚠ BaFin API nicht erreichbar — Daten werden morgen aktualisiert</div>';
+      return;
+    }
+    if (!s.positions || !s.positions.length) {
+      el.innerHTML = `<div style="padding:12px;background:var(--greenDim);border-radius:7px;border:1px solid rgba(0,229,160,.2);font-size:12px;color:var(--green)">
+        ✓ Keine gemeldeten Netto-Leerverkaufspositionen &gt;0,5% des Floats
+        <div style="font-size:10px;color:var(--txt3);margin-top:4px">Kein aktiver Short-Squeeze-Druck erkennbar</div>
+      </div>`;
+      return;
+    }
+
+    const total = `<div style="margin-bottom:12px;padding:10px 14px;background:var(--redDim);border-radius:7px;border:1px solid rgba(166,40,32,.2)">
+      <span style="font-size:11px;font-weight:700;color:var(--red)">⚠ Gesamt Short: ${fmt(s.total_short_pct, 2)}% des Floats</span>
+      <span style="font-size:10px;color:var(--txt3);margin-left:8px">(${s.num_holders} Positionen &gt;0,5%)</span>
+    </div>`;
+
+    const rows = s.positions.map(p =>
+      `<div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg2);border-radius:6px;border:1px solid var(--border);margin-bottom:6px">
+        <span style="font-size:11px;color:var(--txt)">${p.holder}</span>
+        <span style="font-size:11px;font-weight:700;color:var(--red)">${fmt(p.pct, 2)}%</span>
+        <span style="font-size:10px;color:var(--txt3)">${p.date}</span>
+      </div>`
+    ).join('');
+
+    el.innerHTML = total + rows;
+  }
+
+  function renderMacro(m) {
+    const el = document.getElementById('macro-content');
+    const asOf = document.getElementById('macro-as-of');
+    if (!el) return;
+    if (m.as_of) asOf.textContent = 'Stand: ' + m.as_of;
+    if (!m.ecb_deposit_rate && !m.bund_10y) {
+      el.innerHTML = '<div style="color:var(--txt3);font-size:11px">⏳ Wird geladen…</div>';
+      return;
+    }
+
+    const waccColor = (m.wacc_implied || 7.5) > 8.5 ? 'var(--red)' : (m.wacc_implied || 7.5) > 7.5 ? 'var(--amber)' : 'var(--green)';
+
+    el.innerHTML = `
+      <div class="g2" style="gap:10px;margin-bottom:12px">
+        <div style="padding:12px;background:var(--bg2);border-radius:7px;border:1px solid var(--border);text-align:center">
+          <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">EZB Einlagesatz</div>
+          <div style="font-size:22px;font-weight:900;color:var(--blue)">${fmt(m.ecb_deposit_rate, 2)}%</div>
+        </div>
+        <div style="padding:12px;background:var(--bg2);border-radius:7px;border:1px solid var(--border);text-align:center">
+          <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Bund 10J (Rf)</div>
+          <div style="font-size:22px;font-weight:900;color:var(--txt)">${fmt(m.bund_10y, 2)}%</div>
+        </div>
+        <div style="padding:12px;background:var(--bg2);border-radius:7px;border:1px solid var(--border);text-align:center">
+          <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Hypothek 10J DE</div>
+          <div style="font-size:22px;font-weight:900;color:var(--amber)">${fmt(m.mortgage_rate_10y, 2)}%</div>
+        </div>
+        <div style="padding:12px;background:var(--bg2);border-radius:7px;border:1px solid var(--border);text-align:center">
+          <div style="font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">WACC impliziert</div>
+          <div style="font-size:22px;font-weight:900;color:${waccColor}">${fmt(m.wacc_implied, 1)}%</div>
+        </div>
+      </div>
+      <div style="padding:10px 14px;background:var(--amberDim);border-radius:7px;border:1px solid rgba(255,170,0,.25);font-size:11px;color:var(--txt2);line-height:1.6">
+        <strong style="color:var(--amber)">WACC-Herleitung:</strong>
+        rf ${fmt(m.bund_10y, 2)}% + β${m.beta_used || 0.8} × ERP${m.erp_used || 5.5}% + CS 1,5% = <strong>${fmt(m.wacc_implied, 1)}%</strong>
+        ${(m.wacc_implied || 0) > 8.5 ? ' — <strong style="color:var(--red)">⚠ WACC über 8,5%: DCF-Base-Case sensitiv — Impairment-Risiko steigt</strong>' : ''}
+      </div>`;
+  }
+})();
 </script>
 
 <!-- ══════════════════════════════════════════════════
