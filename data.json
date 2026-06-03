@@ -199,5 +199,118 @@
   },
   "brokers": {},
   "multiples": {},
-  "consensus": {}
+  "consensus": {},
+  "levermann": {
+    "_meta": {
+      "calculated": "2026-06-03T17:46:41.752976",
+      "source": "LSEG Workspace",
+      "ric": "DE000A12DM80",
+      "method": "Levermann Large Cap (13 Kriterien)",
+      "scale": "≥+4=KAUFEN, -3 bis +3=HALTEN, ≤-4=VERKAUFEN"
+    },
+    "total_score": 2,
+    "rating": "HALTEN",
+    "rating_color": "amber",
+    "criteria": {
+      "k1_roe": {
+        "value": null,
+        "score": 0,
+        "label": "Return on Equity",
+        "reason": "Keine Daten"
+      },
+      "k2_ebit_margin": {
+        "value": 50.07628228911526,
+        "score": 1,
+        "label": "EBIT-Marge",
+        "reason": "EBIT-Marge = 50.1% (≥12%=+1, 6-12%=0, <6%=-1)"
+      },
+      "k3_equity_ratio": {
+        "value": 71.76323559626057,
+        "score": 1,
+        "label": "Eigenkapitalquote",
+        "reason": "EK-Quote = 71.8% (≥25%=+1, 15-25%=0, <15%=-1)"
+      },
+      "k4_pe": {
+        "value": null,
+        "score": 0,
+        "label": "KGV aktuell",
+        "reason": "Keine Daten oder negativ"
+      },
+      "k5_pe5y": {
+        "value": null,
+        "score": -1,
+        "label": "KGV 5-Jahres-Ø",
+        "reason": "Nicht verfügbar — Annahme: historisch >16× → -1"
+      },
+      "k6_analyst": {
+        "value": null,
+        "score": -1,
+        "label": "Analystenrating (konträr)",
+        "reason": "100% Buy-Konsens angenommen → konträr -1",
+        "buy": 0,
+        "hold": 0,
+        "sell": 0
+      },
+      "k7_earnings_reaction": {
+        "value": null,
+        "score": 0,
+        "label": "Kursreaktion Quartalsbericht",
+        "reason": "Earnings-Datum: unbekannt — Keine Daten verfügbar",
+        "earnings_date": ""
+      },
+      "k8_eps_revision": {
+        "value": 17.00829792826177,
+        "score": 1,
+        "label": "Gewinnrevision (6M)",
+        "reason": "EPS jetzt: 4.05 vs. vor 6M: 3.46 → +17.0% (>+5%=+1, ±5%=0, <-5%=-1)",
+        "eps_now": 4.05119,
+        "eps_6m_ago": 3.46231
+      },
+      "k9_perf_6m": {
+        "value": null,
+        "score": 0,
+        "label": "Kursentwicklung 6 Monate",
+        "reason": "Fehler: No data to return, please check errors: ERROR: No successful response.\n(TS.Interday.UserRequestError.70005, The universe is not found)"
+      },
+      "k10_perf_12m": {
+        "value": null,
+        "score": 0,
+        "label": "Kursentwicklung 12 Monate",
+        "reason": "Fehler: No data to return, please check errors: ERROR: No successful response.\n(TS.Interday.UserRequestError.70005, The universe is not found)"
+      },
+      "k11_momentum": {
+        "value": null,
+        "score": 0,
+        "label": "Kursmomentum (6M vs 12M)",
+        "reason": "Keine Kursdaten für Momentum-Berechnung"
+      },
+      "k12_eps_rev_3m": {
+        "value": 2.9166391456109384,
+        "score": 1,
+        "label": "Gewinnrevision (3M)",
+        "reason": "EPS jetzt: 4.05 vs. vor 3M: 3.94 → +2.9% (>+2%=+1, ±2%=0, <-2%=-1)"
+      },
+      "k13_eps_surprise": {
+        "value": null,
+        "score": 0,
+        "label": "Gewinnüberraschung",
+        "reason": "EPS actual: None | Konsens: None — Keine Daten"
+      }
+    },
+    "ordered_keys": [
+      "k1_roe",
+      "k2_ebit_margin",
+      "k3_equity_ratio",
+      "k4_pe",
+      "k5_pe5y",
+      "k6_analyst",
+      "k7_earnings_reaction",
+      "k8_eps_revision",
+      "k9_perf_6m",
+      "k10_perf_12m",
+      "k11_momentum",
+      "k12_eps_rev_3m",
+      "k13_eps_surprise"
+    ]
+  }
 }
