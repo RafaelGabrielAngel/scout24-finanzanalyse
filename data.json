@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-06-03T16:00:03.914178Z",
+    "generated_at": "2026-06-03T18:27:19.423245Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -113,23 +113,23 @@
     "series": [
       {
         "date": "2026-02-15",
-        "value": 73
+        "value": 75
       },
       {
         "date": "2026-02-22",
-        "value": 73
+        "value": 72
       },
       {
         "date": "2026-03-01",
-        "value": 85
+        "value": 80
       },
       {
         "date": "2026-03-08",
-        "value": 84
+        "value": 81
       },
       {
         "date": "2026-03-15",
-        "value": 97
+        "value": 100
       },
       {
         "date": "2026-03-22",
@@ -137,19 +137,19 @@
       },
       {
         "date": "2026-03-29",
-        "value": 96
+        "value": 95
       },
       {
         "date": "2026-04-05",
-        "value": 93
+        "value": 97
       },
       {
         "date": "2026-04-12",
-        "value": 94
+        "value": 84
       },
       {
         "date": "2026-04-19",
-        "value": 85
+        "value": 81
       },
       {
         "date": "2026-04-26",
@@ -157,176 +157,176 @@
       },
       {
         "date": "2026-05-03",
-        "value": 81
+        "value": 79
       },
       {
         "date": "2026-05-10",
-        "value": 77
+        "value": 76
       },
       {
         "date": "2026-05-17",
-        "value": 74
+        "value": 72
       },
       {
         "date": "2026-05-24",
-        "value": 70
+        "value": 66
       },
       {
         "date": "2026-05-31",
-        "value": 75
+        "value": 73
       }
     ],
     "competitor": [
       {
         "date": "2026-02-15",
-        "immoscout": 68,
-        "immowelt": 66
+        "immoscout": 75,
+        "immowelt": 72
       },
       {
         "date": "2026-02-22",
-        "immoscout": 68,
-        "immowelt": 77
+        "immoscout": 72,
+        "immowelt": 75
       },
       {
         "date": "2026-03-01",
         "immoscout": 80,
-        "immowelt": 73
+        "immowelt": 83
       },
       {
         "date": "2026-03-08",
-        "immoscout": 79,
-        "immowelt": 77
+        "immoscout": 81,
+        "immowelt": 78
       },
       {
         "date": "2026-03-15",
-        "immoscout": 91,
+        "immoscout": 100,
         "immowelt": 79
       },
       {
         "date": "2026-03-22",
-        "immoscout": 88,
-        "immowelt": 77
+        "immoscout": 94,
+        "immowelt": 79
       },
       {
         "date": "2026-03-29",
-        "immoscout": 90,
-        "immowelt": 76
-      },
-      {
-        "date": "2026-04-05",
-        "immoscout": 87,
-        "immowelt": 71
-      },
-      {
-        "date": "2026-04-12",
-        "immoscout": 88,
+        "immoscout": 95,
         "immowelt": 77
       },
       {
+        "date": "2026-04-05",
+        "immoscout": 97,
+        "immowelt": 78
+      },
+      {
+        "date": "2026-04-12",
+        "immoscout": 84,
+        "immowelt": 76
+      },
+      {
         "date": "2026-04-19",
-        "immoscout": 79,
-        "immowelt": 73
+        "immoscout": 81,
+        "immowelt": 74
       },
       {
         "date": "2026-04-26",
-        "immoscout": 76,
-        "immowelt": 69
+        "immoscout": 82,
+        "immowelt": 79
       },
       {
         "date": "2026-05-03",
-        "immoscout": 75,
-        "immowelt": 66
+        "immoscout": 79,
+        "immowelt": 71
       },
       {
         "date": "2026-05-10",
-        "immoscout": 72,
-        "immowelt": 72
+        "immoscout": 76,
+        "immowelt": 73
       },
       {
         "date": "2026-05-17",
-        "immoscout": 69,
-        "immowelt": 73
+        "immoscout": 72,
+        "immowelt": 75
       },
       {
         "date": "2026-05-24",
-        "immoscout": 65,
-        "immowelt": 73
+        "immoscout": 66,
+        "immowelt": 81
       },
       {
         "date": "2026-05-31",
-        "immoscout": 70,
-        "immowelt": 80
+        "immoscout": 73,
+        "immowelt": 84
       }
     ],
     "ai_signal": [
       {
         "date": "2026-03-15",
-        "Wohnung KI": 64,
-        "Wohnung ChatGPT": 77
-      },
-      {
-        "date": "2026-03-22",
-        "Wohnung KI": 43,
-        "Wohnung ChatGPT": 100
-      },
-      {
-        "date": "2026-03-29",
-        "Wohnung KI": 40,
+        "Wohnung KI": 59,
         "Wohnung ChatGPT": 79
       },
       {
+        "date": "2026-03-22",
+        "Wohnung KI": 60,
+        "Wohnung ChatGPT": 90
+      },
+      {
+        "date": "2026-03-29",
+        "Wohnung KI": 44,
+        "Wohnung ChatGPT": 80
+      },
+      {
         "date": "2026-04-05",
-        "Wohnung KI": 58,
-        "Wohnung ChatGPT": 70
+        "Wohnung KI": 62,
+        "Wohnung ChatGPT": 62
       },
       {
         "date": "2026-04-12",
-        "Wohnung KI": 66,
+        "Wohnung KI": 64,
         "Wohnung ChatGPT": 67
       },
       {
         "date": "2026-04-19",
-        "Wohnung KI": 57,
-        "Wohnung ChatGPT": 60
+        "Wohnung KI": 64,
+        "Wohnung ChatGPT": 66
       },
       {
         "date": "2026-04-26",
-        "Wohnung KI": 60,
-        "Wohnung ChatGPT": 59
+        "Wohnung KI": 39,
+        "Wohnung ChatGPT": 68
       },
       {
         "date": "2026-05-03",
-        "Wohnung KI": 87,
+        "Wohnung KI": 88,
         "Wohnung ChatGPT": 66
       },
       {
         "date": "2026-05-10",
-        "Wohnung KI": 69,
-        "Wohnung ChatGPT": 58
-      },
-      {
-        "date": "2026-05-17",
-        "Wohnung KI": 24,
-        "Wohnung ChatGPT": 69
-      },
-      {
-        "date": "2026-05-24",
-        "Wohnung KI": 47,
+        "Wohnung KI": 74,
         "Wohnung ChatGPT": 62
       },
       {
+        "date": "2026-05-17",
+        "Wohnung KI": 25,
+        "Wohnung ChatGPT": 63
+      },
+      {
+        "date": "2026-05-24",
+        "Wohnung KI": 49,
+        "Wohnung ChatGPT": 64
+      },
+      {
         "date": "2026-05-31",
-        "Wohnung KI": 58,
+        "Wohnung KI": 61,
         "Wohnung ChatGPT": 71
       }
     ],
-    "trend_delta": -19.3,
+    "trend_delta": -18.2,
     "competitor_delta": {
-      "immoscout_delta": -19.5,
-      "immowelt_delta": -6.9
+      "immoscout_delta": -18.2,
+      "immowelt_delta": -1.3
     },
-    "ai_delta_Wohnung_KI": 15.8,
-    "ai_delta_Wohnung_ChatGPT": -1.1
+    "ai_delta_Wohnung_KI": 38.4,
+    "ai_delta_Wohnung_ChatGPT": -3.0
   },
   "macro": {
     "ecb_deposit_rate": 2.0,
@@ -350,117 +350,5 @@
   "brokers": {},
   "multiples": {},
   "consensus": {},
-  "levermann": {
-    "_meta": {
-      "calculated": "2026-06-03T20:25:48.285894",
-      "source": "LSEG Workspace",
-      "ric": "DE000A12DM80",
-      "method": "Levermann Large Cap (13 Kriterien)",
-      "scale": "≥+4=KAUFEN, -3 bis +3=HALTEN, ≤-4=VERKAUFEN"
-    },
-    "total_score": 2,
-    "rating": "HALTEN",
-    "rating_color": "amber",
-    "criteria": {
-      "k1_roe": {
-        "value": null,
-        "score": 0,
-        "label": "Return on Equity",
-        "reason": "Keine Daten"
-      },
-      "k2_ebit_margin": {
-        "value": 50.07628228911526,
-        "score": 1,
-        "label": "EBIT-Marge",
-        "reason": "EBIT-Marge = 50.1% (≥12%=+1, 6-12%=0, <6%=-1)"
-      },
-      "k3_equity_ratio": {
-        "value": 71.76323559626057,
-        "score": 1,
-        "label": "Eigenkapitalquote",
-        "reason": "EK-Quote = 71.8% (≥25%=+1, 15-25%=0, <15%=-1)"
-      },
-      "k4_pe": {
-        "value": null,
-        "score": 0,
-        "label": "KGV aktuell",
-        "reason": "Keine Daten oder negativ"
-      },
-      "k5_pe5y": {
-        "value": null,
-        "score": -1,
-        "label": "KGV 5-Jahres-Ø",
-        "reason": "Nicht verfügbar — Annahme: historisch >16× → -1"
-      },
-      "k6_analyst": {
-        "value": null,
-        "score": -1,
-        "label": "Analystenrating (konträr)",
-        "reason": "100% Buy-Konsens angenommen → konträr -1",
-        "buy": 0,
-        "hold": 0,
-        "sell": 0
-      },
-      "k7_earnings_reaction": {
-        "value": null,
-        "score": 0,
-        "label": "Kursreaktion Quartalsbericht",
-        "reason": "Earnings-Datum: unbekannt — Keine Daten verfügbar",
-        "earnings_date": ""
-      },
-      "k8_eps_revision": {
-        "value": 17.00829792826177,
-        "score": 1,
-        "label": "Gewinnrevision (6M)",
-        "reason": "EPS jetzt: 4.05 vs. vor 6M: 3.46 → +17.0% (>+5%=+1, ±5%=0, <-5%=-1)",
-        "eps_now": 4.05119,
-        "eps_6m_ago": 3.46231
-      },
-      "k9_perf_6m": {
-        "value": null,
-        "score": 0,
-        "label": "Kursentwicklung 6 Monate",
-        "reason": "Fehler: No data to return, please check errors: ERROR: No successful response.\n(TS.Interday.UserRequestError.70005, The universe is not found)"
-      },
-      "k10_perf_12m": {
-        "value": null,
-        "score": 0,
-        "label": "Kursentwicklung 12 Monate",
-        "reason": "Fehler: No data to return, please check errors: ERROR: No successful response.\n(TS.Interday.UserRequestError.70005, The universe is not found)"
-      },
-      "k11_momentum": {
-        "value": null,
-        "score": 0,
-        "label": "Kursmomentum (6M vs 12M)",
-        "reason": "Keine Kursdaten für Momentum-Berechnung"
-      },
-      "k12_eps_rev_3m": {
-        "value": 2.9166391456109384,
-        "score": 1,
-        "label": "Gewinnrevision (3M)",
-        "reason": "EPS jetzt: 4.05 vs. vor 3M: 3.94 → +2.9% (>+2%=+1, ±2%=0, <-2%=-1)"
-      },
-      "k13_eps_surprise": {
-        "value": null,
-        "score": 0,
-        "label": "Gewinnüberraschung",
-        "reason": "EPS actual: None | Konsens: None — Keine Daten"
-      }
-    },
-    "ordered_keys": [
-      "k1_roe",
-      "k2_ebit_margin",
-      "k3_equity_ratio",
-      "k4_pe",
-      "k5_pe5y",
-      "k6_analyst",
-      "k7_earnings_reaction",
-      "k8_eps_revision",
-      "k9_perf_6m",
-      "k10_perf_12m",
-      "k11_momentum",
-      "k12_eps_rev_3m",
-      "k13_eps_surprise"
-    ]
-  }
+  "levermann": {}
 }
