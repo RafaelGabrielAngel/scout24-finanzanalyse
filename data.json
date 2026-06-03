@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-06-03T12:55:47.358080Z",
+    "generated_at": "2026-06-03T12:59:09.015528Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -173,7 +173,7 @@
       },
       {
         "date": "2026-05-31",
-        "value": 72
+        "value": 70
       }
     ],
     "competitor": [
@@ -254,7 +254,7 @@
       },
       {
         "date": "2026-05-31",
-        "immoscout": 67,
+        "immoscout": 66,
         "immowelt": 77
       }
     ],
@@ -316,17 +316,17 @@
       },
       {
         "date": "2026-05-31",
-        "Wohnung KI": 54,
-        "Wohnung ChatGPT": 66
+        "Wohnung KI": 53,
+        "Wohnung ChatGPT": 65
       }
     ],
-    "trend_delta": -18.6,
+    "trend_delta": -19.2,
     "competitor_delta": {
-      "immoscout_delta": -19.0,
+      "immoscout_delta": -19.3,
       "immowelt_delta": -7.5
     },
-    "ai_delta_Wohnung_KI": 13.5,
-    "ai_delta_Wohnung_ChatGPT": -3.0
+    "ai_delta_Wohnung_KI": 12.9,
+    "ai_delta_Wohnung_ChatGPT": -3.4
   },
   "macro": {
     "ecb_deposit_rate": 2.0,
