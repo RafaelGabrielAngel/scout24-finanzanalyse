@@ -731,6 +731,7 @@ def main():
         "brokers":   existing_lseg.get("brokers",   {}),
         "multiples": existing_lseg.get("multiples", {}),
         "consensus": existing_lseg.get("consensus", {}),
+        "levermann": existing_lseg.get("levermann", {}),
     }
 
     # ── Schreiben

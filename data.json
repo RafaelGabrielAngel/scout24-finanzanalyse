@@ -349,5 +349,112 @@
   },
   "brokers": {},
   "multiples": {},
-  "consensus": {}
+  "consensus": {},
+  "levermann": {
+    "_meta": {
+      "calculated": "2026-06-01T22:00:00",
+      "source": "LSEG Workspace + Eigenberechnung",
+      "ric": "DE000A12DM80",
+      "method": "Levermann Large Cap (13 Kriterien)",
+      "scale": ">=+4=KAUFEN, -3 bis +3=HALTEN, <=-4=VERKAUFEN"
+    },
+    "total_score": 0,
+    "rating": "HALTEN",
+    "rating_color": "amber",
+    "ordered_keys": [
+      "k1_roe",
+      "k2_ebit_margin",
+      "k3_equity_ratio",
+      "k4_pe",
+      "k5_pe5y",
+      "k6_analyst",
+      "k7_earnings_reaction",
+      "k8_eps_revision",
+      "k9_perf_6m",
+      "k10_perf_12m",
+      "k11_momentum",
+      "k12_eps_rev_3m",
+      "k13_eps_surprise"
+    ],
+    "criteria": {
+      "k1_roe": {
+        "score": 0,
+        "value": 16.8,
+        "label": "Return on Equity (RoE)",
+        "reason": "RoE=16.8% → 0 (≥20%=+1, 10-20%=0, <10%=-1)"
+      },
+      "k2_ebit_margin": {
+        "score": 1,
+        "value": 50.1,
+        "label": "EBIT-Marge (oo)",
+        "reason": "ooEBIT-Marge=50.1% → +1 (≥12%=+1); GAAP-Marge niedriger"
+      },
+      "k3_equity_ratio": {
+        "score": 1,
+        "value": 31.5,
+        "label": "Eigenkapitalquote",
+        "reason": "EK-Quote=31.5% → +1 (≥25%=+1)"
+      },
+      "k4_pe": {
+        "score": -1,
+        "value": 21.7,
+        "label": "KGV aktuell",
+        "reason": "P/E=21.7× → -1 (>16=-1)"
+      },
+      "k5_pe5y": {
+        "score": -1,
+        "value": 27.8,
+        "label": "KGV 5-Jahres-Ø",
+        "reason": "P/E 5J-Ø=27.8× → -1 (>16=-1)"
+      },
+      "k6_analyst": {
+        "score": -1,
+        "value": 1.8,
+        "label": "Analystenrating (konträr!)",
+        "reason": "Rec-Mean=1.8 → -1 konträr (100% Buy-Konsens = Levermann-Minuspunkt)"
+      },
+      "k7_earnings_react": {
+        "score": -1,
+        "value": -1.2,
+        "label": "Kursreaktion Quartalsbericht",
+        "reason": "Q1-Reaktion=-1.2% → -1 (≤-1%=-1)"
+      },
+      "k8_eps_revision": {
+        "score": 0,
+        "value": 0.0,
+        "label": "Gewinnrevision (6M)",
+        "reason": "EPS-Rev=0% → 0 (±5%=0)"
+      },
+      "k9_perf_6m": {
+        "score": 0,
+        "value": 3.2,
+        "label": "Kursentwicklung 6 Monate",
+        "reason": "6M-Perf=+3.2% → 0 (±5%=0)"
+      },
+      "k10_perf_12m": {
+        "score": 1,
+        "value": 8.6,
+        "label": "Kursentwicklung 12 Monate",
+        "reason": "12M-Perf=+8.6% → +1 (>+5%=+1)"
+      },
+      "k11_momentum": {
+        "score": 0,
+        "value": null,
+        "label": "Kursmomentum (6M vs 12M)",
+        "reason": "6M(3.2%)<12M(8.6%) → 0 (kein Beschleunigung)"
+      },
+      "k12_eps_rev_3m": {
+        "score": 0,
+        "value": 0.5,
+        "label": "Gewinnrevision (3M)",
+        "reason": "EPS-Rev-3M=+0.5% → 0 (±2%=0)"
+      },
+      "k13_eps_surprise": {
+        "score": 1,
+        "value": 2.8,
+        "label": "Gewinnüberraschung",
+        "reason": "Beat=+2.8% → +1 (>+2%=+1)"
+      }
+    }
+  }
 }
