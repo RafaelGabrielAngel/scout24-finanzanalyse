@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "generated_at": "2026-06-03T18:27:19.423245Z",
+    "generated_at": "2026-06-04T08:02:02.881147Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
   "market": {
-    "price": 75.85,
-    "change_pct": 1.88,
+    "price": 71.8,
+    "change_pct": -5.34,
     "market_cap_bn": 0,
-    "year_high": 79.4,
-    "year_low": 75.0,
+    "year_high": 75.65,
+    "year_low": 71.8,
     "pe_ratio": 0
   },
   "profile": {
@@ -113,27 +113,27 @@
     "series": [
       {
         "date": "2026-02-15",
-        "value": 75
+        "value": 69
       },
       {
         "date": "2026-02-22",
-        "value": 72
+        "value": 71
       },
       {
         "date": "2026-03-01",
-        "value": 80
+        "value": 82
       },
       {
         "date": "2026-03-08",
-        "value": 81
+        "value": 83
       },
       {
         "date": "2026-03-15",
-        "value": 100
+        "value": 92
       },
       {
         "date": "2026-03-22",
-        "value": 94
+        "value": 86
       },
       {
         "date": "2026-03-29",
@@ -145,23 +145,23 @@
       },
       {
         "date": "2026-04-12",
-        "value": 84
+        "value": 86
       },
       {
         "date": "2026-04-19",
-        "value": 81
-      },
-      {
-        "date": "2026-04-26",
         "value": 82
       },
       {
-        "date": "2026-05-03",
+        "date": "2026-04-26",
         "value": 79
       },
       {
-        "date": "2026-05-10",
+        "date": "2026-05-03",
         "value": 76
+      },
+      {
+        "date": "2026-05-10",
+        "value": 77
       },
       {
         "date": "2026-05-17",
@@ -169,164 +169,79 @@
       },
       {
         "date": "2026-05-24",
-        "value": 66
+        "value": 70
       },
       {
         "date": "2026-05-31",
-        "value": 73
+        "value": 71
       }
     ],
-    "competitor": [
-      {
-        "date": "2026-02-15",
-        "immoscout": 75,
-        "immowelt": 72
-      },
-      {
-        "date": "2026-02-22",
-        "immoscout": 72,
-        "immowelt": 75
-      },
-      {
-        "date": "2026-03-01",
-        "immoscout": 80,
-        "immowelt": 83
-      },
-      {
-        "date": "2026-03-08",
-        "immoscout": 81,
-        "immowelt": 78
-      },
-      {
-        "date": "2026-03-15",
-        "immoscout": 100,
-        "immowelt": 79
-      },
-      {
-        "date": "2026-03-22",
-        "immoscout": 94,
-        "immowelt": 79
-      },
-      {
-        "date": "2026-03-29",
-        "immoscout": 95,
-        "immowelt": 77
-      },
-      {
-        "date": "2026-04-05",
-        "immoscout": 97,
-        "immowelt": 78
-      },
-      {
-        "date": "2026-04-12",
-        "immoscout": 84,
-        "immowelt": 76
-      },
-      {
-        "date": "2026-04-19",
-        "immoscout": 81,
-        "immowelt": 74
-      },
-      {
-        "date": "2026-04-26",
-        "immoscout": 82,
-        "immowelt": 79
-      },
-      {
-        "date": "2026-05-03",
-        "immoscout": 79,
-        "immowelt": 71
-      },
-      {
-        "date": "2026-05-10",
-        "immoscout": 76,
-        "immowelt": 73
-      },
-      {
-        "date": "2026-05-17",
-        "immoscout": 72,
-        "immowelt": 75
-      },
-      {
-        "date": "2026-05-24",
-        "immoscout": 66,
-        "immowelt": 81
-      },
-      {
-        "date": "2026-05-31",
-        "immoscout": 73,
-        "immowelt": 84
-      }
-    ],
+    "competitor": [],
     "ai_signal": [
       {
         "date": "2026-03-15",
-        "Wohnung KI": 59,
-        "Wohnung ChatGPT": 79
-      },
-      {
-        "date": "2026-03-22",
-        "Wohnung KI": 60,
-        "Wohnung ChatGPT": 90
-      },
-      {
-        "date": "2026-03-29",
-        "Wohnung KI": 44,
+        "Wohnung KI": 64,
         "Wohnung ChatGPT": 80
       },
       {
+        "date": "2026-03-22",
+        "Wohnung KI": 43,
+        "Wohnung ChatGPT": 100
+      },
+      {
+        "date": "2026-03-29",
+        "Wohnung KI": 40,
+        "Wohnung ChatGPT": 78
+      },
+      {
         "date": "2026-04-05",
-        "Wohnung KI": 62,
-        "Wohnung ChatGPT": 62
+        "Wohnung KI": 57,
+        "Wohnung ChatGPT": 70
       },
       {
         "date": "2026-04-12",
-        "Wohnung KI": 64,
-        "Wohnung ChatGPT": 67
+        "Wohnung KI": 66,
+        "Wohnung ChatGPT": 66
       },
       {
         "date": "2026-04-19",
-        "Wohnung KI": 64,
-        "Wohnung ChatGPT": 66
+        "Wohnung KI": 57,
+        "Wohnung ChatGPT": 60
       },
       {
         "date": "2026-04-26",
-        "Wohnung KI": 39,
-        "Wohnung ChatGPT": 68
+        "Wohnung KI": 59,
+        "Wohnung ChatGPT": 59
       },
       {
         "date": "2026-05-03",
-        "Wohnung KI": 88,
-        "Wohnung ChatGPT": 66
+        "Wohnung KI": 87,
+        "Wohnung ChatGPT": 65
       },
       {
         "date": "2026-05-10",
-        "Wohnung KI": 74,
-        "Wohnung ChatGPT": 62
+        "Wohnung KI": 68,
+        "Wohnung ChatGPT": 58
       },
       {
         "date": "2026-05-17",
-        "Wohnung KI": 25,
-        "Wohnung ChatGPT": 63
+        "Wohnung KI": 42,
+        "Wohnung ChatGPT": 69
       },
       {
         "date": "2026-05-24",
-        "Wohnung KI": 49,
-        "Wohnung ChatGPT": 64
+        "Wohnung KI": 47,
+        "Wohnung ChatGPT": 61
       },
       {
         "date": "2026-05-31",
-        "Wohnung KI": 61,
-        "Wohnung ChatGPT": 71
+        "Wohnung KI": 57,
+        "Wohnung ChatGPT": 66
       }
     ],
-    "trend_delta": -18.2,
-    "competitor_delta": {
-      "immoscout_delta": -18.2,
-      "immowelt_delta": -1.3
-    },
-    "ai_delta_Wohnung_KI": 38.4,
-    "ai_delta_Wohnung_ChatGPT": -3.0
+    "trend_delta": -17.8,
+    "ai_delta_Wohnung_KI": 25.9,
+    "ai_delta_Wohnung_ChatGPT": -3.1
   },
   "macro": {
     "ecb_deposit_rate": 2.0,
@@ -334,7 +249,7 @@
     "mortgage_rate_10y": 3.82,
     "wacc_floor": 7.5,
     "wacc_implied": 8.9,
-    "as_of": "2026-06-03",
+    "as_of": "2026-06-04",
     "source": "EZB + Bundesbank SDMX API",
     "ecb_next_hike_prob": 0.91,
     "erp_used": 5.5,
@@ -344,117 +259,11 @@
     "positions": [],
     "total_short_pct": 0,
     "num_holders": 0,
-    "as_of": "2026-06-03",
+    "as_of": "2026-06-04",
     "source": "BaFin — Netto-Leerverkaufspositionen (öffentlich)"
   },
   "brokers": {},
   "multiples": {},
   "consensus": {},
-  "levermann": {
-    "_meta": {
-      "calculated": "2026-06-02T08:00:00",
-      "source": "LSEG Workspace",
-      "ric": "DE000A12DM80",
-      "method": "Levermann Large Cap (13 Kriterien)",
-      "scale": ">=+4=KAUFEN, -3..+3=HALTEN, <=-4=VERKAUFEN"
-    },
-    "total_score": 0,
-    "rating": "HALTEN",
-    "rating_color": "amber",
-    "ordered_keys": [
-      "k1_roe",
-      "k2_ebit_margin",
-      "k3_equity_ratio",
-      "k4_pe",
-      "k5_pe5y",
-      "k6_analyst",
-      "k7_earnings_reaction",
-      "k8_eps_revision",
-      "k9_perf_6m",
-      "k10_perf_12m",
-      "k11_momentum",
-      "k12_eps_rev_3m",
-      "k13_eps_surprise"
-    ],
-    "criteria": {
-      "k1_roe": {
-        "score": 0,
-        "value": 16.8,
-        "label": "Return on Equity (RoE)",
-        "reason": "16.8% → 0 (≥20%=+1, 10-20%=0, <10%=-1); Quelle: LSEG TR.ROCE"
-      },
-      "k2_ebit_margin": {
-        "score": 1,
-        "value": 50.1,
-        "label": "EBIT-Marge (oo)",
-        "reason": "ooEBIT-Marge 50.1% → +1 (≥12%=+1); GAAP-Marge niedriger; Quelle: Scout24 GB 2025A"
-      },
-      "k3_equity_ratio": {
-        "score": 1,
-        "value": 31.5,
-        "label": "Eigenkapitalquote",
-        "reason": "31.5% → +1 (≥25%=+1); EK €650M / Assets €2065M; Quelle: LSEG"
-      },
-      "k4_pe": {
-        "score": -1,
-        "value": 21.7,
-        "label": "KGV aktuell",
-        "reason": "21.7× → -1 (>16=-1); Quelle: LSEG TR.PETotalReturn"
-      },
-      "k5_pe5y": {
-        "score": -1,
-        "value": 27.8,
-        "label": "KGV 5-Jahres-Ø",
-        "reason": "Ø 27.8× → -1 (>16=-1); historische P/E 2020-2024; Quelle: LSEG"
-      },
-      "k6_analyst": {
-        "score": -1,
-        "value": 1.8,
-        "label": "Analystenrating (★ konträr!)",
-        "reason": "Rec-Mean 1.8 → -1 konträr (≤2.0=−1); 100% Buy-Konsens = Levermann-Minuspunkt; Quelle: LSEG"
-      },
-      "k7_earnings_react": {
-        "score": -1,
-        "value": -1.2,
-        "label": "Kursreaktion Quartalsbericht",
-        "reason": "-1.2% am Q1-Earnings-Tag → -1 (≤-1%=-1); Quelle: Alpha Vantage historisch"
-      },
-      "k8_eps_revision": {
-        "score": 0,
-        "value": 0.0,
-        "label": "Gewinnrevision (6M)",
-        "reason": "EPS-Revision 0% → 0 (±5%=0); Quelle: LSEG TR.EPSMeanEstimate"
-      },
-      "k9_perf_6m": {
-        "score": 0,
-        "value": 3.2,
-        "label": "Kursentwicklung 6 Monate",
-        "reason": "+3.2% → 0 (±5%=0); Kurs heute €72.25 vs. vor 6M ~€69.9"
-      },
-      "k10_perf_12m": {
-        "score": 1,
-        "value": 8.6,
-        "label": "Kursentwicklung 12 Monate",
-        "reason": "+8.6% → +1 (>+5%=+1); Kurs heute €72.25 vs. vor 12M ~€66.5"
-      },
-      "k11_momentum": {
-        "score": 0,
-        "value": null,
-        "label": "Kursmomentum (6M vs 12M)",
-        "reason": "6M(3.2%) < 12M(8.6%) → 0 (keine Beschleunigung)"
-      },
-      "k12_eps_rev_3m": {
-        "score": 0,
-        "value": 0.5,
-        "label": "Gewinnrevision (3M)",
-        "reason": "+0.5% → 0 (±2%=0); Quelle: LSEG"
-      },
-      "k13_eps_surprise": {
-        "score": 1,
-        "value": 2.8,
-        "label": "Gewinnüberraschung",
-        "reason": "+2.8% Beat → +1 (>+2%=+1); Q1 actual vs. Konsens; Quelle: LSEG"
-      }
-    }
-  }
+  "levermann": {}
 }
