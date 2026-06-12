@@ -365,25 +365,6 @@ def fetch_peers() -> list:
             except Exception as e2:
                 print(f"    [WARN] {name} ({ticker}) komplett fehlgeschlagen: {e2}")
 
-    # Scout24 selbst als markierte Referenzzeile anhaengen (fuer Live-Vergleich)
-    try:
-        subj = _from_yfinance("Scout24", TICKER_YF, is_subject=True)
-        if not subj:
-            raise ValueError("yfinance ohne Daten")
-        peers.append(subj)
-        print(f"    ✓ Scout24 (Referenz): EV/EBITDA {subj['ev_ebitda']}x (yfinance)")
-    except Exception as e:
-        print(f"    [WARN] Scout24-Referenzzeile via yfinance fehlgeschlagen: {e} — Fallback FMP")
-        try:
-            subj = _from_fmp("Scout24", TICKER_FMP)
-            if not subj:
-                raise ValueError("Keine FMP-Daten")
-            subj["is_subject"] = True
-            peers.append(subj)
-            print(f"    ✓ Scout24 (Referenz): EV/EBITDA {subj['ev_ebitda']}x (FMP)")
-        except Exception as e2:
-            print(f"    [WARN] Scout24-Referenzzeile komplett fehlgeschlagen: {e2}")
-
     return peers
 
 # ─────────────────────────────────────────────────────────────────
@@ -806,6 +787,33 @@ def main():
         "consensus": existing_lseg.get("consensus", {}),
         "levermann": existing_lseg.get("levermann", {}),
     }
+
+    # Scout24 selbst als markierte Referenzzeile anhaengen (fuer Live-Vergleich)
+    # Robust: aus bereits berechneten kpis ableiten statt erneuter yfinance/FMP-
+    # Abfrage fuer SDX.DE (die in fetch_peers() zuverlaessig fehlschlaegt, da FMP
+    # Free Tier fuer SDX.DE weder key-metrics noch income-statement liefert und
+    # yfinance als 6./7. sequentieller Call im selben Lauf oft leerlaeuft).
+    try:
+        inc_hist = fin["income"]
+        rev_growth_subj = 0
+        if len(inc_hist) > 1 and inc_hist[1].get("revenue"):
+            rev_growth_subj = round((inc_hist[0]["revenue"] / inc_hist[1]["revenue"] - 1) * 100, 1)
+        subj = {
+            "name":          "Scout24",
+            "ticker":        TICKER_FMP,
+            "ev_ebitda":     data["kpis"]["ev_ebitda"],
+            "pe_ratio":      data["kpis"]["pe_ratio"],
+            "fcf_yield":     data["kpis"]["fcf_yield"],
+            "ebitda_margin": data["kpis"]["ebitda_margin"],
+            "rev_growth":    rev_growth_subj,
+            "as_of":         datetime.date.today().isoformat(),
+            "source":        "intern (kpis)",
+            "is_subject":    True,
+        }
+        data["peers"].append(subj)
+        print(f"    ✓ Scout24 (Referenz): EV/EBITDA {subj['ev_ebitda']}x (aus kpis)")
+    except Exception as e:
+        print(f"    [WARN] Scout24-Referenzzeile fehlgeschlagen: {e}")
 
     # ── Schreiben
     with open(OUTPUT, "w", encoding="utf-8") as f:
