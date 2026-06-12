@@ -2,15 +2,18 @@
 Scout24 SE — Live Data Fetcher v2
 ===================================
 Quellen (Priorität):
-  1. yfinance (PRIMARY)  — Kurs, Shares, MarketCap, Peer-Grunddaten (kostenlos, DE-Stocks)
-  2. FMP                 — Financials, Key Metrics (Starter Plan für volle Abdeckung)
+  1. yfinance (PRIMARY)  — Kurs, Shares, MarketCap, Peer-Grunddaten,
+                            Financials/Bilanz/Cashflow (kostenlos, DE/EU-Stocks;
+                            FMP Free Tier liefert für SDX.DE keine Financials)
+  2. FMP                 — Fallback für Financials/Key Metrics (Starter Plan
+                            nötig für volle SDX.DE-Abdeckung)
   3. Google Trends       — Traffic-Proxy: ImmoScout24 vs Immowelt vs KI-Suchen
 
 Ausführung:
   python fetcher.py
 
 Umgebungsvariablen:
-  FMP_API_KEY=dein-key-hier  (optional für Financials)
+  FMP_API_KEY=dein-key-hier  (optional für Financials-Fallback)
 """
 
 import os
@@ -202,91 +205,293 @@ def fetch_profile() -> dict:
 # 3. FINANCIALS (GuV, Bilanz, Cashflow — letzte 5 Jahre)
 # ─────────────────────────────────────────────────────────────────
 
+def _yf_series(df, label):
+    """Liefert die Zeile (Series) fuer ein pretty-Label aus .financials /
+    .balance_sheet / .cashflow, oder None falls das Label nicht existiert."""
+    try:
+        return df.loc[label]
+    except KeyError:
+        return None
+
+
+def _yf_val(series, col):
+    """Sicherer Zellzugriff; None bei NaN/Fehler (kein extra math/pandas-Import)."""
+    if series is None:
+        return None
+    try:
+        v = series[col]
+        if v != v:  # NaN-Check (NaN != NaN)
+            return None
+        return float(v)
+    except Exception:
+        return None
+
+
 def fetch_financials() -> dict:
-    print("[3/5] Finanzkennzahlen (GuV / Bilanz / Cashflow)...")
+    print("[4/5] Finanzkennzahlen (GuV / Bilanz / Cashflow)...")
     result = {"income": [], "balance": [], "cashflow": [], "metrics": []}
 
-    try:
-        # Gewinn- und Verlustrechnung
-        income = fmp(f"income-statement/{TICKER_FMP}", limit=5)
-        result["income"] = [
-            {
-                "year":          i.get("calendarYear"),
-                "revenue":       round((i.get("revenue") or 0) / 1e6, 1),
-                "ebitda":        round((i.get("ebitda") or 0) / 1e6, 1),
-                "ebit":          round((i.get("operatingIncome") or 0) / 1e6, 1),
-                "net_income":    round((i.get("netIncome") or 0) / 1e6, 1),
-                "gross_profit":  round((i.get("grossProfit") or 0) / 1e6, 1),
-                "rd_expense":    round((i.get("researchAndDevelopmentExpenses") or 0) / 1e6, 1),
-                "eps":           round(i.get("eps") or 0, 2),
-                "ebitda_margin": round((i.get("ebitdaratio") or 0) * 100, 1),
-            }
-            for i in income
-        ]
-        print(f"    GuV: {len(result['income'])} Jahre geladen")
-    except Exception as e:
-        print(f"    [WARN] GuV fehlgeschlagen: {e}")
+    # ── PRIMAER: yfinance ────────────────────────────────────────
+    # FMP Free Tier liefert fuer SDX.DE leere income-statement/
+    # balance-sheet-statement/cash-flow-statement/key-metrics (bestaetigt:
+    # alle vier Endpunkte liefern [] -- siehe history.metrics/balance in
+    # frueheren data.json-Versionen). yfinance .financials/.balance_sheet/
+    # .cashflow nutzen den fundamentals-timeseries Endpoint, der fuer
+    # europaeische Nebenwerte i.d.R. besser abgedeckt ist.
+    if YFINANCE_OK:
+        try:
+            tk = yf.Ticker(TICKER_YF)
 
-    try:
-        # Bilanz
-        balance = fmp(f"balance-sheet-statement/{TICKER_FMP}", limit=5)
-        result["balance"] = [
-            {
-                "year":             b.get("calendarYear"),
-                "total_assets":     round((b.get("totalAssets") or 0) / 1e6, 1),
-                "goodwill":         round((b.get("goodwill") or 0) / 1e6, 1),
-                "intangibles":      round((b.get("intangibleAssets") or 0) / 1e6, 1),
-                "total_equity":     round((b.get("totalEquity") or 0) / 1e6, 1),
-                "total_debt":       round((b.get("totalDebt") or 0) / 1e6, 1),
-                "cash":             round((b.get("cashAndCashEquivalents") or 0) / 1e6, 1),
-                "net_debt":         round(((b.get("totalDebt") or 0) - (b.get("cashAndCashEquivalents") or 0)) / 1e6, 1),
-                "goodwill_pct_assets": round(
-                    ((b.get("goodwill") or 0) / (b.get("totalAssets") or 1)) * 100, 1
-                ),
-            }
-            for b in balance
-        ]
-        print(f"    Bilanz: {len(result['balance'])} Jahre geladen")
-    except Exception as e:
-        print(f"    [WARN] Bilanz fehlgeschlagen: {e}")
+            # GuV
+            try:
+                df = tk.financials
+                if df is not None and not df.empty:
+                    rev_r  = _yf_series(df, "Total Revenue")
+                    ebd_r  = _yf_series(df, "EBITDA")
+                    ebit_r = _yf_series(df, "EBIT")
+                    opi_r  = _yf_series(df, "Operating Income")
+                    ni_r   = _yf_series(df, "Net Income")
+                    gp_r   = _yf_series(df, "Gross Profit")
+                    rd_r   = _yf_series(df, "Research And Development")
+                    eps_r  = _yf_series(df, "Diluted EPS")
+                    for col in sorted(df.columns, reverse=True)[:5]:
+                        rev = _yf_val(rev_r, col)
+                        if not rev:
+                            continue
+                        ebd  = _yf_val(ebd_r, col)
+                        ebit = _yf_val(ebit_r, col)
+                        if ebit is None:
+                            ebit = _yf_val(opi_r, col)
+                        result["income"].append({
+                            "year":          str(col.year),
+                            "revenue":       round(rev / 1e6, 1),
+                            "ebitda":        round(ebd / 1e6, 1) if ebd else 0,
+                            "ebit":          round(ebit / 1e6, 1) if ebit else 0,
+                            "net_income":    round((_yf_val(ni_r, col) or 0) / 1e6, 1),
+                            "gross_profit":  round((_yf_val(gp_r, col) or 0) / 1e6, 1),
+                            "rd_expense":    round((_yf_val(rd_r, col) or 0) / 1e6, 1),
+                            "eps":           round(_yf_val(eps_r, col) or 0, 2),
+                            "ebitda_margin": round(ebd / rev * 100, 1) if ebd else 0,
+                        })
+                    if result["income"]:
+                        print(f"    GuV: {len(result['income'])} Jahre geladen (yfinance)")
+            except Exception as e:
+                print(f"    [WARN] GuV via yfinance fehlgeschlagen: {e}")
 
-    try:
-        # Cashflow
-        cf = fmp(f"cash-flow-statement/{TICKER_FMP}", limit=5)
-        result["cashflow"] = [
-            {
-                "year":              c.get("calendarYear"),
-                "operating_cf":      round((c.get("operatingCashFlow") or 0) / 1e6, 1),
-                "capex":             round((c.get("capitalExpenditure") or 0) / 1e6, 1),
-                "free_cashflow":     round((c.get("freeCashFlow") or 0) / 1e6, 1),
-                "dividends":         round((c.get("dividendsPaid") or 0) / 1e6, 1),
-                "buybacks":          round((c.get("commonStockRepurchased") or 0) / 1e6, 1),
-            }
-            for c in cf
-        ]
-        print(f"    Cashflow: {len(result['cashflow'])} Jahre geladen")
-    except Exception as e:
-        print(f"    [WARN] Cashflow fehlgeschlagen: {e}")
+            # Bilanz
+            try:
+                df = tk.balance_sheet
+                if df is not None and not df.empty:
+                    ta_r    = _yf_series(df, "Total Assets")
+                    gw_r    = _yf_series(df, "Goodwill")
+                    oia_r   = _yf_series(df, "Other Intangible Assets")
+                    gwoia_r = _yf_series(df, "Goodwill And Other Intangible Assets")
+                    eq_r    = _yf_series(df, "Stockholders Equity")
+                    eqgmi_r = _yf_series(df, "Total Equity Gross Minority Interest")
+                    td_r    = _yf_series(df, "Total Debt")
+                    cash_r  = _yf_series(df, "Cash And Cash Equivalents")
+                    ccsti_r = _yf_series(df, "Cash Cash Equivalents And Short Term Investments")
+                    nd_r    = _yf_series(df, "Net Debt")
+                    for col in sorted(df.columns, reverse=True)[:5]:
+                        ta = _yf_val(ta_r, col)
+                        if not ta:
+                            continue
+                        gw = _yf_val(gw_r, col) or 0
+                        intg = _yf_val(oia_r, col)
+                        if intg is None:
+                            gwoia = _yf_val(gwoia_r, col)
+                            intg = (gwoia - gw) if gwoia is not None else 0
+                        eq = _yf_val(eq_r, col)
+                        if eq is None:
+                            eq = _yf_val(eqgmi_r, col) or 0
+                        td = _yf_val(td_r, col) or 0
+                        cash = _yf_val(cash_r, col)
+                        if cash is None:
+                            cash = _yf_val(ccsti_r, col) or 0
+                        nd = _yf_val(nd_r, col)
+                        if nd is None:
+                            nd = td - cash
+                        result["balance"].append({
+                            "year":                str(col.year),
+                            "total_assets":        round(ta / 1e6, 1),
+                            "goodwill":            round(gw / 1e6, 1),
+                            "intangibles":         round(intg / 1e6, 1),
+                            "total_equity":        round(eq / 1e6, 1),
+                            "total_debt":          round(td / 1e6, 1),
+                            "cash":                round(cash / 1e6, 1),
+                            "net_debt":            round(nd / 1e6, 1),
+                            "goodwill_pct_assets": round(gw / ta * 100, 1),
+                        })
+                    if result["balance"]:
+                        print(f"    Bilanz: {len(result['balance'])} Jahre geladen (yfinance)")
+            except Exception as e:
+                print(f"    [WARN] Bilanz via yfinance fehlgeschlagen: {e}")
 
-    try:
-        # Key Metrics (EV/EBITDA, P/E, FCF Yield etc.)
-        km = fmp(f"key-metrics/{TICKER_FMP}", limit=5)
-        result["metrics"] = [
-            {
-                "year":           m.get("calendarYear"),
-                "ev_ebitda":      round(m.get("evToOperatingCashFlow") or m.get("enterpriseValueOverEBITDA") or 0, 1),
-                "pe_ratio":       round(m.get("peRatio") or 0, 1),
-                "pb_ratio":       round(m.get("pbRatio") or 0, 1),
-                "fcf_yield":      round((m.get("freeCashFlowYield") or 0) * 100, 2),
-                "roce":           round((m.get("returnOnCapitalEmployed") or 0) * 100, 1),
-                "ev_mn":          round((m.get("enterpriseValue") or 0) / 1e6, 1),
-                "revenue_per_share": round(m.get("revenuePerShare") or 0, 2),
-            }
-            for m in km
-        ]
-        print(f"    Multiples: {len(result['metrics'])} Jahre geladen")
-    except Exception as e:
-        print(f"    [WARN] Multiples fehlgeschlagen: {e}")
+            # Cashflow
+            try:
+                df = tk.cashflow
+                if df is not None and not df.empty:
+                    ocf_r = _yf_series(df, "Operating Cash Flow")
+                    cpx_r = _yf_series(df, "Capital Expenditure")
+                    fcf_r = _yf_series(df, "Free Cash Flow")
+                    div_r = _yf_series(df, "Cash Dividends Paid")
+                    cdp_r = _yf_series(df, "Common Stock Dividend Paid")
+                    bb_r  = _yf_series(df, "Repurchase Of Capital Stock")
+                    for col in sorted(df.columns, reverse=True)[:5]:
+                        ocf = _yf_val(ocf_r, col)
+                        fcf = _yf_val(fcf_r, col)
+                        if ocf is None and fcf is None:
+                            continue
+                        div = _yf_val(div_r, col)
+                        if div is None:
+                            div = _yf_val(cdp_r, col) or 0
+                        result["cashflow"].append({
+                            "year":          str(col.year),
+                            "operating_cf":  round((ocf or 0) / 1e6, 1),
+                            "capex":         round((_yf_val(cpx_r, col) or 0) / 1e6, 1),
+                            "free_cashflow": round((fcf or 0) / 1e6, 1),
+                            "dividends":     round(div / 1e6, 1),
+                            "buybacks":      round((_yf_val(bb_r, col) or 0) / 1e6, 1),
+                        })
+                    if result["cashflow"]:
+                        print(f"    Cashflow: {len(result['cashflow'])} Jahre geladen (yfinance)")
+            except Exception as e:
+                print(f"    [WARN] Cashflow via yfinance fehlgeschlagen: {e}")
+
+            # Kennzahlen (aktuell, aus .info -- yfinance liefert keine
+            # mehrjaehrige key-metrics-Historie wie FMP)
+            try:
+                info = tk.info or {}
+                ev_ebitda = info.get("enterpriseToEbitda")
+                pe_ratio  = info.get("trailingPE") or info.get("forwardPE")
+                pb_ratio  = info.get("priceToBook")
+                ev_val    = info.get("enterpriseValue")
+                mcap      = info.get("marketCap")
+                shares    = info.get("sharesOutstanding")
+
+                fcf_latest = result["cashflow"][0]["free_cashflow"] if result["cashflow"] else None
+                fcf_yield  = round(fcf_latest * 1e6 / mcap * 100, 2) if (fcf_latest and mcap) else 0
+
+                rev_latest    = result["income"][0]["revenue"] if result["income"] else None
+                rev_per_share = round(rev_latest * 1e6 / shares, 2) if (rev_latest and shares) else 0
+
+                roce = 0
+                if result["income"] and result["balance"]:
+                    ebit_v = result["income"][0]["ebit"]
+                    cap_employed = result["balance"][0]["total_equity"] + result["balance"][0]["total_debt"]
+                    if ebit_v and cap_employed:
+                        roce = round(ebit_v / cap_employed * 100, 1)
+
+                if ev_ebitda or pe_ratio:
+                    result["metrics"].append({
+                        "year":              str(datetime.date.today().year),
+                        "ev_ebitda":         round(ev_ebitda, 1) if ev_ebitda else 0,
+                        "pe_ratio":          round(pe_ratio, 1) if pe_ratio else 0,
+                        "pb_ratio":          round(pb_ratio, 1) if pb_ratio else 0,
+                        "fcf_yield":         fcf_yield,
+                        "roce":              roce,
+                        "ev_mn":             round(ev_val / 1e6, 1) if ev_val else 0,
+                        "revenue_per_share": rev_per_share,
+                    })
+                    print("    Multiples: aktuelle Kennzahlen geladen (yfinance .info)")
+            except Exception as e:
+                print(f"    [WARN] Multiples via yfinance fehlgeschlagen: {e}")
+
+        except Exception as e:
+            print(f"    [WARN] yfinance Financials komplett fehlgeschlagen: {e}")
+
+    # ── FALLBACK: FMP ────────────────────────────────────────────
+    # Fuellt nur Luecken, die yfinance nicht liefern konnte. Fuer SDX.DE
+    # auf FMP Free Tier i.d.R. weiterhin leer (bestaetigt) -- main()
+    # greift dann auf FALLBACK_2025A zurueck.
+    if not result["income"]:
+        try:
+            income = fmp(f"income-statement/{TICKER_FMP}", limit=5)
+            result["income"] = [
+                {
+                    "year":          i.get("calendarYear"),
+                    "revenue":       round((i.get("revenue") or 0) / 1e6, 1),
+                    "ebitda":        round((i.get("ebitda") or 0) / 1e6, 1),
+                    "ebit":          round((i.get("operatingIncome") or 0) / 1e6, 1),
+                    "net_income":    round((i.get("netIncome") or 0) / 1e6, 1),
+                    "gross_profit":  round((i.get("grossProfit") or 0) / 1e6, 1),
+                    "rd_expense":    round((i.get("researchAndDevelopmentExpenses") or 0) / 1e6, 1),
+                    "eps":           round(i.get("eps") or 0, 2),
+                    "ebitda_margin": round((i.get("ebitdaratio") or 0) * 100, 1),
+                }
+                for i in income
+            ]
+            if result["income"]:
+                print(f"    GuV: {len(result['income'])} Jahre geladen (FMP)")
+        except Exception as e:
+            print(f"    [WARN] GuV via FMP fehlgeschlagen: {e}")
+
+    if not result["balance"]:
+        try:
+            balance = fmp(f"balance-sheet-statement/{TICKER_FMP}", limit=5)
+            result["balance"] = [
+                {
+                    "year":             b.get("calendarYear"),
+                    "total_assets":     round((b.get("totalAssets") or 0) / 1e6, 1),
+                    "goodwill":         round((b.get("goodwill") or 0) / 1e6, 1),
+                    "intangibles":      round((b.get("intangibleAssets") or 0) / 1e6, 1),
+                    "total_equity":     round((b.get("totalEquity") or 0) / 1e6, 1),
+                    "total_debt":       round((b.get("totalDebt") or 0) / 1e6, 1),
+                    "cash":             round((b.get("cashAndCashEquivalents") or 0) / 1e6, 1),
+                    "net_debt":         round(((b.get("totalDebt") or 0) - (b.get("cashAndCashEquivalents") or 0)) / 1e6, 1),
+                    "goodwill_pct_assets": round(
+                        ((b.get("goodwill") or 0) / (b.get("totalAssets") or 1)) * 100, 1
+                    ),
+                }
+                for b in balance
+            ]
+            if result["balance"]:
+                print(f"    Bilanz: {len(result['balance'])} Jahre geladen (FMP)")
+        except Exception as e:
+            print(f"    [WARN] Bilanz via FMP fehlgeschlagen: {e}")
+
+    if not result["cashflow"]:
+        try:
+            cf = fmp(f"cash-flow-statement/{TICKER_FMP}", limit=5)
+            result["cashflow"] = [
+                {
+                    "year":              c.get("calendarYear"),
+                    "operating_cf":      round((c.get("operatingCashFlow") or 0) / 1e6, 1),
+                    "capex":             round((c.get("capitalExpenditure") or 0) / 1e6, 1),
+                    "free_cashflow":     round((c.get("freeCashFlow") or 0) / 1e6, 1),
+                    "dividends":         round((c.get("dividendsPaid") or 0) / 1e6, 1),
+                    "buybacks":          round((c.get("commonStockRepurchased") or 0) / 1e6, 1),
+                }
+                for c in cf
+            ]
+            if result["cashflow"]:
+                print(f"    Cashflow: {len(result['cashflow'])} Jahre geladen (FMP)")
+        except Exception as e:
+            print(f"    [WARN] Cashflow via FMP fehlgeschlagen: {e}")
+
+    if not result["metrics"]:
+        try:
+            km = fmp(f"key-metrics/{TICKER_FMP}", limit=5)
+            result["metrics"] = [
+                {
+                    "year":           m.get("calendarYear"),
+                    "ev_ebitda":      round(m.get("evToOperatingCashFlow") or m.get("enterpriseValueOverEBITDA") or 0, 1),
+                    "pe_ratio":       round(m.get("peRatio") or 0, 1),
+                    "pb_ratio":       round(m.get("pbRatio") or 0, 1),
+                    "fcf_yield":      round((m.get("freeCashFlowYield") or 0) * 100, 2),
+                    "roce":           round((m.get("returnOnCapitalEmployed") or 0) * 100, 1),
+                    "ev_mn":          round((m.get("enterpriseValue") or 0) / 1e6, 1),
+                    "revenue_per_share": round(m.get("revenuePerShare") or 0, 2),
+                }
+                for m in km
+            ]
+            if result["metrics"]:
+                print(f"    Multiples: {len(result['metrics'])} Jahre geladen (FMP)")
+        except Exception as e:
+            print(f"    [WARN] Multiples via FMP fehlgeschlagen: {e}")
+
+    if not (result["income"] or result["balance"] or result["cashflow"] or result["metrics"]):
+        print("    [INFO] Weder yfinance noch FMP lieferten Financials -- main() verwendet FALLBACK_2025A")
 
     return result
 
@@ -295,7 +500,7 @@ def fetch_financials() -> dict:
 # ─────────────────────────────────────────────────────────────────
 
 def fetch_peers() -> list:
-    print("[4/5] Peer-Daten (PRIMARY: yfinance)...")
+    print("[3/5] Peer-Daten (PRIMARY: yfinance)...")
     peers = []
     today = datetime.date.today().isoformat()
 
@@ -666,8 +871,8 @@ def main():
 
     market    = fetch_market_data()
     profile   = fetch_profile()
-    fin       = fetch_financials()
     peers     = fetch_peers()
+    fin       = fetch_financials()
     trends    = fetch_trends()
     macro     = fetch_macro()
     shorts    = fetch_bafin_shorts()
@@ -691,7 +896,7 @@ def main():
     latest_metrics = fin["metrics"][0] if fin["metrics"] else FALLBACK_2025A["metrics"]
 
     if not fin["income"]:
-        print("    [INFO] FMP Financials nicht verfügbar — verwende 2025A Fallback-Werte")
+        print("    [INFO] Financials (yfinance+FMP) nicht verfügbar — verwende 2025A Fallback-Werte")
     # Historische Zeitreihen mit Fallback befüllen
     if not fin["income"]:
         fin["income"] = [
@@ -709,6 +914,12 @@ def main():
             {"year": y, "free_cashflow": f, "operating_cf": round(f*1.22,1), "capex": round(-f*0.22,1)}
             for y, f in [("2021",127.8),("2022",163.2),("2023",197.4),("2024",234.6),("2025",261.4)]
         ]
+    # Bilanz/Multiples: falls weder yfinance noch FMP etwas lieferten, zumindest
+    # die aktuelle 2025A-Zeile zeigen statt history.balance/metrics komplett leer
+    if not fin["balance"]:
+        fin["balance"] = [FALLBACK_2025A["balance"]]
+    if not fin["metrics"]:
+        fin["metrics"] = [FALLBACK_2025A["metrics"]]
 
     # ── data.json zusammenbauen
     data = {
