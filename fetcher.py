@@ -295,29 +295,85 @@ def fetch_financials() -> dict:
 # ─────────────────────────────────────────────────────────────────
 
 def fetch_peers() -> list:
-    print("[4/5] Peer-Daten...")
+    print("[4/5] Peer-Daten (PRIMARY: yfinance)...")
     peers = []
+    today = datetime.date.today().isoformat()
+
+    def _from_yfinance(name: str, ticker: str, is_subject: bool = False):
+        if not YFINANCE_OK:
+            return None
+        info = yf.Ticker(ticker).info
+        ev_ebitda = info.get("enterpriseToEbitda")
+        pe_ratio  = info.get("trailingPE") or info.get("forwardPE")
+        fcf       = info.get("freeCashflow")
+        mcap      = info.get("marketCap")
+        fcf_yield = (fcf / mcap * 100) if fcf and mcap else None
+        ebitda_m  = info.get("ebitdaMargins")
+        rev_g     = info.get("revenueGrowth")
+        if ev_ebitda is None and pe_ratio is None:
+            return None
+        row = {
+            "name":          name,
+            "ticker":        ticker,
+            "ev_ebitda":     round(ev_ebitda or 0, 1),
+            "pe_ratio":      round(pe_ratio or 0, 1),
+            "fcf_yield":     round(fcf_yield, 2) if fcf_yield is not None else 0,
+            "ebitda_margin": round(ebitda_m * 100, 1) if ebitda_m is not None else 0,
+            "rev_growth":    round(rev_g * 100, 1) if rev_g is not None else 0,
+            "as_of":         today,
+            "source":        "yfinance",
+        }
+        if is_subject:
+            row["is_subject"] = True
+        return row
+
+    def _from_fmp(name: str, ticker: str):
+        quotes = fmp(f"quote/{ticker}")
+        km     = fmp(f"key-metrics/{ticker}", limit=1)
+        inc    = fmp(f"income-statement/{ticker}", limit=1)
+        if not quotes or not km:
+            return None
+        q, k = quotes[0], km[0]
+        i = inc[0] if inc else {}
+        return {
+            "name":           name,
+            "ticker":         ticker,
+            "ev_ebitda":      round(k.get("enterpriseValueOverEBITDA") or 0, 1),
+            "pe_ratio":       round(q.get("pe") or 0, 1),
+            "fcf_yield":      round((k.get("freeCashFlowYield") or 0) * 100, 2),
+            "ebitda_margin":  round((i.get("ebitdaratio") or 0) * 100, 1),
+            "rev_growth":     round((i.get("revenueGrowth") or 0) * 100, 1),
+            "as_of":          today,
+            "source":         "FMP",
+        }
+
     for name, ticker in PEER_TICKERS.items():
         try:
-            quotes = fmp(f"quote/{ticker}")
-            km     = fmp(f"key-metrics/{ticker}", limit=1)
-            inc    = fmp(f"income-statement/{ticker}", limit=1)
-            if not quotes or not km:
-                raise ValueError("Keine Daten")
-            q, k = quotes[0], km[0]
-            i = inc[0] if inc else {}
-            peers.append({
-                "name":           name,
-                "ticker":         ticker,
-                "ev_ebitda":      round(k.get("enterpriseValueOverEBITDA") or 0, 1),
-                "pe_ratio":       round(q.get("pe") or 0, 1),
-                "fcf_yield":      round((k.get("freeCashFlowYield") or 0) * 100, 2),
-                "ebitda_margin":  round((i.get("ebitdaratio") or 0) * 100, 1),
-                "revenue_growth": round((i.get("revenueGrowth") or 0) * 100, 1),
-            })
-            print(f"    {name}: EV/EBITDA {peers[-1]['ev_ebitda']}x")
+            p = _from_yfinance(name, ticker)
+            if not p:
+                raise ValueError("yfinance ohne Daten")
+            peers.append(p)
+            print(f"    ✓ {name}: EV/EBITDA {p['ev_ebitda']}x (yfinance)")
         except Exception as e:
-            print(f"    [WARN] {name} ({ticker}): {e}")
+            print(f"    [WARN] {name} ({ticker}) via yfinance fehlgeschlagen: {e} — Fallback FMP")
+            try:
+                p = _from_fmp(name, ticker)
+                if not p:
+                    raise ValueError("Keine FMP-Daten")
+                peers.append(p)
+                print(f"    ✓ {name}: EV/EBITDA {p['ev_ebitda']}x (FMP)")
+            except Exception as e2:
+                print(f"    [WARN] {name} ({ticker}) komplett fehlgeschlagen: {e2}")
+
+    # Scout24 selbst als markierte Referenzzeile anhaengen (fuer Live-Vergleich)
+    try:
+        subj = _from_yfinance("Scout24", TICKER_YF, is_subject=True)
+        if subj:
+            peers.append(subj)
+            print(f"    ✓ Scout24 (Referenz): EV/EBITDA {subj['ev_ebitda']}x")
+    except Exception as e:
+        print(f"    [WARN] Scout24-Referenzzeile fehlgeschlagen: {e}")
+
     return peers
 
 # ─────────────────────────────────────────────────────────────────
@@ -487,8 +543,8 @@ def fetch_macro() -> dict:
 
     # ── 1. EZB Einlagesatz — mehrere Endpunkte versuchen
     ecb_urls = [
-        "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.RT0.BB.N.R?format=jsondata&lastNObservations=1",
-        "https://sdw-wsrest.ecb.europa.eu/service/data/FM/B.U2.EUR.RT0.BB.N.R?format=jsondata&lastNObservations=1",
+        "https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR.LEV?format=jsondata&lastNObservations=1",
+        "https://sdw-wsrest.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR.LEV?format=jsondata&lastNObservations=1",
     ]
     for url in ecb_urls:
         try:
@@ -509,9 +565,8 @@ def fetch_macro() -> dict:
             print(f"    [WARN] ECB Endpunkt {url[:50]}... fehlgeschlagen: {e}")
     if not result["ecb_deposit_rate"]:
         # Fallback: letzter bekannter EZB-Satz (manuell aktualisieren bei Änderung)
-        result["ecb_deposit_rate"] = 2.00   # Stand: 2.00% (EZB-Sitzung 11.06.2026 steht aus)
-        result["ecb_next_hike_prob"] = 0.91  # Marktimpl. Wahrscheinlichkeit +25bp am 11.06.2026
-        print(f"    [FALLBACK] EZB Einlagesatz: 2.00% (Stand Jun 2026, Hike-Wahrsch. 91% am 11.06.)")
+        result["ecb_deposit_rate"] = 2.25   # Stand: 2.25% (EZB-Zinserhoehung vom 11.06.2026)
+        print(f"    [FALLBACK] EZB Einlagesatz: 2.25% (Stand Jun 2026, nach Erhoehung 11.06.2026)")
 
     # ── 2. Deutscher 10J-Bund (AAA Euro-Area Yield Curve 10Y)
     try:
@@ -519,12 +574,20 @@ def fetch_macro() -> dict:
                "YC/B.U2.EUR.4F.G_N_A.SV_C_YM.SR_10Y?format=jsondata&lastNObservations=1")
         r = requests.get(url, timeout=15, headers={"Accept": "application/json"})
         r.raise_for_status()
-        obs = r.json()["dataSets"][0]["series"]["0:0:0:0:0:0:0"]["observations"]
-        bund = round(float(list(obs.values())[-1][0]), 2)
-        result["bund_10y"] = bund
-        print(f"    ✓ Bund 10J: {bund}%")
+        data_bund = r.json()
+        datasets = data_bund.get("dataSets", [{}])
+        series = datasets[0].get("series", {}) if datasets else {}
+        first_series = list(series.values())[0] if series else {}
+        obs = first_series.get("observations", {})
+        if obs:
+            bund = round(float(list(obs.values())[-1][0]), 2)
+            result["bund_10y"] = bund
+            print(f"    ✓ Bund 10J: {bund}%")
     except Exception as e:
         print(f"    [WARN] Bund-Rendite fehlgeschlagen: {e}")
+    if not result["bund_10y"]:
+        result["bund_10y"] = 3.05  # Fallback: letzter bekannter Wert (Stand Jun 2026)
+        print(f"    [FALLBACK] Bund 10J: 3.05% (statisch)")
 
     # ── 3. Hypothekenzins DE — mehrere Bundesbank-Endpunkte versuchen
     bbk_urls = [
