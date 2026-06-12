@@ -51,7 +51,7 @@ PEER_TICKERS = {
     "Auto Trader":     "AUTO.L",
     "REA Group":       "REA.AX",
     "Hemnet":          "HEM.ST",
-    "Vend Marketplaces": "VMAR.PA",
+    "Vend Marketplaces": "VEND.OL",  # vormals Schibsted ASA, umbenannt Mai 2025 (Oslo Boers)
 }
 
 FMP_BASE = "https://financialmodelingprep.com/api/v3"
@@ -368,11 +368,21 @@ def fetch_peers() -> list:
     # Scout24 selbst als markierte Referenzzeile anhaengen (fuer Live-Vergleich)
     try:
         subj = _from_yfinance("Scout24", TICKER_YF, is_subject=True)
-        if subj:
-            peers.append(subj)
-            print(f"    ✓ Scout24 (Referenz): EV/EBITDA {subj['ev_ebitda']}x")
+        if not subj:
+            raise ValueError("yfinance ohne Daten")
+        peers.append(subj)
+        print(f"    ✓ Scout24 (Referenz): EV/EBITDA {subj['ev_ebitda']}x (yfinance)")
     except Exception as e:
-        print(f"    [WARN] Scout24-Referenzzeile fehlgeschlagen: {e}")
+        print(f"    [WARN] Scout24-Referenzzeile via yfinance fehlgeschlagen: {e} — Fallback FMP")
+        try:
+            subj = _from_fmp("Scout24", TICKER_FMP)
+            if not subj:
+                raise ValueError("Keine FMP-Daten")
+            subj["is_subject"] = True
+            peers.append(subj)
+            print(f"    ✓ Scout24 (Referenz): EV/EBITDA {subj['ev_ebitda']}x (FMP)")
+        except Exception as e2:
+            print(f"    [WARN] Scout24-Referenzzeile komplett fehlgeschlagen: {e2}")
 
     return peers
 
