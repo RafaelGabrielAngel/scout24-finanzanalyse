@@ -2220,15 +2220,30 @@ window.addEventListener('load',()=>{
   function fmt(v, dec=1) { return v == null || v === 0 ? '—' : Number(v).toFixed(dec); }
   function fmtPct(v) { return v == null || v === 0 ? '—' : Number(v).toFixed(1) + '%'; }
 
+  function showErr(elId, err, asRow) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const msg = '⚠ Fehler beim Laden: ' + (err && err.message ? err.message : String(err));
+    el.innerHTML = asRow
+      ? '<tr><td colspan="7" style="color:var(--red);text-align:center;font-size:11px">' + msg + '</td></tr>'
+      : '<div style="color:var(--red);font-size:11px">' + msg + '</div>';
+  }
+
   fetch(DATA_URL + '?t=' + Date.now())
     .then(r => r.json())
     .then(d => {
-      renderIRNews(d.ir_news || {});
-      renderPeers(d.peers || []);
-      renderShorts(d.shorts || {});
-      renderMacro(d.macro || {});
+      try { renderIRNews(d.ir_news || {}); } catch(e) { console.error('renderIRNews:', e); showErr('ir-news-list', e); }
+      try { renderPeers(d.peers || []); } catch(e) { console.error('renderPeers:', e); showErr('peers-live-body', e, true); }
+      try { renderShorts(d.shorts || {}); } catch(e) { console.error('renderShorts:', e); showErr('shorts-content', e); }
+      try { renderMacro(d.macro || {}); } catch(e) { console.error('renderMacro:', e); showErr('macro-content', e); }
     })
-    .catch(e => console.warn('Live-Daten: data.json nicht geladen', e));
+    .catch(e => {
+      console.error('Live-Daten: data.json nicht geladen', e);
+      showErr('ir-news-list', e);
+      showErr('peers-live-body', e, true);
+      showErr('shorts-content', e);
+      showErr('macro-content', e);
+    });
 
   function renderIRNews(ir) {
     const el = document.getElementById('ir-news-list');
