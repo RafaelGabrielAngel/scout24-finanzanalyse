@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-06-12T09:23:48.726148Z",
+    "generated_at": "2026-06-12T10:05:36.129929Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -149,7 +149,7 @@
       },
       {
         "date": "2026-04-26",
-        "value": 82
+        "value": 81
       },
       {
         "date": "2026-05-03",
@@ -157,11 +157,11 @@
       },
       {
         "date": "2026-05-10",
-        "value": 81
+        "value": 80
       },
       {
         "date": "2026-05-17",
-        "value": 75
+        "value": 74
       },
       {
         "date": "2026-05-24",
@@ -173,7 +173,7 @@
       },
       {
         "date": "2026-06-07",
-        "value": 68
+        "value": 69
       }
     ],
     "competitor": [
@@ -224,8 +224,8 @@
       },
       {
         "date": "2026-04-26",
-        "immoscout": 82,
-        "immowelt": 75
+        "immoscout": 81,
+        "immowelt": 74
       },
       {
         "date": "2026-05-03",
@@ -234,12 +234,12 @@
       },
       {
         "date": "2026-05-10",
-        "immoscout": 81,
-        "immowelt": 76
+        "immoscout": 80,
+        "immowelt": 75
       },
       {
         "date": "2026-05-17",
-        "immoscout": 75,
+        "immoscout": 74,
         "immowelt": 80
       },
       {
@@ -302,7 +302,7 @@
       {
         "date": "2026-05-17",
         "Wohnung KI": 56,
-        "Wohnung ChatGPT": 63
+        "Wohnung ChatGPT": 62
       },
       {
         "date": "2026-05-24",
@@ -317,23 +317,23 @@
       {
         "date": "2026-06-07",
         "Wohnung KI": 55,
-        "Wohnung ChatGPT": 61
+        "Wohnung ChatGPT": 63
       }
     ],
     "trend_delta": -20.1,
     "competitor_delta": {
-      "immoscout_delta": -19.8,
-      "immowelt_delta": -3.6
+      "immoscout_delta": -20.1,
+      "immowelt_delta": -3.9
     },
-    "ai_delta_Wohnung_KI": 56.2,
-    "ai_delta_Wohnung_ChatGPT": 7.8
+    "ai_delta_Wohnung_KI": 55.1,
+    "ai_delta_Wohnung_ChatGPT": 8.2
   },
   "macro": {
     "ecb_deposit_rate": 2.0,
-    "bund_10y": null,
+    "bund_10y": 3.08,
     "mortgage_rate_10y": 3.82,
-    "wacc_floor": 7.0,
-    "wacc_implied": 8.4,
+    "wacc_floor": 7.6,
+    "wacc_implied": 9.0,
     "as_of": "2026-06-12",
     "source": "EZB + Bundesbank SDMX API",
     "ecb_next_hike_prob": 0.91,
