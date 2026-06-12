@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-06-12T12:30:02.101538Z",
+    "generated_at": "2026-06-12T13:16:28.185526Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -113,7 +113,7 @@
       "ticker": "RMV.L",
       "ev_ebitda": 10.9,
       "pe_ratio": 15.1,
-      "fcf_yield": 6.09,
+      "fcf_yield": 6.12,
       "ebitda_margin": 68.2,
       "rev_growth": 7.9,
       "as_of": "2026-06-12",
@@ -123,8 +123,8 @@
       "name": "Auto Trader",
       "ticker": "AUTO.L",
       "ev_ebitda": 9.6,
-      "pe_ratio": 13.4,
-      "fcf_yield": 6.71,
+      "pe_ratio": 13.3,
+      "fcf_yield": 6.74,
       "ebitda_margin": 64.8,
       "rev_growth": 2.7,
       "as_of": "2026-06-12",
@@ -145,10 +145,21 @@
       "name": "Hemnet",
       "ticker": "HEM.ST",
       "ev_ebitda": 12.9,
-      "pe_ratio": 16.5,
-      "fcf_yield": 5.87,
+      "pe_ratio": 16.4,
+      "fcf_yield": 5.88,
       "ebitda_margin": 45.9,
       "rev_growth": -24.7,
+      "as_of": "2026-06-12",
+      "source": "yfinance"
+    },
+    {
+      "name": "Vend Marketplaces",
+      "ticker": "VEND.OL",
+      "ev_ebitda": 27.2,
+      "pe_ratio": 23.1,
+      "fcf_yield": 3.22,
+      "ebitda_margin": 28.3,
+      "rev_growth": 1.6,
       "as_of": "2026-06-12",
       "source": "yfinance"
     }
@@ -157,71 +168,8 @@
     "status": "ok",
     "series": [],
     "competitor": [],
-    "ai_signal": [
-      {
-        "date": "2026-03-22",
-        "Wohnung KI": 48,
-        "Wohnung ChatGPT": 88
-      },
-      {
-        "date": "2026-03-29",
-        "Wohnung KI": 44,
-        "Wohnung ChatGPT": 66
-      },
-      {
-        "date": "2026-04-05",
-        "Wohnung KI": 62,
-        "Wohnung ChatGPT": 61
-      },
-      {
-        "date": "2026-04-12",
-        "Wohnung KI": 52,
-        "Wohnung ChatGPT": 66
-      },
-      {
-        "date": "2026-04-19",
-        "Wohnung KI": 54,
-        "Wohnung ChatGPT": 51
-      },
-      {
-        "date": "2026-04-26",
-        "Wohnung KI": 56,
-        "Wohnung ChatGPT": 53
-      },
-      {
-        "date": "2026-05-03",
-        "Wohnung KI": 73,
-        "Wohnung ChatGPT": 57
-      },
-      {
-        "date": "2026-05-10",
-        "Wohnung KI": 62,
-        "Wohnung ChatGPT": 59
-      },
-      {
-        "date": "2026-05-17",
-        "Wohnung KI": 41,
-        "Wohnung ChatGPT": 58
-      },
-      {
-        "date": "2026-05-24",
-        "Wohnung KI": 72,
-        "Wohnung ChatGPT": 79
-      },
-      {
-        "date": "2026-05-31",
-        "Wohnung KI": 48,
-        "Wohnung ChatGPT": 58
-      },
-      {
-        "date": "2026-06-07",
-        "Wohnung KI": 49,
-        "Wohnung ChatGPT": 59
-      }
-    ],
-    "trend_delta": 0,
-    "ai_delta_Wohnung_KI": 69.4,
-    "ai_delta_Wohnung_ChatGPT": 7.6
+    "ai_signal": [],
+    "trend_delta": 0
   },
   "macro": {
     "ecb_deposit_rate": 2.0,
