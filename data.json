@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-06-12T11:41:52.994258Z",
+    "generated_at": "2026-06-12T11:55:07.873946Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -107,7 +107,52 @@
     "metrics": [],
     "annual": []
   },
-  "peers": [],
+  "peers": [
+    {
+      "name": "Rightmove",
+      "ticker": "RMV.L",
+      "ev_ebitda": 10.9,
+      "pe_ratio": 15.2,
+      "fcf_yield": 6.07,
+      "ebitda_margin": 68.2,
+      "rev_growth": 7.9,
+      "as_of": "2026-06-12",
+      "source": "yfinance"
+    },
+    {
+      "name": "Auto Trader",
+      "ticker": "AUTO.L",
+      "ev_ebitda": 9.6,
+      "pe_ratio": 13.4,
+      "fcf_yield": 6.71,
+      "ebitda_margin": 64.8,
+      "rev_growth": 2.7,
+      "as_of": "2026-06-12",
+      "source": "yfinance"
+    },
+    {
+      "name": "REA Group",
+      "ticker": "REA.AX",
+      "ev_ebitda": 22.1,
+      "pe_ratio": 33.0,
+      "fcf_yield": 2.56,
+      "ebitda_margin": 44.1,
+      "rev_growth": 6.1,
+      "as_of": "2026-06-12",
+      "source": "yfinance"
+    },
+    {
+      "name": "Hemnet",
+      "ticker": "HEM.ST",
+      "ev_ebitda": 12.9,
+      "pe_ratio": 16.6,
+      "fcf_yield": 5.81,
+      "ebitda_margin": 45.9,
+      "rev_growth": -24.7,
+      "as_of": "2026-06-12",
+      "source": "yfinance"
+    }
+  ],
   "trends": {
     "status": "ok",
     "series": [
@@ -195,7 +240,7 @@
       {
         "date": "2026-03-15",
         "immoscout": 91,
-        "immowelt": 78
+        "immowelt": 76
       },
       {
         "date": "2026-03-22",
@@ -235,7 +280,7 @@
       {
         "date": "2026-05-10",
         "immoscout": 77,
-        "immowelt": 73
+        "immowelt": 76
       },
       {
         "date": "2026-05-17",
@@ -336,7 +381,6 @@
     "wacc_implied": 9.0,
     "as_of": "2026-06-12",
     "source": "EZB + Bundesbank SDMX API",
-    "ecb_next_hike_prob": 0.91,
     "erp_used": 5.5,
     "beta_used": 0.8
   },
