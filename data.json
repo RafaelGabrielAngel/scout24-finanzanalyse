@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "generated_at": "2026-06-18T08:39:53.953217Z",
+    "generated_at": "2026-06-18T11:18:05.099691Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
   "market": {
-    "price": 77.6,
-    "change_pct": 0.71,
+    "price": 76.1,
+    "change_pct": -1.23,
     "market_cap_bn": 0,
     "year_high": 78.55,
-    "year_low": 77.0,
+    "year_low": 76.1,
     "pe_ratio": 0
   },
   "profile": {
@@ -133,8 +133,8 @@
       "name": "Rightmove",
       "ticker": "RMV.L",
       "ev_ebitda": 11.3,
-      "pe_ratio": 15.0,
-      "fcf_yield": 6.14,
+      "pe_ratio": 14.9,
+      "fcf_yield": 6.2,
       "ebitda_margin": 68.2,
       "rev_growth": 7.9,
       "as_of": "2026-06-18",
@@ -144,8 +144,8 @@
       "name": "Auto Trader",
       "ticker": "AUTO.L",
       "ev_ebitda": 10.0,
-      "pe_ratio": 13.9,
-      "fcf_yield": 6.47,
+      "pe_ratio": 13.8,
+      "fcf_yield": 6.52,
       "ebitda_margin": 64.8,
       "rev_growth": 2.7,
       "as_of": "2026-06-18",
@@ -166,8 +166,8 @@
       "name": "Hemnet",
       "ticker": "HEM.ST",
       "ev_ebitda": 11.1,
-      "pe_ratio": 14.6,
-      "fcf_yield": 6.62,
+      "pe_ratio": 14.4,
+      "fcf_yield": 6.71,
       "ebitda_margin": 45.9,
       "rev_growth": -24.7,
       "as_of": "2026-06-18",
@@ -177,8 +177,8 @@
       "name": "Vend Marketplaces",
       "ticker": "VEND.OL",
       "ev_ebitda": 26.7,
-      "pe_ratio": 23.2,
-      "fcf_yield": 3.21,
+      "pe_ratio": 23.0,
+      "fcf_yield": 3.23,
       "ebitda_margin": 28.3,
       "rev_growth": 1.6,
       "as_of": "2026-06-18",
@@ -258,16 +258,16 @@
       },
       {
         "date": "2026-06-07",
-        "value": 72
+        "value": 68
       },
       {
         "date": "2026-06-14",
-        "value": 62
+        "value": 63
       }
     ],
     "competitor": [],
     "ai_signal": [],
-    "trend_delta": -24.1
+    "trend_delta": -24.9
   },
   "macro": {
     "ecb_deposit_rate": 2.25,
