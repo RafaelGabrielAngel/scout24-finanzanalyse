@@ -576,7 +576,16 @@ def fetch_peers() -> list:
 # 5. GOOGLE TRENDS (Traffic-Proxy + Wettbewerber + KI-Signal)
 # ─────────────────────────────────────────────────────────────────
 
-def fetch_trends() -> dict:
+def fetch_trends(previous: dict = None) -> dict:
+    """
+    previous: trends-Block aus dem letzten erfolgreichen data.json. Google Trends
+    (pytrends) blockt zunehmend einzelne der 3 sequenziellen Abfragen pro Lauf
+    (Rate-Limit/429) -- ohne Fallback wuerde das betroffene Feld dann auf leer
+    zurueckgesetzt statt den letzten bekannten Wert zu behalten. Pro Block wird
+    daher bei Fehlschlag auf `previous` zurueckgefallen und das als "stale"
+    markiert (sichtbar im Dashboard statt eines stillen Datenverlusts).
+    """
+    previous = previous or {}
     print("[5/5] Google Trends (ImmoScout24 vs Immowelt + KI-Signale)...")
     if not TRENDS_OK:
         return {"status": "pytrends nicht installiert", "series": [], "competitor": [], "ai_signal": []}
@@ -665,6 +674,37 @@ def fetch_trends() -> dict:
                     print(f"    ✓ KI-Signal '{kw}': {delta:+.1f}%")
     except Exception as e:
         print(f"    [WARN] KI-Signal fehlgeschlagen: {e}")
+
+    # ── Fallback: einzelne Bloecke, die heute leer blieben (i.d.R. Google-Trends
+    # Rate-Limit auf den 2./3. sequenziellen Call), aus dem letzten erfolgreichen
+    # Lauf wiederherstellen statt sie kommentarlos zu leeren.
+    stale = []
+    if not result["series"] and previous.get("series"):
+        result["series"] = previous["series"]
+        result["trend_delta"] = previous.get("trend_delta", 0)
+        stale.append("series")
+    if not result["competitor"] and previous.get("competitor"):
+        result["competitor"] = previous["competitor"]
+        result["competitor_delta"] = previous.get("competitor_delta", {})
+        stale.append("competitor")
+    if not result["ai_signal"] and previous.get("ai_signal"):
+        result["ai_signal"] = previous["ai_signal"]
+        for k, v in previous.items():
+            if k.startswith("ai_delta_"):
+                result[k] = v
+        stale.append("ai_signal")
+
+    if stale:
+        result["stale_fields"] = stale
+        result["stale_as_of"] = previous.get("_fetched_at", previous.get("stale_as_of", "unbekannt"))
+        print(f"    [FALLBACK] Google Trends teilweise rate-limited -- aus letztem Lauf uebernommen: {stale}")
+    else:
+        result["stale_fields"] = []
+        result["stale_as_of"] = None
+
+    # Zeitstempel des letzten Laufs, in dem ALLE drei Bloecke frisch waren --
+    # wird im naechsten Lauf als stale_as_of weitergegeben, falls dann etwas fehlschlaegt.
+    result["_fetched_at"] = datetime.datetime.utcnow().isoformat() + "Z"
 
     return result
 
@@ -857,6 +897,17 @@ def _load_existing_lseg() -> dict:
     except:
         return {}
 
+def _load_existing_trends() -> dict:
+    """Laedt den trends-Block (inkl. ai_signal/ai_delta_*) aus dem vorherigen
+    data.json, damit fetch_trends() bei Google-Trends-Rate-Limit darauf
+    zurueckfallen kann statt das Feld zu leeren."""
+    try:
+        with open(OUTPUT) as f:
+            old = json.load(f)
+        return old.get("trends", {}) or {}
+    except Exception:
+        return {}
+
 def main():
     print("=" * 55)
     print("Scout24 SE — Data Fetcher")
@@ -866,14 +917,15 @@ def main():
     if not FMP_KEY:
         print("\n[INFO] FMP_API_KEY nicht gesetzt — FMP-Calls werden übersprungen")
 
-    # LSEG-Daten aus vorherigem data.json laden und erhalten
-    existing_lseg = _load_existing_lseg()
+    # LSEG-Daten + vorherigen Trends-Block aus data.json laden und erhalten
+    existing_lseg   = _load_existing_lseg()
+    existing_trends = _load_existing_trends()
 
     market    = fetch_market_data()
     profile   = fetch_profile()
     peers     = fetch_peers()
     fin       = fetch_financials()
-    trends    = fetch_trends()
+    trends    = fetch_trends(previous=existing_trends)
     macro     = fetch_macro()
     shorts    = fetch_bafin_shorts()
 
