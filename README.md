@@ -48,4 +48,22 @@ Oder via GitHub Pages / Netlify als statische Website deployen.
 
 ---
 
-> **Disclaimer:** Dieses Dashboard dient ausschließlich zu Ausbildungszwecken im Rahmen des FOM M.Sc. Finance & Accounting. Keine Anlageberatung.
+> **Disclaimer:** Dieses Dashboard dient ausschließlich zu Ausbildungszwecken im Rahmen des FOM M.Sc. Finance & Accounting.
+>
+> ## Hinweise zur Nutzung
+
+Diese Anwendung ist das Ergebnis einer akademischen Lehrveranstaltung 
+(Finanzanalyse-Projekt, M.Sc. Finance & Accounting, FOM Hochschule, SS 2026) 
+und dient ausschließlich wissenschaftlichen und Demonstrationszwecken.
+
+**Die Inhalte stellen keine Anlageberatung dar und sind nicht als 
+Empfehlung zum Kauf oder Verkauf von Wertpapieren zu verstehen. 
+Alle Bewertungsmodelle basieren auf öffentlich verfügbaren Daten 
+sowie Refinitiv/LSEG-Datenbankzugängen der FOM Hochschule (Stand: Mai 2026). 
+Für die Richtigkeit und Vollständigkeit der Daten wird keine Gewähr übernommen.
+
+**Interessenkonflikt:** Die Autoren halten oder hielten zum Zeitpunkt 
+der Erstellung private Positionen in Scout24 SE im Umfang von unter 25.000 EUR.
+
+Autoren: Stefan Eich & Jan Seidel  
+Betreuung: Prof. Dr. Dr. habil. Eric Frère, FOM Hochschule  
