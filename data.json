@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "generated_at": "2026-06-26T10:29:16.236046Z",
+    "generated_at": "2026-06-29T12:09:40.385559Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
   "market": {
-    "price": 71.65,
-    "change_pct": -3.11,
+    "price": 72.45,
+    "change_pct": 1.12,
     "market_cap_bn": 0,
-    "year_high": 74.0,
-    "year_low": 71.65,
+    "year_high": 72.5,
+    "year_low": 69.05,
     "pe_ratio": 0
   },
   "profile": {
@@ -132,56 +132,56 @@
     {
       "name": "Rightmove",
       "ticker": "RMV.L",
-      "ev_ebitda": 11.2,
-      "pe_ratio": 15.2,
-      "fcf_yield": 6.09,
+      "ev_ebitda": 11.4,
+      "pe_ratio": 15.8,
+      "fcf_yield": 5.86,
       "ebitda_margin": 68.2,
       "rev_growth": 7.9,
-      "as_of": "2026-06-26",
+      "as_of": "2026-06-29",
       "source": "yfinance"
     },
     {
       "name": "Auto Trader",
       "ticker": "AUTO.L",
-      "ev_ebitda": 10.2,
-      "pe_ratio": 14.1,
-      "fcf_yield": 6.43,
+      "ev_ebitda": 10.3,
+      "pe_ratio": 14.4,
+      "fcf_yield": 6.31,
       "ebitda_margin": 64.8,
       "rev_growth": 2.7,
-      "as_of": "2026-06-26",
+      "as_of": "2026-06-29",
       "source": "yfinance"
     },
     {
       "name": "REA Group",
       "ticker": "REA.AX",
-      "ev_ebitda": 20.1,
-      "pe_ratio": 30.8,
-      "fcf_yield": 2.74,
+      "ev_ebitda": 20.0,
+      "pe_ratio": 31.9,
+      "fcf_yield": 2.64,
       "ebitda_margin": 44.1,
       "rev_growth": 6.1,
-      "as_of": "2026-06-26",
+      "as_of": "2026-06-29",
       "source": "yfinance"
     },
     {
       "name": "Hemnet",
       "ticker": "HEM.ST",
       "ev_ebitda": 10.7,
-      "pe_ratio": 14.0,
-      "fcf_yield": 6.93,
+      "pe_ratio": 14.8,
+      "fcf_yield": 6.53,
       "ebitda_margin": 45.9,
       "rev_growth": -24.7,
-      "as_of": "2026-06-26",
+      "as_of": "2026-06-29",
       "source": "yfinance"
     },
     {
       "name": "Vend Marketplaces",
       "ticker": "VEND.OL",
-      "ev_ebitda": 26.8,
-      "pe_ratio": 22.1,
-      "fcf_yield": 3.39,
+      "ev_ebitda": 26.2,
+      "pe_ratio": 22.8,
+      "fcf_yield": 3.28,
       "ebitda_margin": 28.3,
       "rev_growth": 1.6,
-      "as_of": "2026-06-26",
+      "as_of": "2026-06-29",
       "source": "yfinance"
     },
     {
@@ -192,7 +192,7 @@
       "fcf_yield": 5.0,
       "ebitda_margin": 62.5,
       "rev_growth": -13.1,
-      "as_of": "2026-06-26",
+      "as_of": "2026-06-29",
       "source": "intern (kpis)",
       "is_subject": true
     }
@@ -267,84 +267,84 @@
     ],
     "competitor": [
       {
-        "date": "2026-03-08",
-        "immoscout": 87,
-        "immowelt": 78
-      },
-      {
         "date": "2026-03-15",
-        "immoscout": 89,
-        "immowelt": 80
+        "immoscout": 94,
+        "immowelt": 81
       },
       {
         "date": "2026-03-22",
-        "immoscout": 90,
-        "immowelt": 78
+        "immoscout": 96,
+        "immowelt": 84
       },
       {
         "date": "2026-03-29",
-        "immoscout": 93,
-        "immowelt": 80
+        "immoscout": 97,
+        "immowelt": 82
       },
       {
         "date": "2026-04-05",
         "immoscout": 95,
-        "immowelt": 75
+        "immowelt": 87
       },
       {
         "date": "2026-04-12",
-        "immoscout": 90,
-        "immowelt": 74
+        "immoscout": 93,
+        "immowelt": 79
       },
       {
         "date": "2026-04-19",
-        "immoscout": 83,
-        "immowelt": 78
+        "immoscout": 87,
+        "immowelt": 82
       },
       {
         "date": "2026-04-26",
-        "immoscout": 81,
-        "immowelt": 72
+        "immoscout": 80,
+        "immowelt": 77
       },
       {
         "date": "2026-05-03",
-        "immoscout": 78,
-        "immowelt": 80
+        "immoscout": 84,
+        "immowelt": 71
       },
       {
         "date": "2026-05-10",
-        "immoscout": 78,
-        "immowelt": 76
+        "immoscout": 85,
+        "immowelt": 75
       },
       {
         "date": "2026-05-17",
-        "immoscout": 70,
-        "immowelt": 72
-      },
-      {
-        "date": "2026-05-24",
-        "immoscout": 67,
-        "immowelt": 73
-      },
-      {
-        "date": "2026-05-31",
-        "immoscout": 68,
-        "immowelt": 73
-      },
-      {
-        "date": "2026-06-07",
-        "immoscout": 66,
+        "immoscout": 74,
         "immowelt": 76
       },
       {
+        "date": "2026-05-24",
+        "immoscout": 72,
+        "immowelt": 77
+      },
+      {
+        "date": "2026-05-31",
+        "immoscout": 69,
+        "immowelt": 76
+      },
+      {
+        "date": "2026-06-07",
+        "immoscout": 70,
+        "immowelt": 75
+      },
+      {
         "date": "2026-06-14",
-        "immoscout": 67,
-        "immowelt": 72
+        "immoscout": 64,
+        "immowelt": 74
       },
       {
         "date": "2026-06-21",
-        "immoscout": 58,
-        "immowelt": 65
+        "immoscout": 62,
+        "immowelt": 71
+      },
+      {
+        "date": "2026-06-28",
+        "immoscout": 63,
+        "immowelt": 74
       }
     ],
     "ai_signal": [
@@ -411,14 +411,17 @@
     ],
     "trend_delta": -29.0,
     "competitor_delta": {
-      "immoscout_delta": -29.0,
-      "immowelt_delta": -14.1
+      "immoscout_delta": -29.2,
+      "immowelt_delta": -15.8
     },
     "ai_delta_Wohnung_KI": 320.3,
     "ai_delta_Wohnung_ChatGPT": -10.0,
-    "stale_fields": [],
-    "stale_as_of": null,
-    "_fetched_at": "2026-06-26T10:28:59.608073Z"
+    "stale_fields": [
+      "series",
+      "ai_signal"
+    ],
+    "stale_as_of": "2026-06-26T10:28:59.608073Z",
+    "_fetched_at": "2026-06-29T12:09:23.796267Z"
   },
   "macro": {
     "ecb_deposit_rate": 2.25,
@@ -426,7 +429,7 @@
     "mortgage_rate_10y": 3.82,
     "wacc_floor": 7.4,
     "wacc_implied": 8.8,
-    "as_of": "2026-06-26",
+    "as_of": "2026-06-29",
     "source": "EZB + Bundesbank SDMX API",
     "erp_used": 5.5,
     "beta_used": 0.8
@@ -435,7 +438,7 @@
     "positions": [],
     "total_short_pct": 0,
     "num_holders": 0,
-    "as_of": "2026-06-26",
+    "as_of": "2026-06-29",
     "source": "BaFin — Netto-Leerverkaufspositionen (öffentlich)"
   },
   "brokers": {},
