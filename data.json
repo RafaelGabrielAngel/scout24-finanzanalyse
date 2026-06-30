@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-06-30T08:01:53.794701Z",
+    "generated_at": "2026-06-30T10:36:59.269865Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -144,8 +144,8 @@
       "name": "Auto Trader",
       "ticker": "AUTO.L",
       "ev_ebitda": 10.4,
-      "pe_ratio": 14.5,
-      "fcf_yield": 6.25,
+      "pe_ratio": 14.7,
+      "fcf_yield": 6.18,
       "ebitda_margin": 64.8,
       "rev_growth": 2.7,
       "as_of": "2026-06-30",
@@ -177,8 +177,8 @@
       "name": "Vend Marketplaces",
       "ticker": "VEND.OL",
       "ev_ebitda": 26.8,
-      "pe_ratio": 22.8,
-      "fcf_yield": 3.27,
+      "pe_ratio": 22.7,
+      "fcf_yield": 3.29,
       "ebitda_margin": 28.3,
       "rev_growth": 1.6,
       "as_of": "2026-06-30",
@@ -421,15 +421,15 @@
       "competitor",
       "ai_signal"
     ],
-    "stale_as_of": "2026-06-29T12:09:23.796267Z",
-    "_fetched_at": "2026-06-30T08:01:37.526144Z"
+    "stale_as_of": "2026-06-30T08:01:37.526144Z",
+    "_fetched_at": "2026-06-30T10:36:42.636118Z"
   },
   "macro": {
     "ecb_deposit_rate": 2.25,
-    "bund_10y": 2.92,
+    "bund_10y": 3.05,
     "mortgage_rate_10y": 3.82,
-    "wacc_floor": 7.4,
-    "wacc_implied": 8.8,
+    "wacc_floor": 7.5,
+    "wacc_implied": 8.9,
     "as_of": "2026-06-30",
     "source": "EZB + Bundesbank SDMX API",
     "erp_used": 5.5,
