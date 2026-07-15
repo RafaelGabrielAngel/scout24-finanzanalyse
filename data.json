@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "generated_at": "2026-07-14T09:17:45.353024Z",
+    "generated_at": "2026-07-15T09:21:46.121085Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
   "market": {
-    "price": 74.05,
-    "change_pct": 1.3,
+    "price": 72.75,
+    "change_pct": -1.76,
     "market_cap_bn": 0,
-    "year_high": 74.9,
-    "year_low": 73.0,
+    "year_high": 73.6,
+    "year_low": 71.05,
     "pe_ratio": 0
   },
   "profile": {
@@ -132,56 +132,56 @@
     {
       "name": "Rightmove",
       "ticker": "RMV.L",
-      "ev_ebitda": 11.3,
-      "pe_ratio": 15.2,
-      "fcf_yield": 6.08,
+      "ev_ebitda": 11.4,
+      "pe_ratio": 15.7,
+      "fcf_yield": 5.9,
       "ebitda_margin": 68.2,
       "rev_growth": 7.9,
-      "as_of": "2026-07-14",
+      "as_of": "2026-07-15",
       "source": "yfinance"
     },
     {
       "name": "Auto Trader",
       "ticker": "AUTO.L",
-      "ev_ebitda": 10.5,
-      "pe_ratio": 14.5,
-      "fcf_yield": 6.31,
+      "ev_ebitda": 10.6,
+      "pe_ratio": 14.8,
+      "fcf_yield": 6.17,
       "ebitda_margin": 64.8,
       "rev_growth": 2.7,
-      "as_of": "2026-07-14",
+      "as_of": "2026-07-15",
       "source": "yfinance"
     },
     {
       "name": "REA Group",
       "ticker": "REA.AX",
       "ev_ebitda": 22.5,
-      "pe_ratio": 34.5,
-      "fcf_yield": 2.45,
+      "pe_ratio": 34.3,
+      "fcf_yield": 2.46,
       "ebitda_margin": 44.1,
       "rev_growth": 6.1,
-      "as_of": "2026-07-14",
+      "as_of": "2026-07-15",
       "source": "yfinance"
     },
     {
       "name": "Hemnet",
       "ticker": "HEM.ST",
-      "ev_ebitda": 12.2,
+      "ev_ebitda": 11.9,
       "pe_ratio": 16.0,
-      "fcf_yield": 6.05,
+      "fcf_yield": 6.06,
       "ebitda_margin": 45.9,
       "rev_growth": -24.7,
-      "as_of": "2026-07-14",
+      "as_of": "2026-07-15",
       "source": "yfinance"
     },
     {
       "name": "Vend Marketplaces",
       "ticker": "VEND.OL",
-      "ev_ebitda": 27.6,
-      "pe_ratio": 23.0,
-      "fcf_yield": 3.27,
+      "ev_ebitda": 27.8,
+      "pe_ratio": 23.5,
+      "fcf_yield": 3.2,
       "ebitda_margin": 28.3,
       "rev_growth": 1.6,
-      "as_of": "2026-07-14",
+      "as_of": "2026-07-15",
       "source": "yfinance"
     },
     {
@@ -192,7 +192,7 @@
       "fcf_yield": 5.0,
       "ebitda_margin": 62.5,
       "rev_growth": -13.1,
-      "as_of": "2026-07-14",
+      "as_of": "2026-07-15",
       "source": "intern (kpis)",
       "is_subject": true
     }
@@ -421,16 +421,16 @@
       "competitor",
       "ai_signal"
     ],
-    "stale_as_of": "2026-07-13T10:35:27.159876Z",
-    "_fetched_at": "2026-07-14T09:17:28.166726Z"
+    "stale_as_of": "2026-07-14T09:17:28.166726Z",
+    "_fetched_at": "2026-07-15T09:21:25.399931Z"
   },
   "macro": {
     "ecb_deposit_rate": 2.25,
-    "bund_10y": 3.11,
+    "bund_10y": 3.12,
     "mortgage_rate_10y": 3.82,
     "wacc_floor": 7.6,
     "wacc_implied": 9.0,
-    "as_of": "2026-07-14",
+    "as_of": "2026-07-15",
     "source": "EZB + Bundesbank SDMX API",
     "erp_used": 5.5,
     "beta_used": 0.8
@@ -439,7 +439,7 @@
     "positions": [],
     "total_short_pct": 0,
     "num_holders": 0,
-    "as_of": "2026-07-14",
+    "as_of": "2026-07-15",
     "source": "BaFin — Netto-Leerverkaufspositionen (öffentlich)"
   },
   "brokers": {},
