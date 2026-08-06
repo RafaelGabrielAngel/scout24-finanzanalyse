@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-08-06T12:50:00.857219Z",
+    "generated_at": "2026-08-06T13:00:33.003849Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -134,7 +134,7 @@
       "ticker": "RMV.L",
       "ev_ebitda": 12.1,
       "pe_ratio": 16.3,
-      "fcf_yield": 5.51,
+      "fcf_yield": 5.5,
       "ebitda_margin": 66.9,
       "rev_growth": 6.7,
       "as_of": "2026-08-06",
@@ -166,8 +166,8 @@
       "name": "Hemnet",
       "ticker": "HEM.ST",
       "ev_ebitda": 14.2,
-      "pe_ratio": 19.6,
-      "fcf_yield": 5.07,
+      "pe_ratio": 19.7,
+      "fcf_yield": 5.06,
       "ebitda_margin": 43.1,
       "rev_growth": -23.1,
       "as_of": "2026-08-06",
@@ -420,8 +420,8 @@
       "series",
       "competitor"
     ],
-    "stale_as_of": "2026-08-06T12:25:12.884989Z",
-    "_fetched_at": "2026-08-06T12:49:43.603419Z"
+    "stale_as_of": "2026-08-06T12:49:43.603419Z",
+    "_fetched_at": "2026-08-06T13:00:15.962173Z"
   },
   "macro": {
     "ecb_deposit_rate": 2.25,
