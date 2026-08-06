@@ -2059,7 +2059,7 @@ async function loadLiveData(){
           const sign = chgPct >= 0 ? '+' : '';
           val.title = `Δ ${sign}${chgPct?.toFixed(2) ?? ''}% (${d?.market?.latest_day ?? ''})`;
         }
-        if (lbl === 'Upside') {
+        if (lbl === 'Upside (vs. €105)') {
           const up = ((105 - price) / price * 100).toFixed(1);
           val.textContent = (up >= 0 ? '+' : '') + up + ' %';
           document.getElementById('hdr-up') && (document.getElementById('hdr-up').textContent = (up >= 0 ? '+' : '') + up + ' %');
