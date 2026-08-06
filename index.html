@@ -2067,12 +2067,19 @@ async function loadLiveData(){
       window.LIVE_PRICE = price;
 
       // Stand-Zeitstempel einblenden
-      if (meta) {
-        const dt = new Date(meta);
-        const fmt = dt.toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'})
-                  + ' ' + dt.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
-        const stamp = document.getElementById('live-stamp');
-        if (stamp) stamp.textContent = 'Kurs-Stand: ' + fmt + ' UTC';
+      const stamp = document.getElementById('live-stamp');
+      if (stamp) {
+        const latestDay = d?.market?.latest_day;
+        if (latestDay) {
+          // Format: "Handelskurs 06.08.2026 · XETRA"
+          const parts = latestDay.split('-');
+          const fmtDay = parts.length === 3 ? `${parts[2]}.${parts[1]}.${parts[0]}` : latestDay;
+          stamp.textContent = `Handelskurs ${fmtDay} · XETRA`;
+        } else if (meta) {
+          const dt = new Date(meta);
+          const fmtDay = dt.toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'});
+          stamp.textContent = `Datenstand ${fmtDay} · XETRA`;
+        }
       }
     }
 
