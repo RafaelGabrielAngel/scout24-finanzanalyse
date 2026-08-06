@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-08-06T09:51:23.256820Z",
+    "generated_at": "2026-08-06T12:20:42.469268Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -8,7 +8,7 @@
     "price": 76.4,
     "change_pct": 0.26,
     "market_cap_bn": 0,
-    "year_high": 77.1,
+    "year_high": 77.0,
     "year_low": 75.05,
     "pe_ratio": 0
   },
@@ -145,7 +145,7 @@
       "ticker": "AUTO.L",
       "ev_ebitda": 10.9,
       "pe_ratio": 15.1,
-      "fcf_yield": 6.06,
+      "fcf_yield": 6.08,
       "ebitda_margin": 64.8,
       "rev_growth": 2.7,
       "as_of": "2026-08-06",
@@ -167,7 +167,7 @@
       "ticker": "HEM.ST",
       "ev_ebitda": 14.2,
       "pe_ratio": 19.7,
-      "fcf_yield": 5.06,
+      "fcf_yield": 5.04,
       "ebitda_margin": 43.1,
       "rev_growth": -23.1,
       "as_of": "2026-08-06",
@@ -176,9 +176,9 @@
     {
       "name": "Vend Marketplaces",
       "ticker": "VEND.OL",
-      "ev_ebitda": 26.4,
-      "pe_ratio": 23.8,
-      "fcf_yield": 4.49,
+      "ev_ebitda": 26.3,
+      "pe_ratio": 23.7,
+      "fcf_yield": 4.53,
       "ebitda_margin": 29.9,
       "rev_growth": 0.1,
       "as_of": "2026-08-06",
@@ -202,149 +202,149 @@
     "series": [
       {
         "date": "2026-04-19",
-        "value": 84
+        "value": 81
       },
       {
         "date": "2026-04-26",
-        "value": 79
+        "value": 73
       },
       {
         "date": "2026-05-03",
-        "value": 79
+        "value": 81
       },
       {
         "date": "2026-05-10",
-        "value": 76
+        "value": 75
       },
       {
         "date": "2026-05-17",
-        "value": 72
+        "value": 67
       },
       {
         "date": "2026-05-24",
-        "value": 67
+        "value": 65
       },
       {
         "date": "2026-05-31",
-        "value": 67
+        "value": 65
       },
       {
         "date": "2026-06-07",
-        "value": 68
+        "value": 64
       },
       {
         "date": "2026-06-14",
-        "value": 63
+        "value": 59
       },
       {
         "date": "2026-06-21",
-        "value": 58
+        "value": 55
       },
       {
         "date": "2026-06-28",
-        "value": 60
+        "value": 57
       },
       {
         "date": "2026-07-05",
-        "value": 67
+        "value": 65
       },
       {
         "date": "2026-07-12",
-        "value": 72
+        "value": 66
       },
       {
         "date": "2026-07-19",
-        "value": 85
+        "value": 81
       },
       {
         "date": "2026-07-26",
-        "value": 91
+        "value": 85
       },
       {
         "date": "2026-08-02",
-        "value": 96
+        "value": 91
       }
     ],
     "competitor": [
       {
         "date": "2026-04-19",
-        "immoscout": 83,
-        "immowelt": 76
+        "immoscout": 81,
+        "immowelt": 72
       },
       {
         "date": "2026-04-26",
-        "immoscout": 78,
-        "immowelt": 77
+        "immoscout": 73,
+        "immowelt": 69
       },
       {
         "date": "2026-05-03",
-        "immoscout": 78,
-        "immowelt": 73
+        "immoscout": 81,
+        "immowelt": 72
       },
       {
         "date": "2026-05-10",
         "immoscout": 75,
-        "immowelt": 74
-      },
-      {
-        "date": "2026-05-17",
-        "immoscout": 71,
-        "immowelt": 72
-      },
-      {
-        "date": "2026-05-24",
-        "immoscout": 67,
-        "immowelt": 74
-      },
-      {
-        "date": "2026-05-31",
-        "immoscout": 66,
-        "immowelt": 83
-      },
-      {
-        "date": "2026-06-07",
-        "immoscout": 67,
-        "immowelt": 73
-      },
-      {
-        "date": "2026-06-14",
-        "immoscout": 63,
-        "immowelt": 65
-      },
-      {
-        "date": "2026-06-21",
-        "immoscout": 58,
-        "immowelt": 65
-      },
-      {
-        "date": "2026-06-28",
-        "immoscout": 60,
         "immowelt": 70
       },
       {
-        "date": "2026-07-05",
+        "date": "2026-05-17",
         "immoscout": 67,
+        "immowelt": 71
+      },
+      {
+        "date": "2026-05-24",
+        "immoscout": 65,
         "immowelt": 76
       },
       {
+        "date": "2026-05-31",
+        "immoscout": 65,
+        "immowelt": 73
+      },
+      {
+        "date": "2026-06-07",
+        "immoscout": 64,
+        "immowelt": 71
+      },
+      {
+        "date": "2026-06-14",
+        "immoscout": 59,
+        "immowelt": 63
+      },
+      {
+        "date": "2026-06-21",
+        "immoscout": 55,
+        "immowelt": 66
+      },
+      {
+        "date": "2026-06-28",
+        "immoscout": 57,
+        "immowelt": 68
+      },
+      {
+        "date": "2026-07-05",
+        "immoscout": 65,
+        "immowelt": 70
+      },
+      {
         "date": "2026-07-12",
-        "immoscout": 72,
-        "immowelt": 75
+        "immoscout": 66,
+        "immowelt": 70
       },
       {
         "date": "2026-07-19",
-        "immoscout": 84,
-        "immowelt": 81
+        "immoscout": 81,
+        "immowelt": 78
       },
       {
         "date": "2026-07-26",
-        "immoscout": 90,
-        "immowelt": 79
+        "immoscout": 85,
+        "immowelt": 76
       },
       {
         "date": "2026-08-02",
-        "immoscout": 95,
-        "immowelt": 79
+        "immoscout": 91,
+        "immowelt": 77
       }
     ],
     "ai_signal": [
@@ -409,19 +409,18 @@
         "Wohnung ChatGPT": 62
       }
     ],
-    "trend_delta": 4.6,
+    "trend_delta": 0.0,
+    "competitor_delta": {
+      "immoscout_delta": 0.0,
+      "immowelt_delta": -14.5
+    },
     "ai_delta_Wohnung_KI": 122.7,
     "ai_delta_Wohnung_ChatGPT": 15.2,
-    "competitor_delta": {
-      "immoscout_delta": 4.9,
-      "immowelt_delta": -13.7
-    },
     "stale_fields": [
-      "series",
-      "competitor"
+      "ai_signal"
     ],
-    "stale_as_of": "2026-08-05T09:49:02.805646Z",
-    "_fetched_at": "2026-08-06T09:51:06.131811Z"
+    "stale_as_of": "2026-08-06T09:51:06.131811Z",
+    "_fetched_at": "2026-08-06T12:20:25.682227Z"
   },
   "macro": {
     "ecb_deposit_rate": 2.25,
