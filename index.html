@@ -2190,7 +2190,7 @@ window.addEventListener('load',()=>{
     <div id="ir-news-list" style="display:flex;flex-direction:column;gap:10px">
       <div style="color:var(--txt3);font-size:11px">⏳ Wird geladen…</div>
     </div>
-    <div style="margin-top:10px;font-size:10px;color:var(--txt3)">Quelle: Scout24 Investor Relations · täglich via GitHub Actions aktualisiert</div>
+    <div style="margin-top:10px;font-size:10px;color:var(--txt3)">Quelle: EQS Group IR-Feed Scout24 SE · automatisch aktualisiert</div>
   </div>
 
   <!-- Peer Multiples Live -->
@@ -2293,6 +2293,83 @@ window.addEventListener('load',()=>{
       </div>`;
     }).join('');
   }
+
+  // ── IR-News direkt laden (CORS-Proxy → EQS RSS → Fallback) ──────
+  (function loadIRNews() {
+    const el  = document.getElementById('ir-news-list');
+    const st  = document.getElementById('ir-status');
+
+    // Hardcoded Fallback — aktuelle Meldungen Stand 06.08.2026
+    const FALLBACK = [
+      { date:'06.08.2026', title:'Scout24 setzt starke Wachstumsdynamik im zweiten Quartal fort: 20 % Umsatzwachstum, anhaltend zweistelliges organisches Wachstum und 18 % Anstieg des bereinigten EPS', url:'https://www.scout24.com/en/news-media/media-releases', sentiment:'positive', is_catalyst:true },
+      { date:'17.06.2026', title:'Scout24: Hauptversammlung nimmt alle Beschlussvorschläge an, Dividende erneut erhöht auf EUR 1,50 je Aktie', url:'https://www.scout24.com/en/news-media/media-releases', sentiment:'positive', is_catalyst:false },
+      { date:'12.05.2026', title:'Scout24 präsentiert „Agentic OS für Immobilien" und nächste Wachstumsphase auf dem Capital Markets Day 2026', url:'https://www.scout24.com/en/news-media/media-releases', sentiment:'positive', is_catalyst:true },
+      { date:'30.04.2026', title:'Aufsichtsrat verlängert Amtszeit und Vorstandsvertrag von Dr. Gesa Crockford bis März 2030', url:'https://www.scout24.com/en/news-media/media-releases', sentiment:'positive', is_catalyst:false },
+      { date:'29.04.2026', title:'Scout24 liefert starken Start in 2026: zweistelliges organisches Wachstum, Margenausbau; Aktienrückkauf auf EUR 350 Mio. erhöht', url:'https://www.scout24.com/en/news-media/media-releases', sentiment:'positive', is_catalyst:true },
+      { date:'07.01.2026', title:'Ernennung neuer CFO: Martin Mildner folgt Dirk Schmelzer ab 1. März 2026', url:'https://www.scout24.com/en/news-media/media-releases', sentiment:'positive', is_catalyst:false }
+    ];
+
+    function renderItems(items, source) {
+      if (st) st.textContent = 'Stand: ' + new Date().toLocaleDateString('de-DE') + ' · ' + source;
+      if (!el) return;
+      el.innerHTML = items.map(item => {
+        const color = item.sentiment === 'positive' ? 'var(--green)'
+                    : item.sentiment === 'negative' ? 'var(--red)' : 'var(--txt2)';
+        const badge = item.is_catalyst
+          ? '<span style="background:var(--amberDim);color:var(--amber);padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;margin-left:6px;border:1px solid rgba(255,170,0,.3)">CATALYST</span>'
+          : '';
+        const dot = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};margin-right:8px;flex-shrink:0;margin-top:4px"></span>`;
+        return `<div style="display:flex;align-items:flex-start;padding:10px 12px;background:var(--bg2);border-radius:7px;border:1px solid var(--border)">
+          ${dot}
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:600;color:var(--txt)">
+              <a href="${item.url}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;line-height:1.4">${item.title}</a>${badge}
+            </div>
+            <div style="font-size:10px;color:var(--txt3);margin-top:4px">${item.date}</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // Versuche CORS-Proxy → EQS RSS Feed
+    const EQS_URL  = 'https://www.eqs-news.com/company/scout24-se/news/5c0bc7e7-ea7c-11e8-902f-2c44fd856d8c';
+    const PROXY    = 'https://api.allorigins.win/get?url=' + encodeURIComponent(EQS_URL);
+
+    fetch(PROXY, { signal: AbortSignal.timeout(6000) })
+      .then(r => r.json())
+      .then(data => {
+        // Parse HTML response für News-Items
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data.contents || '', 'text/html');
+        const items = [];
+
+        // Versuche Zeilen aus EQS-Tabelle zu extrahieren
+        doc.querySelectorAll('article, .news-item, tr, li').forEach(row => {
+          const titleEl = row.querySelector('a, h2, h3, .title');
+          const dateEl  = row.querySelector('time, .date, [datetime]');
+          if (titleEl && titleEl.textContent.trim().length > 20) {
+            items.push({
+              title: titleEl.textContent.trim().substring(0, 120),
+              url:   titleEl.href || EQS_URL,
+              date:  dateEl ? dateEl.textContent.trim() : '',
+              sentiment: 'positive',
+              is_catalyst: titleEl.textContent.includes('Quarter') || titleEl.textContent.includes('Quartal') || titleEl.textContent.includes('Capital Markets')
+            });
+          }
+        });
+
+        if (items.length >= 3) {
+          renderItems(items.slice(0, 6), 'EQS live');
+        } else {
+          // Fallback wenn Parsing fehlschlägt
+          renderItems(FALLBACK, 'Stand 06.08.2026');
+        }
+      })
+      .catch(() => {
+        // Netzwerk-Fehler → Fallback
+        renderItems(FALLBACK, 'Stand 06.08.2026');
+      });
+  })();
 
   function renderPeers(peers) {
     const tbody = document.getElementById('peers-live-body');
