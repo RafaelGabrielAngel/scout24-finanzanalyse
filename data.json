@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-08-06T13:53:35.605555Z",
+    "generated_at": "2026-08-06T13:55:43.377571+00:00",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -10,7 +10,8 @@
     "market_cap_bn": 0,
     "year_high": 77.0,
     "year_low": 75.05,
-    "pe_ratio": 0
+    "pe_ratio": 0,
+    "latest_day": "2026-08-06"
   },
   "profile": {
     "shares_diluted_mn": 72.07,
