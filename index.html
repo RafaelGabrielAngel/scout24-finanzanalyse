@@ -724,12 +724,12 @@ tr.row-sep td:first-child{color:#7A3000!important}
     <div class="g4" id="macro-block">
       <div style="background:var(--redDim);border-radius:8px;padding:14px;border:1px solid rgba(166,40,32,.2);text-align:center">
         <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">EZB Einlagesatz</div>
-        <div id="macro-ecb" style="font-size:26px;font-weight:900;color:var(--red)">2,00 %</div>
+        <div id="macro-ecb" style="font-size:26px;font-weight:900;color:var(--red)">2,25 %</div>
         <div style="font-size:10px;color:var(--txt2);margin-top:4px">Leitzins aktuell</div>
       </div>
       <div style="background:var(--amberDim);border-radius:8px;padding:14px;border:1px solid rgba(139,77,0,.2);text-align:center">
         <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Bund 10J Rendite</div>
-        <div id="macro-bund" style="font-size:26px;font-weight:900;color:var(--amber)">2,90 %</div>
+        <div id="macro-bund" style="font-size:26px;font-weight:900;color:var(--amber)">3,15 %</div>
         <div style="font-size:10px;color:var(--txt2);margin-top:4px">Risikofreier Zinssatz (Rf)</div>
       </div>
       <div style="background:var(--amberDim);border-radius:8px;padding:14px;border:1px solid rgba(139,77,0,.2);text-align:center">
@@ -739,7 +739,7 @@ tr.row-sep td:first-child{color:#7A3000!important}
       </div>
       <div style="background:var(--greenDim);border-radius:8px;padding:14px;border:1px solid rgba(13,107,56,.2);text-align:center">
         <div style="font-size:9px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">WACC impliziert</div>
-        <div id="macro-wacc" style="font-size:26px;font-weight:900;color:var(--green)">7,5 %</div>
+        <div id="macro-wacc" style="font-size:26px;font-weight:900;color:var(--amber)">9,1 %</div>
         <div style="font-size:10px;color:var(--txt2);margin-top:4px">Rf + β×ERP + CS</div>
       </div>
     </div>
@@ -755,20 +755,20 @@ tr.row-sep td:first-child{color:#7A3000!important}
         <table>
           <thead><tr><th>Komponente</th><th>Wert</th><th>Quelle / Annahme</th></tr></thead>
           <tbody>
-            <tr><td>Risikofreier Zinssatz (Rf)</td><td class="b-val">2,90 %</td><td class="c-txt2 fz11">10J. Bund-Rendite Ø 2025A</td></tr>
+            <tr><td>Risikofreier Zinssatz (Rf)</td><td class="b-val">3,15 %</td><td class="c-txt2 fz11">10J. Bund-Rendite aktuell (Aug. 2026)</td></tr>
             <tr><td>Equity Risk Premium (ERP)</td><td class="b-val">5,50 %</td><td class="c-txt2 fz11">Damodaran DE-ERP Jan 2026</td></tr>
-            <tr><td>Beta (verschuldet, 2J.)</td><td class="b-val">0,72</td><td class="c-txt2 fz11">Bloomberg 24M wöchentlich vs. DAX</td></tr>
+            <tr><td>Beta (verschuldet, 2J.)</td><td class="b-val">0,80</td><td class="c-txt2 fz11">Bloomberg 24M wöchentlich vs. DAX</td></tr>
             <tr><td>Eigenkapitalkosten (Ke)</td><td class="a-val">6,86 %</td><td class="c-txt2 fz11">Rf + β × ERP = 2,9 + 0,72 × 5,5</td></tr>
             <tr><td>Fremdkapitalkosten (Kd, pre-tax)</td><td>3,50 %</td><td class="c-txt2 fz11">Kupon-Ø Anleihen, Bloomberg</td></tr>
             <tr><td>Steuersatz</td><td>30,0 %</td><td class="c-txt2 fz11">Effektiver Steuerquote DE 2025A</td></tr>
             <tr><td>Kd after-tax</td><td>2,45 %</td><td class="c-txt2 fz11">3,5 % × (1 − 0,30)</td></tr>
             <tr><td>Eigenkapitalquote (E/EV)</td><td>97,5 %</td><td class="c-txt2 fz11">Market Cap / EV (Net Debt 0,2×)</td></tr>
-            <tr class="row-hl"><td>WACC (gewichtet)</td><td class="a-val">7,5 %</td><td class="c-txt2 fz11">0,975 × 6,86 % + 0,025 × 2,45 %</td></tr>
+            <tr class="row-hl"><td>WACC (gewichtet)</td><td class="a-val">7,5 %</td><td class="c-txt2 fz11">0,975 × 7,55 % + 0,025 × 2,45 % = 7,42 % ≈ 7,5 %</td></tr>
           </tbody>
         </table>
       </div>
       <div style="margin-top:10px;padding:8px 12px;background:var(--amberDim);border-radius:6px;border:1px solid rgba(255,170,0,.2);font-size:10px;color:var(--txt2);line-height:1.55">
-        ⚠ WACC-Sensitivität: Bei Anstieg auf 9,0 % (EZB-Normalisierung + Credit-Spread-Ausweitung) fällt der DCF Base-Case auf ~€74. Impairment-Test Scout24 intern: WACC 8,9 % — Puffer zur Goodwill-Abschreibung ist gering.
+        ⚠ WACC-Sensitivität: Bei weiterem EZB-Anstieg auf 2,75 % (Markterwartung bis Ende 2026) + Bund-Spread-Ausweitung könnte WACC auf 8,5–9,0 % steigen → DCF Base-Case fällt auf ~€85–95. Impairment-Test Scout24 intern: WACC 8,9 % — Puffer zur Goodwill-Abschreibung ist gering.
       </div>
     </div>
     <div class="card">
