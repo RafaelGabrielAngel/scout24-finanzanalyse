@@ -1,8 +1,8 @@
 {
   "_meta": {
-    "generated_at": "2026-08-06T13:00:33.003849Z",
+    "generated_at": "2026-08-06T13:03:05.452883+00:00",
     "ticker": "SDX.DE",
-    "source": "FMP Free + yfinance + Google Trends"
+    "source": "FMP Free + yfinance + Google Trends | H1 2026 manuell aktualisiert"
   },
   "market": {
     "price": 76.4,
@@ -10,7 +10,8 @@
     "market_cap_bn": 0,
     "year_high": 77.0,
     "year_low": 75.05,
-    "pe_ratio": 0
+    "pe_ratio": 0,
+    "latest_day": "2026-08-06"
   },
   "profile": {
     "shares_diluted_mn": 72.07,
@@ -19,7 +20,7 @@
   "kpis": {
     "revenue_mn": 649.6,
     "ebitda_mn": 405.7,
-    "ebitda_margin": 62.5,
+    "ebitda_margin": 63.0,
     "fcf_mn": 261.4,
     "fcf_margin": 40.2,
     "net_debt_mn": 100.0,
@@ -31,7 +32,16 @@
     "fcf_yield": 5.0,
     "roce": 16.8,
     "net_debt_ebitda": 0.25,
-    "year": "2025A"
+    "year": "2025A / H1 2026",
+    "h1_revenue_mn": 372.2,
+    "h1_ebitda_mn": 223.9,
+    "h1_ebitda_margin": 63.0,
+    "h1_eps_adj": 1.97,
+    "arpu_professional": 1224,
+    "immo_punkte_adoption": 60,
+    "ki_searches_jun_mn": 3.3,
+    "rating": "KAUFEN",
+    "target_price": 105.0
   },
   "history": {
     "income": [
