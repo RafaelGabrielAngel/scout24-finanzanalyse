@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-08-06T14:24:55.445855+00:00",
+    "generated_at": "2026-08-06T14:29:09.867740Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -10,8 +10,7 @@
     "market_cap_bn": 0,
     "year_high": 77.0,
     "year_low": 75.05,
-    "pe_ratio": 0,
-    "latest_day": "2026-08-06"
+    "pe_ratio": 0
   },
   "profile": {
     "shares_diluted_mn": 72.07,
@@ -32,9 +31,7 @@
     "fcf_yield": 5.0,
     "roce": 16.8,
     "net_debt_ebitda": 0.25,
-    "year": "2025A",
-    "rating": "HALTEN",
-    "target_price": 100.0
+    "year": "2025A"
   },
   "history": {
     "income": [
@@ -136,8 +133,8 @@
       "name": "Rightmove",
       "ticker": "RMV.L",
       "ev_ebitda": 12.1,
-      "pe_ratio": 16.3,
-      "fcf_yield": 5.5,
+      "pe_ratio": 16.4,
+      "fcf_yield": 5.49,
       "ebitda_margin": 66.9,
       "rev_growth": 6.7,
       "as_of": "2026-08-06",
@@ -147,8 +144,8 @@
       "name": "Auto Trader",
       "ticker": "AUTO.L",
       "ev_ebitda": 10.9,
-      "pe_ratio": 15.1,
-      "fcf_yield": 6.07,
+      "pe_ratio": 15.3,
+      "fcf_yield": 6.0,
       "ebitda_margin": 64.8,
       "rev_growth": 2.7,
       "as_of": "2026-08-06",
@@ -169,8 +166,8 @@
       "name": "Hemnet",
       "ticker": "HEM.ST",
       "ev_ebitda": 14.2,
-      "pe_ratio": 19.5,
-      "fcf_yield": 5.11,
+      "pe_ratio": 19.2,
+      "fcf_yield": 5.19,
       "ebitda_margin": 43.1,
       "rev_growth": -23.1,
       "as_of": "2026-08-06",
@@ -179,9 +176,9 @@
     {
       "name": "Vend Marketplaces",
       "ticker": "VEND.OL",
-      "ev_ebitda": 26.3,
-      "pe_ratio": 23.6,
-      "fcf_yield": 4.54,
+      "ev_ebitda": 26.6,
+      "pe_ratio": 23.7,
+      "fcf_yield": 4.52,
       "ebitda_margin": 29.9,
       "rev_growth": 0.1,
       "as_of": "2026-08-06",
@@ -420,11 +417,12 @@
     "ai_delta_Wohnung_KI": 121.8,
     "ai_delta_Wohnung_ChatGPT": 14.7,
     "stale_fields": [
+      "series",
       "competitor",
       "ai_signal"
     ],
-    "stale_as_of": "2026-08-06T13:53:18.733687Z",
-    "_fetched_at": "2026-08-06T13:57:50.547037Z"
+    "stale_as_of": "2026-08-06T13:57:50.547037Z",
+    "_fetched_at": "2026-08-06T14:28:52.595082Z"
   },
   "macro": {
     "ecb_deposit_rate": 2.25,
