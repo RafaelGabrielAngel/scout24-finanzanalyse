@@ -1,15 +1,15 @@
 {
   "_meta": {
-    "generated_at": "2026-08-05T09:49:20.213923Z",
+    "generated_at": "2026-08-06T09:51:23.256820Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
   "market": {
-    "price": 76.2,
-    "change_pct": 1.46,
+    "price": 76.4,
+    "change_pct": 0.26,
     "market_cap_bn": 0,
-    "year_high": 76.65,
-    "year_low": 74.35,
+    "year_high": 77.1,
+    "year_low": 75.05,
     "pe_ratio": 0
   },
   "profile": {
@@ -133,55 +133,55 @@
       "name": "Rightmove",
       "ticker": "RMV.L",
       "ev_ebitda": 12.1,
-      "pe_ratio": 16.4,
-      "fcf_yield": 5.47,
+      "pe_ratio": 16.3,
+      "fcf_yield": 5.5,
       "ebitda_margin": 66.9,
       "rev_growth": 6.7,
-      "as_of": "2026-08-05",
+      "as_of": "2026-08-06",
       "source": "yfinance"
     },
     {
       "name": "Auto Trader",
       "ticker": "AUTO.L",
-      "ev_ebitda": 11.2,
-      "pe_ratio": 15.5,
-      "fcf_yield": 5.89,
+      "ev_ebitda": 10.9,
+      "pe_ratio": 15.1,
+      "fcf_yield": 6.06,
       "ebitda_margin": 64.8,
       "rev_growth": 2.7,
-      "as_of": "2026-08-05",
+      "as_of": "2026-08-06",
       "source": "yfinance"
     },
     {
       "name": "REA Group",
       "ticker": "REA.AX",
       "ev_ebitda": 24.6,
-      "pe_ratio": 38.3,
-      "fcf_yield": 2.2,
+      "pe_ratio": 39.6,
+      "fcf_yield": 2.13,
       "ebitda_margin": 44.1,
       "rev_growth": 6.1,
-      "as_of": "2026-08-05",
+      "as_of": "2026-08-06",
       "source": "yfinance"
     },
     {
       "name": "Hemnet",
       "ticker": "HEM.ST",
-      "ev_ebitda": 14.5,
-      "pe_ratio": 19.8,
-      "fcf_yield": 5.04,
+      "ev_ebitda": 14.2,
+      "pe_ratio": 19.7,
+      "fcf_yield": 5.06,
       "ebitda_margin": 43.1,
       "rev_growth": -23.1,
-      "as_of": "2026-08-05",
+      "as_of": "2026-08-06",
       "source": "yfinance"
     },
     {
       "name": "Vend Marketplaces",
       "ticker": "VEND.OL",
-      "ev_ebitda": 26.6,
+      "ev_ebitda": 26.4,
       "pe_ratio": 23.8,
       "fcf_yield": 4.49,
       "ebitda_margin": 29.9,
       "rev_growth": 0.1,
-      "as_of": "2026-08-05",
+      "as_of": "2026-08-06",
       "source": "yfinance"
     },
     {
@@ -192,7 +192,7 @@
       "fcf_yield": 5.0,
       "ebitda_margin": 62.5,
       "rev_growth": -13.1,
-      "as_of": "2026-08-05",
+      "as_of": "2026-08-06",
       "source": "intern (kpis)",
       "is_subject": true
     }
@@ -350,85 +350,86 @@
     "ai_signal": [
       {
         "date": "2026-05-17",
-        "Wohnung KI": 46,
-        "Wohnung ChatGPT": 53
+        "Wohnung KI": 35,
+        "Wohnung ChatGPT": 55
       },
       {
         "date": "2026-05-24",
-        "Wohnung KI": 74,
+        "Wohnung KI": 72,
         "Wohnung ChatGPT": 75
       },
       {
         "date": "2026-05-31",
-        "Wohnung KI": 69,
-        "Wohnung ChatGPT": 71
+        "Wohnung KI": 67,
+        "Wohnung ChatGPT": 74
       },
       {
         "date": "2026-06-07",
-        "Wohnung KI": 73,
-        "Wohnung ChatGPT": 63
+        "Wohnung KI": 48,
+        "Wohnung ChatGPT": 62
       },
       {
         "date": "2026-06-14",
-        "Wohnung KI": 71,
-        "Wohnung ChatGPT": 64
+        "Wohnung KI": 76,
+        "Wohnung ChatGPT": 61
       },
       {
         "date": "2026-06-21",
         "Wohnung KI": 100,
-        "Wohnung ChatGPT": 91
+        "Wohnung ChatGPT": 83
       },
       {
         "date": "2026-06-28",
-        "Wohnung KI": 69,
-        "Wohnung ChatGPT": 81
+        "Wohnung KI": 74,
+        "Wohnung ChatGPT": 66
       },
       {
         "date": "2026-07-05",
-        "Wohnung KI": 76,
-        "Wohnung ChatGPT": 57
+        "Wohnung KI": 71,
+        "Wohnung ChatGPT": 80
       },
       {
         "date": "2026-07-12",
-        "Wohnung KI": 71,
-        "Wohnung ChatGPT": 62
+        "Wohnung KI": 79,
+        "Wohnung ChatGPT": 72
       },
       {
         "date": "2026-07-19",
         "Wohnung KI": 49,
-        "Wohnung ChatGPT": 57
+        "Wohnung ChatGPT": 63
       },
       {
         "date": "2026-07-26",
-        "Wohnung KI": 58,
-        "Wohnung ChatGPT": 54
+        "Wohnung KI": 57,
+        "Wohnung ChatGPT": 53
       },
       {
         "date": "2026-08-02",
-        "Wohnung KI": 57,
-        "Wohnung ChatGPT": 53
+        "Wohnung KI": 60,
+        "Wohnung ChatGPT": 62
       }
     ],
     "trend_delta": 4.6,
+    "ai_delta_Wohnung_KI": 122.7,
+    "ai_delta_Wohnung_ChatGPT": 15.2,
     "competitor_delta": {
       "immoscout_delta": 4.9,
       "immowelt_delta": -13.7
     },
-    "ai_delta_Wohnung_KI": 158.2,
-    "ai_delta_Wohnung_ChatGPT": -2.6,
     "stale_fields": [
-      "ai_signal"
+      "series",
+      "competitor"
     ],
-    "stale_as_of": "2026-08-04T09:50:14.997220Z",
-    "_fetched_at": "2026-08-05T09:49:02.805646Z"
+    "stale_as_of": "2026-08-05T09:49:02.805646Z",
+    "_fetched_at": "2026-08-06T09:51:06.131811Z"
   },
   "macro": {
     "ecb_deposit_rate": 2.25,
-    "bund_10y": 3.19,
+    "bund_10y": 3.15,
     "mortgage_rate_10y": 3.82,
     "wacc_floor": 7.7,
     "wacc_implied": 9.1,
-    "as_of": "2026-08-05",
+    "as_of": "2026-08-06",
     "source": "EZB + Bundesbank SDMX API",
     "erp_used": 5.5,
     "beta_used": 0.8
@@ -437,7 +438,7 @@
     "positions": [],
     "total_short_pct": 0,
     "num_holders": 0,
-    "as_of": "2026-08-05",
+    "as_of": "2026-08-06",
     "source": "BaFin — Netto-Leerverkaufspositionen (öffentlich)"
   },
   "brokers": {},
