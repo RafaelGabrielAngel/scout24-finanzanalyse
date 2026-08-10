@@ -6,6 +6,9 @@ on:
     - cron: "15 7 * * 1-5"
   workflow_dispatch:     # Manuell auslösbar via GitHub UI
 
+permissions:
+  contents: write
+  
 jobs:
   fetch-and-deploy:
     runs-on: ubuntu-latest
