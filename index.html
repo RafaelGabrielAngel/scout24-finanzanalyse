@@ -444,6 +444,7 @@ tr.row-sep td:first-child{color:#7A3000!important}
   <button class="tb" style="display:none" onclick="tab('lev',this)"><span class="dot"></span>Levermann-Score</button>
   <button class="tb" onclick="tab('risk',this)"><span class="dot"></span>Investment-Urteil</button>
   <button class="tb" onclick="tab('live',this)"><span class="dot"></span>Live-Daten</button>
+<button class="tb" onclick="tab('dvfa',this)"><span class="dot"></span>📋 Empfehlung</button>
 </div>
 
 <!-- ══════════════════════════════════════════════════
@@ -2190,6 +2191,212 @@ window.addEventListener('load',()=>{
 <!-- ══════════════════════════════════════════════════
      PANE 7 — LIVE-DATEN
 ══════════════════════════════════════════════════ -->
+
+<!-- ══════════════════════════════════════════════════
+PANE — DVFA EMPFEHLUNG
+══════════════════════════════════════════════════ -->
+<div id="p-dvfa" class="pane">
+
+<!-- DVFA Rating-Skalierung -->
+<div class="card mb16">
+  <div class="card-hd"><div class="dot dot-blue"></div>📋 Analystenempfehlung — DVFA-Skalierung (Deutsche Grundsätze für Finanzresearch 2018)</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px">
+    <div style="padding:18px;background:rgba(39,174,96,0.12);border:2px solid var(--green);border-radius:10px;text-align:center">
+      <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">KAUFEN</div>
+      <div style="font-size:28px;font-weight:900;color:var(--green)">▲</div>
+      <div style="font-size:13px;font-weight:600;color:var(--green);margin-top:6px">Upside &gt; +10 %</div>
+      <div style="font-size:10px;color:var(--txt3);margin-top:4px">Erwartete Kursentwicklung<br>über 12 Monate</div>
+    </div>
+    <div style="padding:18px;background:rgba(255,170,0,0.12);border:2px solid var(--amber);border-radius:10px;text-align:center">
+      <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">HALTEN</div>
+      <div style="font-size:28px;font-weight:900;color:var(--amber)">◆</div>
+      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-top:6px">−10 % bis +10 %</div>
+      <div style="font-size:10px;color:var(--txt3);margin-top:4px">Erwartete Kursentwicklung<br>über 12 Monate</div>
+    </div>
+    <div style="padding:18px;background:rgba(192,57,43,0.12);border:2px solid var(--red);border-radius:10px;text-align:center">
+      <div style="font-size:11px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">VERKAUFEN</div>
+      <div style="font-size:28px;font-weight:900;color:var(--red)">▼</div>
+      <div style="font-size:13px;font-weight:600;color:var(--red);margin-top:6px">Downside &lt; −10 %</div>
+      <div style="font-size:10px;color:var(--txt3);margin-top:4px">Erwartete Kursentwicklung<br>über 12 Monate</div>
+    </div>
+  </div>
+
+  <div style="font-size:10px;color:var(--txt3);padding:8px 12px;background:var(--bg2);border-radius:6px;margin-bottom:16px">
+    Quelle: DVFA (2018). Deutsche Grundsätze für Finanzresearch — Version 2.0. Frankfurt: DVFA e.V. · Vgl.: Frère/Schömig, FOM Finanzanalyse-Projekt Skript, Folie 33.
+  </div>
+</div>
+
+<!-- Unsere Empfehlung -->
+<div class="card mb16">
+  <div class="card-hd"><div class="dot dot-amber"></div>Unsere Empfehlung — Scout24 SE (SDX.DE)</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+
+    <!-- Linke Seite: Mechanische DVFA-Anwendung -->
+    <div style="padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px">
+      <div style="font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">① Mechanische DVFA-Anwendung</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+        <div class="stat-row"><span class="s-lbl">Aktueller Kurs</span><span class="s-val" id="dvfa-price">€ 74,40</span></div>
+        <div class="stat-row"><span class="s-lbl">Kursziel 12M</span><span class="s-val">€ 100</span></div>
+        <div class="stat-row"><span class="s-lbl">Upside (mechanisch)</span><span class="s-val g" id="dvfa-upside">+34,4 %</span></div>
+        <div class="stat-row"><span class="s-lbl">DVFA-Schwelle KAUFEN</span><span class="s-val g">&gt; +10 %</span></div>
+        <div style="margin-top:10px;padding:10px;background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.3);border-radius:7px;text-align:center">
+          <div style="font-size:10px;color:var(--txt3);margin-bottom:4px">Mechanisches DVFA-Urteil</div>
+          <div style="font-size:20px;font-weight:900;color:var(--green)">KAUFEN ↑</div>
+          <div style="font-size:10px;color:var(--txt3);margin-top:2px">Upside überschreitet +10%-Schwelle</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rechte Seite: Unser qualifiziertes Urteil -->
+    <div style="padding:16px;background:var(--bg2);border:1px solid rgba(255,170,0,.4);border-radius:10px">
+      <div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">② Qualifiziertes Urteil (Begründung Abweichung)</div>
+      <div style="font-size:11px;color:var(--txt2);line-height:1.65;margin-bottom:10px">
+        Trotz mechanisch ausreichendem Upside von <strong>+34,4&nbsp;%</strong> empfehlen wir <strong style="color:var(--amber)">HALTEN</strong>. 
+        Die Marktreaktion vom 6.&nbsp;Aug.&nbsp;2026 (−5&nbsp;% nach Q2-Beat) ist ein Warnsignal, 
+        das in der mechanischen DVFA-Skala nicht abgebildet wird.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:11px">
+        <div style="padding:6px 10px;background:rgba(255,170,0,0.1);border-left:3px solid var(--amber);border-radius:3px">
+          <strong>① Cashflow-Warnsignal:</strong> OCF H1 2026 −9,6&nbsp;% trotz EBITDA-Wachstum
+        </div>
+        <div style="padding:6px 10px;background:rgba(255,170,0,0.1);border-left:3px solid var(--amber);border-radius:3px">
+          <strong>② Keine Guidance-Revision:</strong> H1 am oberen Ende — FY-Prognose unverändert → impliziert schwächeres H2
+        </div>
+        <div style="padding:6px 10px;background:rgba(255,170,0,0.1);border-left:3px solid var(--amber);border-radius:3px">
+          <strong>③ Spanien-Verwässerung:</strong> Berichtete Marge 60,1&nbsp;% vs. organisch 63,0&nbsp;% (−2,9&nbsp;Pp)
+        </div>
+        <div style="padding:6px 10px;background:rgba(255,170,0,0.1);border-left:3px solid var(--amber);border-radius:3px">
+          <strong>④ Goodwill-Risiko:</strong> WACC implied 9,1&nbsp;% > interner Impairment-Test-WACC 8,9&nbsp;%
+        </div>
+      </div>
+      <div style="margin-top:10px;padding:10px;background:rgba(255,170,0,0.12);border:1px solid rgba(255,170,0,.4);border-radius:7px;text-align:center">
+        <div style="font-size:10px;color:var(--txt3);margin-bottom:4px">Qualifiziertes Urteil</div>
+        <div style="font-size:20px;font-weight:900;color:var(--amber)">HALTEN</div>
+        <div style="font-size:10px;color:var(--txt3);margin-top:2px">Abweichung von DVFA-Mechanik begründet</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upgrade/Downgrade Trigger -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+    <div style="padding:12px 14px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.25);border-radius:8px">
+      <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">▲ Upgrade-Trigger zu KAUFEN</div>
+      <div style="font-size:11px;color:var(--txt2);line-height:1.7">
+        ✅ Q3 2026 (Okt.): OCF-Normalisierung sichtbar<br>
+        ✅ Guidance-Anhebung FY 2026<br>
+        ✅ Organisches Wachstum ≥ +10&nbsp;% Q3<br>
+        ✅ WACC normalisiert sich &lt; 8,5&nbsp;%<br>
+        <em style="color:var(--txt3)">→ Kursziel bei Upgrade: €&nbsp;110</em>
+      </div>
+    </div>
+    <div style="padding:12px 14px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.25);border-radius:8px">
+      <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">▼ Downgrade-Trigger zu VERKAUFEN</div>
+      <div style="font-size:11px;color:var(--txt2);line-height:1.7">
+        ❌ Q3 Traffic-Wachstum &lt; 0&nbsp;% YoY<br>
+        ❌ Goodwill-Impairment &gt; €&nbsp;200&nbsp;Mio.<br>
+        ❌ Guidance-Senkung FY 2026<br>
+        ❌ WACC steigt auf &gt; 9,5&nbsp;%<br>
+        <em style="color:var(--txt3)">→ Bear-Case FV: €&nbsp;75 (−1&nbsp;% vs. Kurs)</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bewertungsbandbreite Übersicht -->
+  <div style="padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:16px">
+    <div style="font-size:10px;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Bewertungsbandbreite — Methoden-Übersicht (vgl. DVFA: Median/Mittelwert bei multiplen Verfahren)</div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;font-size:11px;border-collapse:collapse">
+        <thead>
+          <tr style="background:var(--bg0)">
+            <th style="padding:6px 8px;text-align:left;color:var(--txt3);font-weight:600;border-bottom:1px solid var(--border)">Methode</th>
+            <th style="padding:6px 8px;text-align:center;color:var(--txt3);font-weight:600;border-bottom:1px solid var(--border)">Gewicht</th>
+            <th style="padding:6px 8px;text-align:center;color:var(--txt3);font-weight:600;border-bottom:1px solid var(--border)">Fairer Wert</th>
+            <th style="padding:6px 8px;text-align:center;color:var(--txt3);font-weight:600;border-bottom:1px solid var(--border)">Upside</th>
+            <th style="padding:6px 8px;text-align:center;color:var(--txt3);font-weight:600;border-bottom:1px solid var(--border)">DVFA-Urteil</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:6px 8px;color:var(--txt)">DCF Entity (WACC 7,5&nbsp;%, tg 2,5&nbsp;%)</td>
+            <td style="padding:6px 8px;text-align:center;color:var(--txt2)">40&nbsp;%</td>
+            <td style="padding:6px 8px;text-align:center;font-weight:700;color:var(--green)">€&nbsp;110</td>
+            <td style="padding:6px 8px;text-align:center;color:var(--green)" id="dvfa-up-dcf">+48&nbsp;%</td>
+            <td style="padding:6px 8px;text-align:center"><span style="color:var(--green);font-weight:700">KAUFEN</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--bg2)">
+            <td style="padding:6px 8px;color:var(--txt)">EV/ooEBITDA Peer-Median (21,4×)</td>
+            <td style="padding:6px 8px;text-align:center;color:var(--txt2)">35&nbsp;%</td>
+            <td style="padding:6px 8px;text-align:center;font-weight:700;color:var(--green)">€&nbsp;100</td>
+            <td style="padding:6px 8px;text-align:center;color:var(--green)" id="dvfa-up-ev">+34&nbsp;%</td>
+            <td style="padding:6px 8px;text-align:center"><span style="color:var(--green);font-weight:700">KAUFEN</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:6px 8px;color:var(--txt)">Forward P/E (19,09×)</td>
+            <td style="padding:6px 8px;text-align:center;color:var(--txt2)">25&nbsp;%</td>
+            <td style="padding:6px 8px;text-align:center;font-weight:700;color:var(--amber)">€&nbsp;74</td>
+            <td style="padding:6px 8px;text-align:center;color:var(--amber)" id="dvfa-up-pe">−0,5&nbsp;%</td>
+            <td style="padding:6px 8px;text-align:center"><span style="color:var(--amber);font-weight:700">HALTEN</span></td>
+          </tr>
+          <tr style="border-bottom:2px solid var(--border);background:rgba(255,170,0,0.06)">
+            <td style="padding:6px 8px;color:var(--txt);font-weight:700">★ Gewichteter FV (40/35/25)</td>
+            <td style="padding:6px 8px;text-align:center;color:var(--txt2)">100&nbsp;%</td>
+            <td style="padding:6px 8px;text-align:center;font-weight:900;color:var(--amber)">€&nbsp;100</td>
+            <td style="padding:6px 8px;text-align:center;font-weight:700;color:var(--amber)" id="dvfa-up-weight">+34&nbsp;%</td>
+            <td style="padding:6px 8px;text-align:center"><span style="color:var(--green);font-weight:700">KAUFEN*</span></td>
+          </tr>
+          <tr style="background:rgba(255,170,0,0.1)">
+            <td colspan="5" style="padding:6px 8px;font-size:10px;color:var(--amber)">
+              * Mechanisches DVFA-Urteil wäre KAUFEN. <strong>Qualifiziertes Urteil: HALTEN</strong> — wegen Marktreaktion −5&nbsp;% (6.8.2026), OCF-Rückgang −9,6&nbsp;%, fehlender Guidance-Revision und Goodwill-Risiko (WACC 9,1&nbsp;% &gt; Impairment-Test 8,9&nbsp;%). Nächster Review: Q3 Trading Update Oktober 2026.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Methodiknote -->
+  <div style="font-size:10px;color:var(--txt3);line-height:1.7;padding:10px 12px;background:var(--bg2);border-radius:6px;border:1px solid var(--border)">
+    <strong>Methodiknote zur Empfehlung:</strong> Die Analystenempfehlung basiert auf der qualitativen Unternehmens- und Wettbewerbsanalyse sowie der quantitativen Bewertung mittels DCF-, Multiplikator- und P/E-Verfahren. Sofern mehrere Verfahren eingesetzt werden, orientiert sich das Urteil am gewichteten Mittelwert der Kursziele (vgl. DVFA 2018, S. 33; Frère/Schömig, FOM Skript Folie 33). Abweichungen vom mechanischen DVFA-Urteil sind zulässig und müssen begründet werden. Die Skalierung gilt für einen 12-Monats-Horizont ab Berichtsdatum (6. August 2026). Alle Angaben ohne Gewähr — keine Anlageberatung.
+  </div>
+</div>
+
+<!-- JavaScript: DVFA-Upside live aktualisieren -->
+<script>
+(function updateDVFA() {
+  const price = window.LIVE_PRICE || 74.40;
+  const target = 100;
+  const up = ((target - price) / price * 100).toFixed(1);
+  const upStr = (up >= 0 ? '+' : '') + up + ' %';
+  
+  const el = document.getElementById('dvfa-price');
+  if (el) el.textContent = '€ ' + price.toFixed(2).replace('.', ',');
+  
+  const upEl = document.getElementById('dvfa-upside');
+  if (upEl) upEl.textContent = upStr;
+
+  // Update Upside-Spalten
+  const dcfUp = (((110 - price) / price) * 100).toFixed(0);
+  const evUp = (((100 - price) / price) * 100).toFixed(0);
+  const peUp = (((74 - price) / price) * 100).toFixed(0);
+  const wUp = (((100 - price) / price) * 100).toFixed(0);
+  
+  const ids = {
+    'dvfa-up-dcf': dcfUp,
+    'dvfa-up-ev': evUp,
+    'dvfa-up-pe': peUp,
+    'dvfa-up-weight': wUp
+  };
+  Object.entries(ids).forEach(([id, val]) => {
+    const e = document.getElementById(id);
+    if (e) e.textContent = (val >= 0 ? '+' : '') + val + ' %';
+  });
+})();
+</script>
+
+</div><!-- /p-dvfa -->
+
 <div id="p-live" class="pane">
 
   <!-- IR News -->
