@@ -1,16 +1,17 @@
 {
   "_meta": {
-    "generated_at": "2026-08-07T08:21:19.105932Z",
+    "generated_at": "2026-08-10T08:50:31.475596+00:00",
     "ticker": "SDX.DE",
-    "source": "FMP Free + yfinance + Google Trends"
+    "source": "FMP Free + yfinance | Kurs manuell 06.08.2026 (API-Fallback)"
   },
   "market": {
-    "price": 0,
-    "change_pct": 0,
-    "market_cap_bn": 0,
-    "year_high": 0,
-    "year_low": 0,
-    "pe_ratio": 0
+    "price": 76.4,
+    "change_pct": -4.87,
+    "market_cap_bn": 5.51,
+    "year_high": 84.2,
+    "year_low": 68.5,
+    "pe_ratio": 38.8,
+    "latest_day": "2026-08-06"
   },
   "profile": {
     "shares_diluted_mn": 72.07,
