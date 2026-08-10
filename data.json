@@ -1,17 +1,16 @@
 {
   "_meta": {
-    "generated_at": "2026-08-10T08:50:31.475596+00:00",
+    "generated_at": "2026-08-10T08:58:35.602083Z",
     "ticker": "SDX.DE",
-    "source": "FMP Free + yfinance | Kurs manuell 06.08.2026 (API-Fallback)"
+    "source": "FMP Free + yfinance + Google Trends"
   },
   "market": {
-    "price": 76.4,
-    "change_pct": -4.87,
-    "market_cap_bn": 5.51,
-    "year_high": 84.2,
-    "year_low": 68.5,
-    "pe_ratio": 38.8,
-    "latest_day": "2026-08-06"
+    "price": 74.4,
+    "change_pct": 3.62,
+    "market_cap_bn": 0,
+    "year_high": 76.0,
+    "year_low": 73.3,
+    "pe_ratio": 0
   },
   "profile": {
     "shares_diluted_mn": 72.07,
@@ -133,56 +132,56 @@
     {
       "name": "Rightmove",
       "ticker": "RMV.L",
-      "ev_ebitda": 11.9,
-      "pe_ratio": 16.4,
-      "fcf_yield": 5.49,
+      "ev_ebitda": 12.0,
+      "pe_ratio": 16.3,
+      "fcf_yield": 5.54,
       "ebitda_margin": 66.9,
       "rev_growth": 6.7,
-      "as_of": "2026-08-07",
+      "as_of": "2026-08-10",
       "source": "yfinance"
     },
     {
       "name": "Auto Trader",
       "ticker": "AUTO.L",
-      "ev_ebitda": 10.7,
-      "pe_ratio": 15.3,
-      "fcf_yield": 5.99,
+      "ev_ebitda": 10.9,
+      "pe_ratio": 15.2,
+      "fcf_yield": 6.01,
       "ebitda_margin": 64.8,
       "rev_growth": 2.7,
-      "as_of": "2026-08-07",
+      "as_of": "2026-08-10",
       "source": "yfinance"
     },
     {
       "name": "REA Group",
       "ticker": "REA.AX",
-      "ev_ebitda": 25.0,
-      "pe_ratio": 34.0,
-      "fcf_yield": 2.11,
-      "ebitda_margin": 44.1,
-      "rev_growth": 6.1,
-      "as_of": "2026-08-07",
+      "ev_ebitda": 22.6,
+      "pe_ratio": 34.4,
+      "fcf_yield": 2.25,
+      "ebitda_margin": 50.1,
+      "rev_growth": 0,
+      "as_of": "2026-08-10",
       "source": "yfinance"
     },
     {
       "name": "Hemnet",
       "ticker": "HEM.ST",
-      "ev_ebitda": 14.1,
-      "pe_ratio": 20.3,
-      "fcf_yield": 4.9,
+      "ev_ebitda": 15.2,
+      "pe_ratio": 20.8,
+      "fcf_yield": 4.78,
       "ebitda_margin": 43.1,
       "rev_growth": -23.1,
-      "as_of": "2026-08-07",
+      "as_of": "2026-08-10",
       "source": "yfinance"
     },
     {
       "name": "Vend Marketplaces",
       "ticker": "VEND.OL",
-      "ev_ebitda": 25.7,
+      "ev_ebitda": 26.3,
       "pe_ratio": 23.9,
       "fcf_yield": 4.5,
       "ebitda_margin": 29.9,
       "rev_growth": 0.1,
-      "as_of": "2026-08-07",
+      "as_of": "2026-08-10",
       "source": "yfinance"
     },
     {
@@ -193,7 +192,7 @@
       "fcf_yield": 5.0,
       "ebitda_margin": 62.5,
       "rev_growth": -13.1,
-      "as_of": "2026-08-07",
+      "as_of": "2026-08-10",
       "source": "intern (kpis)",
       "is_subject": true
     }
@@ -202,24 +201,20 @@
     "status": "ok",
     "series": [
       {
-        "date": "2026-04-19",
-        "value": 81
-      },
-      {
         "date": "2026-04-26",
-        "value": 73
-      },
-      {
-        "date": "2026-05-03",
-        "value": 80
-      },
-      {
-        "date": "2026-05-10",
         "value": 76
       },
       {
+        "date": "2026-05-03",
+        "value": 72
+      },
+      {
+        "date": "2026-05-10",
+        "value": 74
+      },
+      {
         "date": "2026-05-17",
-        "value": 67
+        "value": 65
       },
       {
         "date": "2026-05-24",
@@ -227,199 +222,203 @@
       },
       {
         "date": "2026-05-31",
-        "value": 65
+        "value": 68
       },
       {
         "date": "2026-06-07",
-        "value": 65
+        "value": 62
       },
       {
         "date": "2026-06-14",
-        "value": 60
+        "value": 58
       },
       {
         "date": "2026-06-21",
-        "value": 56
+        "value": 54
       },
       {
         "date": "2026-06-28",
-        "value": 56
+        "value": 54
       },
       {
         "date": "2026-07-05",
-        "value": 64
+        "value": 61
       },
       {
         "date": "2026-07-12",
-        "value": 67
+        "value": 65
       },
       {
         "date": "2026-07-19",
-        "value": 80
+        "value": 78
       },
       {
         "date": "2026-07-26",
-        "value": 84
+        "value": 81
       },
       {
         "date": "2026-08-02",
-        "value": 90
+        "value": 83
+      },
+      {
+        "date": "2026-08-09",
+        "value": 84
       }
     ],
     "competitor": [
       {
-        "date": "2026-04-19",
+        "date": "2026-04-26",
+        "immoscout": 76,
+        "immowelt": 68
+      },
+      {
+        "date": "2026-05-03",
+        "immoscout": 72,
+        "immowelt": 66
+      },
+      {
+        "date": "2026-05-10",
+        "immoscout": 74,
+        "immowelt": 73
+      },
+      {
+        "date": "2026-05-17",
+        "immoscout": 65,
+        "immowelt": 77
+      },
+      {
+        "date": "2026-05-24",
+        "immoscout": 65,
+        "immowelt": 67
+      },
+      {
+        "date": "2026-05-31",
+        "immoscout": 68,
+        "immowelt": 70
+      },
+      {
+        "date": "2026-06-07",
+        "immoscout": 62,
+        "immowelt": 68
+      },
+      {
+        "date": "2026-06-14",
+        "immoscout": 58,
+        "immowelt": 62
+      },
+      {
+        "date": "2026-06-21",
+        "immoscout": 54,
+        "immowelt": 62
+      },
+      {
+        "date": "2026-06-28",
+        "immoscout": 54,
+        "immowelt": 65
+      },
+      {
+        "date": "2026-07-05",
+        "immoscout": 61,
+        "immowelt": 71
+      },
+      {
+        "date": "2026-07-12",
+        "immoscout": 65,
+        "immowelt": 75
+      },
+      {
+        "date": "2026-07-19",
+        "immoscout": 78,
+        "immowelt": 74
+      },
+      {
+        "date": "2026-07-26",
         "immoscout": 81,
         "immowelt": 72
       },
       {
-        "date": "2026-04-26",
-        "immoscout": 73,
-        "immowelt": 69
-      },
-      {
-        "date": "2026-05-03",
-        "immoscout": 80,
-        "immowelt": 72
-      },
-      {
-        "date": "2026-05-10",
-        "immoscout": 76,
-        "immowelt": 71
-      },
-      {
-        "date": "2026-05-17",
-        "immoscout": 67,
-        "immowelt": 71
-      },
-      {
-        "date": "2026-05-24",
-        "immoscout": 65,
-        "immowelt": 76
-      },
-      {
-        "date": "2026-05-31",
-        "immoscout": 65,
-        "immowelt": 73
-      },
-      {
-        "date": "2026-06-07",
-        "immoscout": 65,
-        "immowelt": 72
-      },
-      {
-        "date": "2026-06-14",
-        "immoscout": 60,
-        "immowelt": 64
-      },
-      {
-        "date": "2026-06-21",
-        "immoscout": 56,
-        "immowelt": 66
-      },
-      {
-        "date": "2026-06-28",
-        "immoscout": 56,
-        "immowelt": 67
-      },
-      {
-        "date": "2026-07-05",
-        "immoscout": 64,
-        "immowelt": 69
-      },
-      {
-        "date": "2026-07-12",
-        "immoscout": 67,
-        "immowelt": 71
-      },
-      {
-        "date": "2026-07-19",
-        "immoscout": 80,
-        "immowelt": 77
-      },
-      {
-        "date": "2026-07-26",
-        "immoscout": 84,
-        "immowelt": 76
-      },
-      {
         "date": "2026-08-02",
-        "immoscout": 90,
+        "immoscout": 83,
         "immowelt": 77
+      },
+      {
+        "date": "2026-08-09",
+        "immoscout": 84,
+        "immowelt": 71
       }
     ],
     "ai_signal": [
       {
-        "date": "2026-05-17",
-        "Wohnung KI": 35,
-        "Wohnung ChatGPT": 54
-      },
-      {
         "date": "2026-05-24",
-        "Wohnung KI": 72,
-        "Wohnung ChatGPT": 75
-      },
-      {
-        "date": "2026-05-31",
         "Wohnung KI": 67,
         "Wohnung ChatGPT": 74
       },
       {
+        "date": "2026-05-31",
+        "Wohnung KI": 62,
+        "Wohnung ChatGPT": 68
+      },
+      {
         "date": "2026-06-07",
-        "Wohnung KI": 48,
-        "Wohnung ChatGPT": 62
+        "Wohnung KI": 64,
+        "Wohnung ChatGPT": 65
       },
       {
         "date": "2026-06-14",
-        "Wohnung KI": 77,
-        "Wohnung ChatGPT": 62
+        "Wohnung KI": 61,
+        "Wohnung ChatGPT": 59
       },
       {
         "date": "2026-06-21",
         "Wohnung KI": 100,
-        "Wohnung ChatGPT": 83
+        "Wohnung ChatGPT": 70
       },
       {
         "date": "2026-06-28",
-        "Wohnung KI": 74,
-        "Wohnung ChatGPT": 66
+        "Wohnung KI": 73,
+        "Wohnung ChatGPT": 85
       },
       {
         "date": "2026-07-05",
-        "Wohnung KI": 71,
-        "Wohnung ChatGPT": 79
-      },
-      {
-        "date": "2026-07-12",
-        "Wohnung KI": 80,
-        "Wohnung ChatGPT": 72
-      },
-      {
-        "date": "2026-07-19",
-        "Wohnung KI": 41,
+        "Wohnung KI": 68,
         "Wohnung ChatGPT": 67
       },
       {
+        "date": "2026-07-12",
+        "Wohnung KI": 72,
+        "Wohnung ChatGPT": 73
+      },
+      {
+        "date": "2026-07-19",
+        "Wohnung KI": 54,
+        "Wohnung ChatGPT": 62
+      },
+      {
         "date": "2026-07-26",
-        "Wohnung KI": 58,
-        "Wohnung ChatGPT": 53
+        "Wohnung KI": 45,
+        "Wohnung ChatGPT": 41
       },
       {
         "date": "2026-08-02",
-        "Wohnung KI": 59,
-        "Wohnung ChatGPT": 60
+        "Wohnung KI": 54,
+        "Wohnung ChatGPT": 52
+      },
+      {
+        "date": "2026-08-09",
+        "Wohnung KI": 55,
+        "Wohnung ChatGPT": 31
       }
     ],
-    "trend_delta": -0.9,
+    "trend_delta": 13.6,
     "competitor_delta": {
-      "immoscout_delta": -0.9,
-      "immowelt_delta": -14.5
+      "immoscout_delta": 13.6,
+      "immowelt_delta": -10.6
     },
-    "ai_delta_Wohnung_KI": 114.4,
-    "ai_delta_Wohnung_ChatGPT": 15.6,
+    "ai_delta_Wohnung_KI": 90.8,
+    "ai_delta_Wohnung_ChatGPT": -6.1,
     "stale_fields": [],
     "stale_as_of": null,
-    "_fetched_at": "2026-08-07T08:21:01.147411Z"
+    "_fetched_at": "2026-08-10T08:58:16.625474Z"
   },
   "macro": {
     "ecb_deposit_rate": 2.25,
@@ -427,7 +426,7 @@
     "mortgage_rate_10y": 3.82,
     "wacc_floor": 7.7,
     "wacc_implied": 9.1,
-    "as_of": "2026-08-07",
+    "as_of": "2026-08-10",
     "source": "EZB + Bundesbank SDMX API",
     "erp_used": 5.5,
     "beta_used": 0.8
@@ -436,7 +435,7 @@
     "positions": [],
     "total_short_pct": 0,
     "num_holders": 0,
-    "as_of": "2026-08-07",
+    "as_of": "2026-08-10",
     "source": "BaFin — Netto-Leerverkaufspositionen (öffentlich)"
   },
   "brokers": {},
