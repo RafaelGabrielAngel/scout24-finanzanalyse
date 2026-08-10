@@ -117,7 +117,22 @@ def fetch_market_data() -> dict:
         print("    [WARN] ALPHA_VANTAGE_KEY nicht gesetzt")
 
     # FALLBACK: Stooq (kein Key nötig)
+    # LETZTER BEKANNTER KURS — wird nur verwendet wenn alle APIs fehlschlagen
     if not result.get("price"):
+        # Lies letzten Kurs aus bestehender data.json (verhindert price:0)
+        try:
+            import os, json as _json
+            if os.path.exists("data.json"):
+                with open("data.json") as _f:
+                    _old = _json.load(_f)
+                _last = _old.get("market", {}).get("price", 0)
+                if _last and _last > 0:
+                    result["price"]      = _last
+                    result["change_pct"] = _old.get("market", {}).get("change_pct", 0)
+                    result["latest_day"] = _old.get("market", {}).get("latest_day", "")
+                    print(f"    [FALLBACK] Letzter bekannter Kurs aus data.json: €{_last}")
+        except Exception as _fe:
+            print(f"    [WARN] data.json Fallback fehlgeschlagen: {_fe}")
         try:
             url2  = "https://stooq.com/q/l/?s=sdx.de&f=sd2t2ohlcv&h&e=csv"
             r2    = requests.get(url2, timeout=15)
