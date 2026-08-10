@@ -2070,6 +2070,11 @@ async function loadLiveData(){
       window.LIVE_PRICE = price;
 
       // Stand-Zeitstempel einblenden
+    // Zusatz-Rendering aus data.json
+    try { if(typeof renderMacro==='function') renderMacro(d.macro||{}); } catch(e) { console.warn('renderMacro:',e); }
+    try { if(typeof renderPeers==='function') renderPeers(d.peers||[]); } catch(e) { console.warn('renderPeers:',e); }
+    try { if(typeof renderShorts==='function') renderShorts(d.shorts||{}); } catch(e) { console.warn('renderShorts:',e); }
+
       const stamp = document.getElementById('live-stamp');
       if (stamp) {
         const latestDay = d?.market?.latest_day;
@@ -2253,10 +2258,8 @@ window.addEventListener('load',()=>{
       : '<div style="color:var(--red);font-size:11px">' + msg + '</div>';
   }
 
-  fetch(DATA_URL + '?t=' + Date.now())
-    .then(r => r.json())
-    .then(d => {
-      try { renderIRNews(d.ir_news || {}); } catch(e) { console.error('renderIRNews:', e); showErr('ir-news-list', e); }
+  // Macro/Peers/Shorts/IR werden bereits in loadLiveData() gerendert
+  // (kein zweiter fetch nötig)
       try { renderPeers(d.peers || []); } catch(e) { console.error('renderPeers:', e); showErr('peers-live-body', e, true); }
       try { renderShorts(d.shorts || {}); } catch(e) { console.error('renderShorts:', e); showErr('shorts-content', e); }
       try { renderMacro(d.macro || {}); } catch(e) { console.error('renderMacro:', e); showErr('macro-content', e); }
