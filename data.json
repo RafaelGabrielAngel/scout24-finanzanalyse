@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "generated_at": "2026-08-10T09:00:29.198117Z",
+    "generated_at": "2026-08-10T09:15:26.951556Z",
     "ticker": "SDX.DE",
     "source": "FMP Free + yfinance + Google Trends"
   },
@@ -10,8 +10,7 @@
     "market_cap_bn": 0,
     "year_high": 76.0,
     "year_low": 73.3,
-    "pe_ratio": 0,
-    "latest_day": "2026-08-10"
+    "pe_ratio": 0
   },
   "profile": {
     "shares_diluted_mn": 72.07,
@@ -32,9 +31,7 @@
     "fcf_yield": 5.0,
     "roce": 16.8,
     "net_debt_ebitda": 0.25,
-    "year": "2025A",
-    "rating": "HALTEN",
-    "target_price": 100.0
+    "year": "2025A"
   },
   "history": {
     "income": [
@@ -137,7 +134,7 @@
       "ticker": "RMV.L",
       "ev_ebitda": 12.0,
       "pe_ratio": 16.3,
-      "fcf_yield": 5.54,
+      "fcf_yield": 5.52,
       "ebitda_margin": 66.9,
       "rev_growth": 6.7,
       "as_of": "2026-08-10",
@@ -147,8 +144,8 @@
       "name": "Auto Trader",
       "ticker": "AUTO.L",
       "ev_ebitda": 10.9,
-      "pe_ratio": 15.2,
-      "fcf_yield": 6.02,
+      "pe_ratio": 15.3,
+      "fcf_yield": 6.0,
       "ebitda_margin": 64.8,
       "rev_growth": 2.7,
       "as_of": "2026-08-10",
@@ -180,8 +177,8 @@
       "name": "Vend Marketplaces",
       "ticker": "VEND.OL",
       "ev_ebitda": 26.3,
-      "pe_ratio": 23.8,
-      "fcf_yield": 4.51,
+      "pe_ratio": 23.9,
+      "fcf_yield": 4.5,
       "ebitda_margin": 29.9,
       "rev_growth": 0.1,
       "as_of": "2026-08-10",
@@ -205,23 +202,23 @@
     "series": [
       {
         "date": "2026-04-26",
-        "value": 79
+        "value": 76
       },
       {
         "date": "2026-05-03",
-        "value": 83
+        "value": 72
       },
       {
         "date": "2026-05-10",
-        "value": 77
+        "value": 74
       },
       {
         "date": "2026-05-17",
-        "value": 83
+        "value": 65
       },
       {
         "date": "2026-05-24",
-        "value": 68
+        "value": 65
       },
       {
         "date": "2026-05-31",
@@ -229,125 +226,125 @@
       },
       {
         "date": "2026-06-07",
-        "value": 68
-      },
-      {
-        "date": "2026-06-14",
         "value": 62
       },
       {
+        "date": "2026-06-14",
+        "value": 58
+      },
+      {
         "date": "2026-06-21",
-        "value": 59
+        "value": 54
       },
       {
         "date": "2026-06-28",
-        "value": 59
+        "value": 54
       },
       {
         "date": "2026-07-05",
-        "value": 70
+        "value": 61
       },
       {
         "date": "2026-07-12",
-        "value": 73
+        "value": 65
       },
       {
         "date": "2026-07-19",
-        "value": 82
+        "value": 78
       },
       {
         "date": "2026-07-26",
-        "value": 88
+        "value": 81
       },
       {
         "date": "2026-08-02",
-        "value": 91
+        "value": 83
       },
       {
         "date": "2026-08-09",
-        "value": 91
+        "value": 83
       }
     ],
     "competitor": [
       {
         "date": "2026-04-26",
-        "immoscout": 79,
-        "immowelt": 80
+        "immoscout": 76,
+        "immowelt": 68
       },
       {
         "date": "2026-05-03",
-        "immoscout": 83,
-        "immowelt": 73
+        "immoscout": 72,
+        "immowelt": 66
       },
       {
         "date": "2026-05-10",
-        "immoscout": 77,
-        "immowelt": 83
+        "immoscout": 74,
+        "immowelt": 73
       },
       {
         "date": "2026-05-17",
-        "immoscout": 83,
-        "immowelt": 91
+        "immoscout": 65,
+        "immowelt": 77
       },
       {
         "date": "2026-05-24",
-        "immoscout": 68,
-        "immowelt": 80
+        "immoscout": 65,
+        "immowelt": 67
       },
       {
         "date": "2026-05-31",
         "immoscout": 68,
-        "immowelt": 77
+        "immowelt": 70
       },
       {
         "date": "2026-06-07",
-        "immoscout": 68,
-        "immowelt": 73
-      },
-      {
-        "date": "2026-06-14",
         "immoscout": 62,
-        "immowelt": 67
-      },
-      {
-        "date": "2026-06-21",
-        "immoscout": 59,
-        "immowelt": 67
-      },
-      {
-        "date": "2026-06-28",
-        "immoscout": 59,
         "immowelt": 68
       },
       {
+        "date": "2026-06-14",
+        "immoscout": 58,
+        "immowelt": 62
+      },
+      {
+        "date": "2026-06-21",
+        "immoscout": 54,
+        "immowelt": 62
+      },
+      {
+        "date": "2026-06-28",
+        "immoscout": 54,
+        "immowelt": 65
+      },
+      {
         "date": "2026-07-05",
-        "immoscout": 70,
-        "immowelt": 77
+        "immoscout": 61,
+        "immowelt": 71
       },
       {
         "date": "2026-07-12",
-        "immoscout": 73,
-        "immowelt": 72
+        "immoscout": 65,
+        "immowelt": 75
       },
       {
         "date": "2026-07-19",
-        "immoscout": 82,
-        "immowelt": 83
+        "immoscout": 78,
+        "immowelt": 74
       },
       {
         "date": "2026-07-26",
-        "immoscout": 88,
-        "immowelt": 77
+        "immoscout": 81,
+        "immowelt": 72
       },
       {
         "date": "2026-08-02",
-        "immoscout": 91,
-        "immowelt": 83
+        "immoscout": 83,
+        "immowelt": 77
       },
       {
         "date": "2026-08-09",
-        "immoscout": 91,
-        "immowelt": 77
+        "immoscout": 82,
+        "immowelt": 71
       }
     ],
     "ai_signal": [
@@ -398,7 +395,7 @@
       },
       {
         "date": "2026-07-26",
-        "Wohnung KI": 45,
+        "Wohnung KI": 46,
         "Wohnung ChatGPT": 41
       },
       {
@@ -408,22 +405,20 @@
       },
       {
         "date": "2026-08-09",
-        "Wohnung KI": 55,
-        "Wohnung ChatGPT": 31
+        "Wohnung KI": 49,
+        "Wohnung ChatGPT": 39
       }
     ],
-    "trend_delta": 13.5,
+    "trend_delta": 13.2,
     "competitor_delta": {
-      "immoscout_delta": 13.5,
+      "immoscout_delta": 12.9,
       "immowelt_delta": -10.6
     },
-    "ai_delta_Wohnung_KI": 90.8,
-    "ai_delta_Wohnung_ChatGPT": -6.1,
-    "stale_fields": [
-      "ai_signal"
-    ],
-    "stale_as_of": "2026-08-10T08:58:16.625474Z",
-    "_fetched_at": "2026-08-10T09:00:08.971450Z"
+    "ai_delta_Wohnung_KI": 86.2,
+    "ai_delta_Wohnung_ChatGPT": -2.0,
+    "stale_fields": [],
+    "stale_as_of": null,
+    "_fetched_at": "2026-08-10T09:15:09.333445Z"
   },
   "macro": {
     "ecb_deposit_rate": 2.25,
@@ -446,45 +441,5 @@
   "brokers": {},
   "multiples": {},
   "consensus": {},
-  "levermann": {},
-  "ir_news": {
-    "as_of": "2026-08-10",
-    "items": [
-      {
-        "date": "06.08.2026",
-        "title": "Scout24 setzt starke Wachstumsdynamik im zweiten Quartal fort: 20 % Umsatzwachstum, +18 % bereinigtes EPS",
-        "url": "https://www.scout24.com/en/news-media/media-releases",
-        "sentiment": "positive",
-        "is_catalyst": true
-      },
-      {
-        "date": "17.06.2026",
-        "title": "Hauptversammlung: alle Beschlussvorschläge angenommen, Dividende erhöht auf EUR 1,50",
-        "url": "https://www.scout24.com/en/news-media/media-releases",
-        "sentiment": "positive",
-        "is_catalyst": false
-      },
-      {
-        "date": "12.05.2026",
-        "title": "Capital Markets Day: Scout24 präsentiert Agentic OS für Immobilien",
-        "url": "https://www.scout24.com/en/news-media/media-releases",
-        "sentiment": "positive",
-        "is_catalyst": true
-      },
-      {
-        "date": "29.04.2026",
-        "title": "Q1 2026: Zweistelliges organisches Wachstum, Aktienrückkauf auf EUR 350 Mio. erhöht",
-        "url": "https://www.scout24.com/en/news-media/media-releases",
-        "sentiment": "positive",
-        "is_catalyst": true
-      },
-      {
-        "date": "07.01.2026",
-        "title": "Martin Mildner wird neuer CFO ab 1. März 2026",
-        "url": "https://www.scout24.com/en/news-media/media-releases",
-        "sentiment": "positive",
-        "is_catalyst": false
-      }
-    ]
-  }
+  "levermann": {}
 }
