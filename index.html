@@ -2258,19 +2258,20 @@ window.addEventListener('load',()=>{
       : '<div style="color:var(--red);font-size:11px">' + msg + '</div>';
   }
 
-  // Macro/Peers/Shorts/IR werden bereits in loadLiveData() gerendert
-  // (kein zweiter fetch nötig)
-      try { renderPeers(d.peers || []); } catch(e) { console.error('renderPeers:', e); showErr('peers-live-body', e, true); }
-      try { renderShorts(d.shorts || {}); } catch(e) { console.error('renderShorts:', e); showErr('shorts-content', e); }
-      try { renderMacro(d.macro || {}); } catch(e) { console.error('renderMacro:', e); showErr('macro-content', e); }
-    })
-    .catch(e => {
-      console.error('Live-Daten: data.json nicht geladen', e);
-      showErr('ir-news-list', e);
-      showErr('peers-live-body', e, true);
-      showErr('shorts-content', e);
-      showErr('macro-content', e);
-    });
+// Lade alle Live-Daten in einem einzigen fetch
+fetch('data.json?t=' + Date.now())
+  .then(r => r.json())
+  .then(d => {
+    try { renderIRNews(d.ir_news || {}); } catch(e) { console.warn('renderIRNews:', e); }
+    try { renderPeers(d.peers || []); } catch(e) { console.warn('renderPeers:', e); showErr('peers-live-body', e, true); }
+    try { renderShorts(d.shorts || {}); } catch(e) { console.warn('renderShorts:', e); showErr('shorts-content', e); }
+    try { renderMacro(d.macro || {}); } catch(e) { console.warn('renderMacro:', e); }
+  })
+  .catch(e => {
+    console.error('Live-Daten: data.json nicht geladen', e);
+    showErr('ir-news-list', e);
+    showErr('peers-live-body', e, true);
+  });
 
   function renderIRNews(ir) {
     const el = document.getElementById('ir-news-list');
